@@ -41,10 +41,21 @@
 
       body {
         margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
         color: var(--text);
         background:
-          radial-gradient(circle at top, rgba(156, 184, 255, 0.16), transparent 30%),
+          radial-gradient(
+            circle at top,
+            rgba(156, 184, 255, 0.16),
+            transparent 30%
+          ),
           linear-gradient(180deg, var(--bg) 0%, #0d1426 48%, #0b1120 100%);
         min-height: 100vh;
       }
@@ -119,10 +130,10 @@
 
       h1 {
         margin: 0 0 16px;
-        font-size: clamp(42px, 7vw, 78px);
-        line-height: 0.94;
-        letter-spacing: -0.045em;
-        max-width: 820px;
+        font-size: clamp(32px, 4.4vw, 54px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        max-width: 760px;
       }
 
       .lead {
@@ -200,6 +211,31 @@
       .section-panel ul {
         margin: 0;
         padding-left: 18px;
+      }
+
+      /* ── hero-side specific overrides ── */
+      .hero-side {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .hero-side ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .hero-side li {
+        padding: 0.65rem 0.85rem;
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--muted);
       }
 
       .section {
@@ -351,23 +387,44 @@
           <span>Mirasen</span>
         </div>
         <nav class="nav-links" aria-label="External links">
-          <a href="https://github.com/mirasen-io" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.npmjs.com/org/mirasen" target="_blank" rel="noreferrer">npm</a>
+          <a
+            href="https://github.com/mirasen-io"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="https://www.npmjs.com/org/mirasen"
+            target="_blank"
+            rel="noreferrer"
+            >npm</a
+          >
         </nav>
       </header>
 
       <main>
         <section class="hero">
           <div class="hero-copy">
-            <div class="eyebrow">Structured chess learning, training, and study</div>
+            <div class="eyebrow">
+              Structured chess learning, training, and study
+            </div>
             <h1>Build better chess understanding, not just more repetition.</h1>
             <p class="lead">
-              Mirasen is building tools and systems for structured chess learning — helping trainers,
-              students, and authors organize knowledge, review patterns, and reinforce understanding over time.
+              Mirasen is building tools and systems for structured chess
+              learning — helping trainers, students, and authors organize
+              knowledge, review patterns, and reinforce understanding over time.
             </p>
             <div class="hero-actions">
-              <a class="button primary" href="#chess-lore">Explore Chess Lore</a>
-              <a class="button" href="https://github.com/mirasen-io" target="_blank" rel="noreferrer">View GitHub</a>
+              <a class="button primary" href="#chess-lore"
+                >Explore Chess Lore</a
+              >
+              <a
+                class="button"
+                href="https://github.com/mirasen-io"
+                target="_blank"
+                rel="noreferrer"
+                >View GitHub</a
+              >
             </div>
           </div>
 
@@ -377,7 +434,9 @@
               <li>Structured learning workflows for real chess study</li>
               <li>Semantic annotation built around motifs and context</li>
               <li>Review and retention tied to actual training material</li>
-              <li>Reusable learning objects for a broader ecosystem over time</li>
+              <li>
+                Reusable learning objects for a broader ecosystem over time
+              </li>
             </ul>
           </aside>
         </section>
@@ -387,18 +446,21 @@
             <p class="kicker">Current product direction</p>
             <h2>Mirasen Chess Lore</h2>
             <p>
-              Chess Lore is the first major product direction inside Mirasen: a workflow-first system
-              for structured chess learning, starting with trainer workflows and expanding toward a broader
-              learning ecosystem.
+              Chess Lore is the first major product direction inside Mirasen: a
+              workflow-first system for structured chess learning, starting with
+              trainer workflows and expanding toward a broader learning
+              ecosystem.
             </p>
           </div>
 
           <div class="spotlight">
             <div>
               <p>
-                The current direction focuses on helping trainers assign, organize, review, and reinforce
-                chess learning more effectively. At the same time, the underlying workflows are also intended
-                to support self-directed learners who want clearer review, retention, and progress visibility.
+                The current direction focuses on helping trainers assign,
+                organize, review, and reinforce chess learning more effectively.
+                At the same time, the underlying workflows are also intended to
+                support self-directed learners who want clearer review,
+                retention, and progress visibility.
               </p>
               <div class="pill-row" aria-label="Core themes">
                 <span class="pill">trainer workflows</span>
@@ -409,10 +471,21 @@
             </div>
             <div>
               <ul class="list-plain">
-                <li>Assign and organize training material in a more structured way</li>
-                <li>Annotate positions with motifs and context, not only moves and comments</li>
-                <li>Reinforce learning over time through review workflows tied to real material</li>
-                <li>Lay the groundwork for progress visibility based on meaningful study activity</li>
+                <li>
+                  Assign and organize training material in a more structured way
+                </li>
+                <li>
+                  Annotate positions with motifs and context, not only moves and
+                  comments
+                </li>
+                <li>
+                  Reinforce learning over time through review workflows tied to
+                  real material
+                </li>
+                <li>
+                  Lay the groundwork for progress visibility based on meaningful
+                  study activity
+                </li>
               </ul>
             </div>
           </div>
@@ -423,8 +496,9 @@
             <p class="kicker">Who it serves</p>
             <h2>Designed around real learning roles</h2>
             <p>
-              The current product direction is trainer-first, but the broader system is meant to connect
-              trainers, students, and authors through the same underlying learning structure.
+              The current product direction is trainer-first, but the broader
+              system is meant to connect trainers, students, and authors through
+              the same underlying learning structure.
             </p>
           </div>
 
@@ -432,24 +506,27 @@
             <article class="card">
               <h3>Trainers</h3>
               <p>
-                Organize homework, track follow-up, reinforce learning over time, and work with training
-                material in a way that supports actual coaching workflows.
+                Organize homework, track follow-up, reinforce learning over
+                time, and work with training material in a way that supports
+                actual coaching workflows.
               </p>
             </article>
 
             <article class="card">
               <h3>Students</h3>
               <p>
-                Study with more structure, get clearer review loops, and retain ideas and patterns through
-                workflows connected to real games and training material.
+                Study with more structure, get clearer review loops, and retain
+                ideas and patterns through workflows connected to real games and
+                training material.
               </p>
             </article>
 
             <article class="card">
               <h3>Authors</h3>
               <p>
-                Contribute to a longer-term ecosystem where semantic annotation and reusable educational
-                material can support richer chess learning experiences.
+                Contribute to a longer-term ecosystem where semantic annotation
+                and reusable educational material can support richer chess
+                learning experiences.
               </p>
             </article>
           </div>
@@ -460,9 +537,10 @@
             <p class="kicker">Core product ideas</p>
             <h2>From positions to reusable learning units</h2>
             <p>
-              Mirasen is built around the idea that chess learning should be more than isolated puzzles,
-              loose notes, or disconnected homework. The goal is to turn training material into structured,
-              reusable knowledge.
+              Mirasen is built around the idea that chess learning should be
+              more than isolated puzzles, loose notes, or disconnected homework.
+              The goal is to turn training material into structured, reusable
+              knowledge.
             </p>
           </div>
 
@@ -470,32 +548,36 @@
             <div class="section-panel">
               <h3 class="panel-title">Motifs + Context</h3>
               <p>
-                The first semantic layer combines motif annotation with contextual metadata so a position can
-                become a real learning unit — not only what happened, but why it matters here.
+                The first semantic layer combines motif annotation with
+                contextual metadata so a position can become a real learning
+                unit — not only what happened, but why it matters here.
               </p>
             </div>
 
             <div class="section-panel">
               <h3 class="panel-title">Review + Retention</h3>
               <p>
-                Review is tied to meaningful training objects and learning behavior, creating a path toward
-                stronger retention, clearer follow-up, and more useful progress visibility.
+                Review is tied to meaningful training objects and learning
+                behavior, creating a path toward stronger retention, clearer
+                follow-up, and more useful progress visibility.
               </p>
             </div>
 
             <div class="section-panel">
               <h3 class="panel-title">Reusable Educational Material</h3>
               <p>
-                The same underlying structure is meant to support repeated use of training content across
-                coaching, self-study, and later author-driven learning scenarios.
+                The same underlying structure is meant to support repeated use
+                of training content across coaching, self-study, and later
+                author-driven learning scenarios.
               </p>
             </div>
 
             <div class="section-panel">
               <h3 class="panel-title">Long-term Learning Ecosystem</h3>
               <p>
-                The long-term direction connects workflows, semantic annotation, retention systems, and richer
-                learning objects into a broader chess learning ecosystem.
+                The long-term direction connects workflows, semantic annotation,
+                retention systems, and richer learning objects into a broader
+                chess learning ecosystem.
               </p>
             </div>
           </div>
@@ -506,8 +588,10 @@
             <p class="kicker">Technology foundation</p>
             <h2>Built on a modern chessboard foundation</h2>
             <p>
-              The learning system is supported by a modern chessboard architecture designed for rendering,
-              interaction, and extension-driven features — a foundation for current workflows and future tools.
+              The learning system is supported by a modern chessboard
+              architecture designed for rendering, interaction, and
+              extension-driven features — a foundation for current workflows and
+              future tools.
             </p>
           </div>
 
@@ -515,15 +599,16 @@
             <div class="section-panel">
               <h3 class="panel-title">Chessboard</h3>
               <p>
-                A modern board foundation for rendering, interaction, and extensibility inside the broader
-                Mirasen ecosystem.
+                A modern board foundation for rendering, interaction, and
+                extensibility inside the broader Mirasen ecosystem.
               </p>
             </div>
             <div class="section-panel">
               <h3 class="panel-title">Why the foundation matters</h3>
               <p>
-                The board is not the product story by itself. It is the enabling layer that supports richer
-                learning workflows, review interactions, and future product depth.
+                The board is not the product story by itself. It is the enabling
+                layer that supports richer learning workflows, review
+                interactions, and future product depth.
               </p>
             </div>
           </div>
