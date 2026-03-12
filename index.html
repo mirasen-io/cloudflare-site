@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mirasen — Chess software and learning tools</title>
+    <meta
+      name="description"
+      content="Mirasen builds chess software and learning tools."
+    />
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: #eef2ff;
+        --muted: #b8c0e0;
+        --line: rgba(255, 255, 255, 0.12);
+        --accent: #8ab4ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top, rgba(138, 180, 255, 0.18), transparent 32%),
+          linear-gradient(180deg, #0b1020 0%, #0e152b 100%);
+        min-height: 100vh;
+      }
+
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 64px;
+      }
+
+      .brand {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .nav a,
+      .button,
+      .card a {
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 28px;
+        align-items: center;
+        margin-bottom: 44px;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 6px 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(40px, 7vw, 72px);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+      }
+
+      .lead {
+        margin: 0 0 28px;
+        max-width: 680px;
+        color: var(--muted);
+        font-size: 19px;
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 18px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        backdrop-filter: blur(8px);
+        font-weight: 600;
+      }
+
+      .button.primary {
+        background: var(--accent);
+        color: #08101f;
+        border-color: transparent;
+      }
+
+      .panel {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        backdrop-filter: blur(10px);
+      }
+
+      .panel h2,
+      .section h2 {
+        margin: 0 0 14px;
+        font-size: 22px;
+      }
+
+      .panel p,
+      .section p,
+      .section li {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin: 30px 0 48px;
+      }
+
+      .card {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--panel);
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .card p {
+        margin: 0 0 14px;
+      }
+
+      .section {
+        margin-top: 44px;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      footer {
+        margin-top: 56px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      @media (max-width: 860px) {
+        .hero,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="nav">
+        <div class="brand">Mirasen</div>
+        <nav class="nav-links">
+          <a href="https://github.com/mirasen-io" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://www.npmjs.com/org/mirasen" target="_blank" rel="noreferrer">npm</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <div class="eyebrow">Chess software and learning tools</div>
+            <h1>Building the Mirasen chess ecosystem.</h1>
+            <p class="lead">
+              Mirasen is building software for chess development, visualization,
+              and learning — from embeddable UI components to training products.
+            </p>
+            <div class="actions">
+              <a class="button primary" href="https://github.com/mirasen-io" target="_blank" rel="noreferrer">View GitHub</a>
+              <a class="button" href="https://www.npmjs.com/org/mirasen" target="_blank" rel="noreferrer">View npm org</a>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <h2>Early projects</h2>
+            <p>
+              The ecosystem is in active development. Initial work is focused on
+              a modern chessboard architecture and chess learning tools.
+            </p>
+            <ul>
+              <li>Embeddable chessboard library</li>
+              <li>Extension-oriented UI architecture</li>
+              <li>Spaced-repetition learning tools for chess</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section class="grid">
+          <article class="card">
+            <h3>Chessboard</h3>
+            <p>
+              A TypeScript-first chessboard foundation for rendering,
+              interaction, and extension-driven features.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Learning</h3>
+            <p>
+              Tools aimed at helping players train, review, and retain chess
+              patterns more effectively.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Ecosystem</h3>
+            <p>
+              A growing set of libraries and products under one consistent chess
+              technology brand.
+            </p>
+          </article>
+        </section>
+
+        <section class="section">
+          <h2>About</h2>
+          <p>
+            Mirasen is the home for chess software projects focused on strong
+            foundations, developer usability, and long-term product direction.
+          </p>
+        </section>
+      </main>
+
+      <footer>
+        © 2026 Mirasen. Chess software and learning tools.
+      </footer>
+    </div>
+  </body>
+</html>
