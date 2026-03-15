@@ -65,11 +65,10 @@ a {
 }
 
 .brand-mark {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 24px rgba(156, 184, 255, 0.7);
+  width: 40px;
+  height: 40px;
+  display: block;
+  flex: 0 0 40px;
 }
 
 .nav-links {

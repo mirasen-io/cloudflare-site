@@ -1,0 +1,30 @@
+<svg width="820" height="200" viewBox="0 0 820 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="820" height="200" rx="24" fill="#F8F8F6"/>
+
+  <!-- Icon container -->
+  <rect x="32" y="32" width="136" height="136" rx="28" fill="#111111"/>
+
+  <!-- Abstract M -->
+  <path
+    d="M60 140V60H74L100 106L126 60H140V140H126V84L103 142H97L74 84V140H60Z"
+    fill="#F8F8F6"
+  />
+
+  <!-- learning nodes -->
+  <circle cx="74" cy="60" r="8.15" fill="#C9A227"/>
+  <circle cx="100" cy="106" r="8.15" fill="#C9A227"/>
+  <circle cx="126" cy="60" r="8.15" fill="#C9A227"/>
+
+  <!-- Wordmark -->
+  <text
+    x="210"
+    y="120"
+    fill="#111111"
+    font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
+    font-size="64"
+    font-weight="700"
+    letter-spacing="-1.5"
+  >
+    Mirasen
+  </text>
+</svg>
