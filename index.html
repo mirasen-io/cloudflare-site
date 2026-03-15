@@ -3,382 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Mirasen — Structured chess learning</title>
     <meta
       name="description"
-      content="Mirasen builds tools and systems for structured chess learning, training, and study."
+      content="Mirasen builds tools and systems for structured chess learning, training, and study — including Mirasen Chess Lore and Mirasen Chessboard."
     />
-    <meta property="og:title" content="Mirasen" />
+
+    <meta property="og:title" content="Mirasen — Structured chess learning" />
     <meta
       property="og:description"
-      content="Tools and systems for structured chess learning, training, and study."
+      content="Tools and systems for structured chess learning, training, and study — including Mirasen Chess Lore and Mirasen Chessboard."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://mirasen.io/" />
+
     <link rel="canonical" href="https://mirasen.io/" />
-    <style>
-      :root {
-        --bg: #0a0f1d;
-        --bg-soft: #10172a;
-        --panel: rgba(255, 255, 255, 0.05);
-        --panel-strong: rgba(255, 255, 255, 0.08);
-        --line: rgba(255, 255, 255, 0.12);
-        --text: #edf2ff;
-        --muted: #b7c1dd;
-        --accent: #9cb8ff;
-        --accent-2: #c7d6ff;
-        --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-        --radius: 24px;
+    <link rel="stylesheet" href="/assets/styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Mirasen",
+        "url": "https://mirasen.io/",
+        "description": "Mirasen builds tools and systems for structured chess learning, training, and study.",
+        "sameAs": [
+          "https://github.com/mirasen-io",
+          "https://www.npmjs.com/org/mirasen"
+        ]
       }
+    </script>
 
-      * {
-        box-sizing: border-box;
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Mirasen",
+        "url": "https://mirasen.io/"
       }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        font-family:
-          Inter,
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
-        color: var(--text);
-        background:
-          radial-gradient(
-            circle at top,
-            rgba(156, 184, 255, 0.16),
-            transparent 30%
-          ),
-          linear-gradient(180deg, var(--bg) 0%, #0d1426 48%, #0b1120 100%);
-        min-height: 100vh;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .wrap {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 28px 20px 72px;
-      }
-
-      .nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        margin-bottom: 56px;
-      }
-
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-      }
-
-      .brand-mark {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: var(--accent);
-        box-shadow: 0 0 24px rgba(156, 184, 255, 0.7);
-      }
-
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        color: var(--muted);
-        flex-wrap: wrap;
-      }
-
-      .nav-links a:hover,
-      .link:hover {
-        color: var(--text);
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-        gap: 24px;
-        align-items: stretch;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 12px;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--muted);
-        font-size: 13px;
-        margin-bottom: 18px;
-      }
-
-      h1 {
-        margin: 0 0 16px;
-        font-size: clamp(32px, 4.4vw, 54px);
-        line-height: 1.05;
-        letter-spacing: -0.03em;
-        max-width: 760px;
-      }
-
-      .lead {
-        margin: 0;
-        max-width: 720px;
-        color: var(--muted);
-        font-size: 20px;
-        line-height: 1.72;
-      }
-
-      .hero-copy {
-        padding: 10px 0;
-      }
-
-      .hero-actions {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-        margin-top: 28px;
-      }
-
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 13px 18px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--panel);
-        backdrop-filter: blur(12px);
-        font-weight: 600;
-        box-shadow: var(--shadow);
-      }
-
-      .button.primary {
-        background: var(--accent);
-        color: #0a1020;
-        border-color: transparent;
-      }
-
-      .hero-side,
-      .spotlight,
-      .card,
-      .section-panel {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-      }
-
-      .hero-side {
-        padding: 24px;
-      }
-
-      .hero-side h2,
-      .spotlight h2,
-      .section-header h2 {
-        margin: 0 0 12px;
-        font-size: 24px;
-        letter-spacing: -0.02em;
-      }
-
-      .hero-side p,
-      .spotlight p,
-      .card p,
-      .section-panel p,
-      .section-panel li,
-      .spotlight li {
-        color: var(--muted);
-        line-height: 1.68;
-      }
-
-      .hero-side ul,
-      .spotlight ul,
-      .section-panel ul {
-        margin: 0;
-        padding-left: 18px;
-      }
-
-      /* ── hero-side specific overrides ── */
-      .hero-side {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-      }
-
-      .hero-side ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        gap: 0.5rem;
-      }
-
-      .hero-side li {
-        padding: 0.65rem 0.85rem;
-        background: var(--panel-strong);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        color: var(--muted);
-      }
-
-      .section {
-        margin-top: 66px;
-      }
-
-      .section-header {
-        max-width: 760px;
-        margin-bottom: 22px;
-      }
-
-      .section-header p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.72;
-        font-size: 18px;
-      }
-
-      .spotlight {
-        padding: 28px;
-        display: grid;
-        grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-        gap: 24px;
-      }
-
-      .kicker {
-        margin: 0 0 10px;
-        color: var(--accent-2);
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .grid-3 {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .card {
-        padding: 24px;
-      }
-
-      .card h3 {
-        margin: 0 0 10px;
-        font-size: 20px;
-        letter-spacing: -0.02em;
-      }
-
-      .list-plain {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .list-plain li {
-        padding: 14px 0;
-        border-top: 1px solid var(--line);
-      }
-
-      .list-plain li:first-child {
-        border-top: 0;
-        padding-top: 0;
-      }
-
-      .two-col {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .section-panel {
-        padding: 24px;
-      }
-
-      .panel-title {
-        margin: 0 0 12px;
-        font-size: 18px;
-        letter-spacing: -0.02em;
-      }
-
-      .pill-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 18px;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      footer {
-        margin-top: 72px;
-        padding-top: 20px;
-        border-top: 1px solid var(--line);
-        color: var(--muted);
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-        font-size: 14px;
-      }
-
-      @media (max-width: 980px) {
-        .hero,
-        .spotlight,
-        .grid-3,
-        .two-col {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 680px) {
-        .wrap {
-          padding: 24px 16px 56px;
-        }
-
-        .nav {
-          flex-direction: column;
-          align-items: flex-start;
-          margin-bottom: 42px;
-        }
-
-        h1 {
-          font-size: clamp(38px, 12vw, 58px);
-        }
-
-        .lead,
-        .section-header p {
-          font-size: 17px;
-        }
-      }
-    </style>
+    </script>
   </head>
+
   <body>
     <div class="wrap">
       <header class="nav">
@@ -386,7 +52,10 @@
           <span class="brand-mark" aria-hidden="true"></span>
           <span>Mirasen</span>
         </div>
-        <nav class="nav-links" aria-label="External links">
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/chess-lore/">Chess Lore</a>
+          <a href="/chessboard/">Chessboard</a>
           <a
             href="https://github.com/mirasen-io"
             target="_blank"
@@ -413,20 +82,14 @@
             </h1>
             <p class="lead">
               Mirasen builds tools and systems for structured chess learning —
-              helping trainers, students, and authors organize material,
-              reinforce patterns, and turn study into lasting understanding.
+              helping turn training, study, and teaching material into clearer
+              workflows, stronger retention, and deeper understanding over time.
             </p>
             <div class="hero-actions">
-              <a class="button primary" href="#chess-lore"
+              <a class="button primary" href="/chess-lore/"
                 >Explore Chess Lore</a
               >
-              <a
-                class="button"
-                href="https://github.com/mirasen-io"
-                target="_blank"
-                rel="noreferrer"
-                >View GitHub</a
-              >
+              <a class="button" href="/chessboard/">View Chessboard</a>
             </div>
           </div>
 
@@ -434,21 +97,26 @@
             <h2>What Mirasen is building</h2>
             <ul>
               <li>Structured learning workflows for serious chess study</li>
-              <li>Semantic annotation built around motifs and context</li>
+              <li>
+                Current semantic foundations built around motifs and context
+              </li>
               <li>Review and retention tied to real training material</li>
-              <li>Structured learning material for deeper study over time</li>
+              <li>
+                A modern chessboard foundation for current and future tools
+              </li>
             </ul>
           </aside>
         </section>
 
-        <section class="section" id="chess-lore">
+        <section class="section">
           <div class="section-header">
             <p class="kicker">Current product direction</p>
             <h2>Mirasen Chess Lore</h2>
             <p>
-              Chess Lore is the first major product direction inside Mirasen: a
+              Chess Lore is the current main product direction inside Mirasen: a
               workflow-first system for structured chess learning, starting with
-              trainer workflows and expanding into broader chess learning.
+              trainer workflows and expanding into broader chess learning over
+              time.
             </p>
           </div>
 
@@ -457,9 +125,9 @@
               <p>
                 The current direction focuses on helping trainers assign,
                 organize, review, and reinforce chess learning with more
-                structure. The same workflows also support self-directed
-                learners who want clearer review, stronger retention, and
-                clearer progress.
+                structure. The same learning logic also supports self-directed
+                learners who want clearer review, stronger retention, and more
+                meaningful progress visibility.
               </p>
               <div class="pill-row" aria-label="Core themes">
                 <span class="pill">trainer workflows</span>
@@ -468,147 +136,107 @@
                 <span class="pill">structured learning material</span>
               </div>
             </div>
+
             <div>
               <ul class="list-plain">
                 <li>
-                  Assign and organize training material in a more structured way
+                  Organize training material through clearer learning workflows
                 </li>
                 <li>
                   Annotate positions with motifs and context, not only moves and
                   comments
                 </li>
                 <li>
-                  Reinforce learning over time through review workflows tied to
-                  real material
-                </li>
-                <li>
-                  Make progress easier to track through meaningful study
-                  activity
+                  Reinforce learning over time through review tied to real
+                  material
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button primary" href="/chess-lore/"
+              >Learn more about Chess Lore</a
+            >
           </div>
         </section>
 
         <section class="section">
           <div class="section-header">
-            <p class="kicker">Who it serves</p>
-            <h2>Designed around real learning roles</h2>
+            <p class="kicker">Foundation layer</p>
+            <h2>Mirasen Chessboard</h2>
             <p>
-              The current product direction is trainer-first, while the broader
-              system supports trainers, students, and authors through a shared
-              learning workflow.
+              Mirasen Chessboard is the open-source chessboard UI library inside
+              the broader Mirasen ecosystem — a modern foundation for rendering,
+              interaction, and richer chess applications.
+            </p>
+          </div>
+
+          <div class="two-col">
+            <div class="section-panel">
+              <h3 class="panel-title">Why it exists</h3>
+              <p>
+                The board is not the product story by itself. It is the
+                foundation that supports richer learning workflows, review
+                interactions, and future Mirasen tools.
+              </p>
+            </div>
+
+            <div class="section-panel">
+              <h3 class="panel-title">How it fits</h3>
+              <p>
+                Chessboard supports the broader Mirasen learning ecosystem while
+                remaining a distinct open-source library with its own public
+                GitHub and npm presence.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button primary" href="/chessboard/"
+              >Learn more about Chessboard</a
+            >
+            <a
+              class="button"
+              href="https://github.com/mirasen-io/chessboard"
+              target="_blank"
+              rel="noreferrer"
+              >View repository</a
+            >
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <p class="kicker">Brand structure</p>
+            <h2>One brand, multiple layers</h2>
+            <p>
+              Mirasen is structured as a brand hub with a current main product
+              direction and an open-source foundation layer.
             </p>
           </div>
 
           <div class="grid-3">
             <article class="card">
-              <h3>Trainers</h3>
+              <h3>Mirasen</h3>
+              <p>Tools and systems for structured chess learning.</p>
+            </article>
+
+            <article class="card">
+              <h3>Chess Lore</h3>
               <p>
-                Organize homework, track follow-up, reinforce learning over
-                time, and work with training material in a way that fits real
-                coaching workflows.
+                Workflow-first chess learning focused on structure, review, and
+                retention.
               </p>
             </article>
 
             <article class="card">
-              <h3>Students</h3>
+              <h3>Chessboard</h3>
               <p>
-                Study with more structure, get clearer review loops, and retain
-                ideas and patterns through workflows connected to real games and
-                training material.
+                Open-source chessboard UI library supporting the broader Mirasen
+                ecosystem.
               </p>
             </article>
-
-            <article class="card">
-              <h3>Authors</h3>
-              <p>
-                Create educational material that can support richer chess
-                learning over time.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <p class="kicker">Core product ideas</p>
-            <h2>From positions to reusable learning units</h2>
-            <p>
-              Mirasen is built on the idea that chess learning should be more
-              than isolated puzzles, loose notes, or disconnected homework. The
-              goal is to turn training material into structured learning
-              material that can be reused over time.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="section-panel">
-              <h3 class="panel-title">Motifs + Context</h3>
-              <p>
-                The first semantic layer combines motif annotation with
-                contextual metadata so a position becomes a real learning unit —
-                not only what happened, but why it matters here.
-              </p>
-            </div>
-
-            <div class="section-panel">
-              <h3 class="panel-title">Review + Retention</h3>
-              <p>
-                Review is tied to meaningful training objects and learning
-                behavior, supporting stronger retention, clearer follow-up, and
-                more useful progress visibility.
-              </p>
-            </div>
-
-            <div class="section-panel">
-              <h3 class="panel-title">Reusable Educational Material</h3>
-              <p>
-                The same learning structure supports repeated use of training
-                content across coaching, self-study, and later author-driven
-                learning scenarios.
-              </p>
-            </div>
-
-            <div class="section-panel">
-              <h3 class="panel-title">Long-term Product Direction</h3>
-              <p>
-                The long-term direction brings together workflows, semantic
-                annotation, retention systems, and richer learning material into
-                a broader chess learning platform.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <p class="kicker">Technology foundation</p>
-            <h2>Built on a modern chessboard foundation</h2>
-            <p>
-              The learning system is supported by a modern chessboard
-              architecture designed for rendering, interaction, and
-              extension-driven features — a foundation for current workflows and
-              future tools.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="section-panel">
-              <h3 class="panel-title">Chessboard</h3>
-              <p>
-                A modern board foundation for rendering, interaction, and
-                extensibility across Mirasen tools.
-              </p>
-            </div>
-            <div class="section-panel">
-              <h3 class="panel-title">Why the foundation matters</h3>
-              <p>
-                The board is not the product story by itself. It is the
-                foundation that supports richer learning workflows, review
-                interactions, and future tools.
-              </p>
-            </div>
           </div>
         </section>
       </main>
