@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mirasen Chessboard — Minimal Example</title>
+    <title>Mirasen Chessboard — Minimal Interactive Example</title>
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/assets/logo-short.svg" />
@@ -93,12 +93,6 @@
         border-color: var(--line);
       }
 
-      .board-controls button.button.primary {
-        background: var(--accent);
-        color: #0a1020;
-        border-color: transparent;
-      }
-
       #board {
         width: 100%;
         aspect-ratio: 1 / 1;
@@ -106,6 +100,8 @@
         overflow: hidden;
         border-radius: 18px;
         box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+        user-select: none;
+        touch-action: pinch-zoom;
       }
 
       #board svg {
@@ -173,8 +169,10 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/">Home</a>
           <a href="/chess-lore/">Chess Lore</a>
           <a href="/chessboard/">Chessboard</a>
+          <a href="/chessboard/examples/">Examples</a>
           <a
             href="https://github.com/mirasen-io/chessboard"
             target="_blank"
@@ -191,19 +189,24 @@
       </header>
 
       <main class="example-main">
-        <section class="example-layout" aria-label="Mirasen Chessboard example">
+        <section
+          class="example-layout"
+          aria-label="Minimal Mirasen Chessboard example"
+        >
           <div class="example-copy">
-            <p class="kicker">Minimal CDN example</p>
-            <h1>Mirasen Chessboard</h1>
+            <p class="kicker">Minimal interactive example</p>
+            <h1>Move pieces freely</h1>
             <p class="lead">
-              A small static example loaded directly from npm through jsDelivr.
-              No local build step, no framework wrapper — just the published
-              chessboard package running in the browser.
+              A compact interactive board example with free movement,
+              orientation switching, position reset, and random move controls.
             </p>
 
             <div class="hero-actions">
+              <a class="button primary" href="/chessboard/examples/"
+                >All examples</a
+              >
               <a
-                class="button primary"
+                class="button"
                 href="https://github.com/mirasen-io/chessboard"
                 target="_blank"
                 rel="noreferrer"
@@ -235,7 +238,8 @@
             <div id="board"></div>
 
             <p class="example-note">
-              Loaded from <code>@mirasen/chessboard</code> via CDN.
+              Use the controls above, drag pieces directly, or use release
+              targeting to move pieces on the board.
             </p>
           </div>
         </section>
@@ -243,7 +247,7 @@
 
       <footer>
         <span>© 2026 Mirasen</span>
-        <span>Structured chess learning. Become Dangerous.</span>
+        <span>Mirasen Chessboard — minimal interactive example.</span>
       </footer>
     </div>
 
