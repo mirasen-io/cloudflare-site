@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mirasen Chessboard — Promotion Example</title>
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-short.svg" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@ktarmyshov/assert": "https://cdn.jsdelivr.net/npm/@ktarmyshov/assert/+esm",
+          "es-toolkit": "https://cdn.jsdelivr.net/npm/es-toolkit/+esm"
+        }
+      }
+    </script>
+
+    <style>
+      .example-page {
+        min-height: 100vh;
+      }
+
+      .example-wrap {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .example-main {
+        flex: 1;
+        display: grid;
+        align-items: center;
+        padding: 16px 0 40px;
+      }
+
+      .example-layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.72fr) minmax(320px, 1fr);
+        gap: 32px;
+        align-items: center;
+      }
+
+      .example-copy {
+        max-width: 520px;
+      }
+
+      .example-copy h1 {
+        margin-bottom: 18px;
+      }
+
+      .example-copy .lead {
+        font-size: 18px;
+        line-height: 1.65;
+      }
+
+      .example-board-panel {
+        border: 1px solid var(--line);
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(156, 184, 255, 0.14),
+            transparent 34%
+          ),
+          var(--panel);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: clamp(14px, 2.4vw, 24px);
+        justify-self: center;
+        width: min(72vmin, 720px, 100%);
+      }
+
+      .board-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .board-controls button {
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        font: inherit;
+        color: var(--text);
+      }
+
+      .board-controls button.button {
+        background: var(--panel);
+        border-color: var(--line);
+      }
+
+      #board {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        display: block;
+        overflow: hidden;
+        border-radius: 18px;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+      }
+
+      #board svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .example-note {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      @media (max-width: 980px) {
+        .example-main {
+          align-items: start;
+          padding-top: 0;
+        }
+
+        .example-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .example-copy {
+          max-width: 760px;
+        }
+
+        .example-board-panel {
+          width: min(82vmin, 680px, 100%);
+        }
+      }
+
+      @media (max-width: 680px) {
+        .example-board-panel {
+          width: 100%;
+          padding: 12px;
+          border-radius: 20px;
+        }
+
+        .board-controls {
+          gap: 10px;
+        }
+
+        .board-controls .button {
+          flex: 1 1 auto;
+          padding-inline: 12px;
+        }
+
+        #board {
+          border-radius: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="example-page">
+    <div class="wrap example-wrap">
+      <header class="nav">
+        <a class="brand" href="/" aria-label="Mirasen home">
+          <img class="brand-mark" src="/assets/logo-short.svg" alt="Mirasen" />
+          <span>Mirasen</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/">Home</a>
+          <a href="/chess-lore/">Chess Lore</a>
+          <a href="/chessboard/">Chessboard</a>
+          <a href="/chessboard/examples/">Examples</a>
+          <a
+            href="https://github.com/mirasen-io/chessboard"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="https://www.npmjs.com/package/@mirasen/chessboard"
+            target="_blank"
+            rel="noreferrer"
+            >npm</a
+          >
+        </nav>
+      </header>
+
+      <main class="example-main">
+        <section
+          class="example-layout"
+          aria-label="Mirasen Chessboard promotion example"
+        >
+          <div class="example-copy">
+            <p class="kicker">Promotion example</p>
+            <h1>Promotion flow</h1>
+            <p class="lead">
+              A compact promotion scenario with deferred promotion selection and
+              optional auto-promotion to queen.
+            </p>
+
+            <div class="hero-actions">
+              <a class="button primary" href="/chessboard/examples/"
+                >All examples</a
+              >
+              <a
+                class="button"
+                href="https://github.com/mirasen-io/chessboard"
+                target="_blank"
+                rel="noreferrer"
+                >View repository</a
+              >
+              <a
+                class="button"
+                href="https://www.npmjs.com/package/@mirasen/chessboard"
+                target="_blank"
+                rel="noreferrer"
+                >View npm package</a
+              >
+            </div>
+          </div>
+
+          <div class="example-board-panel">
+            <div class="board-controls" aria-label="Chessboard controls">
+              <button class="button" type="button" id="orientationButton">
+                Orientation: white
+              </button>
+              <button class="button" type="button" id="resetButton">
+                Reset position
+              </button>
+              <button class="button" type="button" id="autoPromoteButton">
+                Auto promote to queen: off
+              </button>
+            </div>
+
+            <div id="board"></div>
+
+            <p class="example-note">
+              Move one of the pawns to a promotion target. Toggle auto-promotion
+              to compare manual and automatic resolution.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>© 2026 Mirasen</span>
+        <span>Mirasen Chessboard — promotion example.</span>
+      </footer>
+    </div>
+
+    <script type="module">
+      import { createBoard } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/+esm";
+      import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/extensions/+esm";
+
+      let board;
+      let orientation = "white";
+
+      const START_POSITION = {
+        e2: "wP",
+        f7: "wP",
+        d7: "bP",
+        c2: "bP",
+      };
+
+      const boardElement = document.getElementById("board");
+      const orientationButton = document.getElementById("orientationButton");
+      const resetButton = document.getElementById("resetButton");
+      const autoPromoteButton = document.getElementById("autoPromoteButton");
+
+      if (!boardElement) {
+        throw new Error("Board element not found");
+      }
+
+      if (!resetButton || !autoPromoteButton || !orientationButton) {
+        throw new Error("Chessboard controls not found");
+      }
+
+      const chessnutBaseUrl =
+        "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/assets/pieces/chessnut/";
+
+      const pieceUrls = {
+        wK: `${chessnutBaseUrl}wK.svg`,
+        wQ: `${chessnutBaseUrl}wQ.svg`,
+        wR: `${chessnutBaseUrl}wR.svg`,
+        wB: `${chessnutBaseUrl}wB.svg`,
+        wN: `${chessnutBaseUrl}wN.svg`,
+        wP: `${chessnutBaseUrl}wP.svg`,
+        bK: `${chessnutBaseUrl}bK.svg`,
+        bQ: `${chessnutBaseUrl}bQ.svg`,
+        bR: `${chessnutBaseUrl}bR.svg`,
+        bB: `${chessnutBaseUrl}bB.svg`,
+        bN: `${chessnutBaseUrl}bN.svg`,
+        bP: `${chessnutBaseUrl}bP.svg`,
+      };
+
+      const promotionPieceUrls = {
+        wQ: `${chessnutBaseUrl}wQ.svg`,
+        wR: `${chessnutBaseUrl}wR.svg`,
+        wB: `${chessnutBaseUrl}wB.svg`,
+        wN: `${chessnutBaseUrl}wN.svg`,
+        bQ: `${chessnutBaseUrl}bQ.svg`,
+        bR: `${chessnutBaseUrl}bR.svg`,
+        bB: `${chessnutBaseUrl}bB.svg`,
+        bN: `${chessnutBaseUrl}bN.svg`,
+      };
+
+      function updateAutoPromoteButton() {
+        autoPromoteButton.textContent = `Auto promote to queen: ${
+          board.extensions.autoPromote.toQueen ? "on" : "off"
+        }`;
+      }
+
+      function resetPosition() {
+        board.setPosition({
+          pieces: START_POSITION,
+          turn: "w",
+        });
+        board.select(null);
+      }
+
+      function toggleAutoPromotion() {
+        board.extensions.autoPromote.toQueen =
+          !board.extensions.autoPromote.toQueen;
+        updateAutoPromoteButton();
+      }
+
+      function toggleOrientation() {
+        orientation = orientation === "white" ? "black" : "white";
+        board.setOrientation(orientation);
+        orientationButton.textContent = `Orientation: ${orientation}`;
+      }
+
+      board = createBoard({
+        element: boardElement,
+        state: {
+          board: {
+            turn: "w",
+            pieces: START_POSITION,
+          },
+          interaction: {
+            movability: {
+              mode: "strict",
+              destinations: (source) => {
+                if (source === "e2") {
+                  return [
+                    { to: "e8", promotedTo: ["B", "N"] },
+                    { to: "d8", promotedTo: ["R", "N", "Q"] },
+                  ];
+                }
+
+                if (source === "f7") {
+                  return [
+                    { to: "f8", promotedTo: ["B", "R", "N", "Q"] },
+                    { to: "g8", promotedTo: ["B", "R", "N", "Q"] },
+                  ];
+                }
+
+                if (source === "d7") {
+                  return [
+                    { to: "d1", promotedTo: ["B", "N"] },
+                    { to: "e1", promotedTo: ["R", "N", "Q"] },
+                  ];
+                }
+
+                if (source === "c2") {
+                  return [
+                    { to: "c1", promotedTo: ["B", "R", "N", "Q"] },
+                    { to: "b1", promotedTo: ["B", "R", "N", "Q"] },
+                  ];
+                }
+
+                return undefined;
+              },
+            },
+          },
+        },
+        extensions: [
+          builtInExtensionFactoryMap.renderer({
+            pieceUrls,
+          }),
+          "selectedSquare",
+          "lastMove",
+          "activeTarget",
+          "legalMoves",
+          "events",
+          "autoPromote",
+          //"promotion",
+          builtInExtensionFactoryMap.promotion({
+            pieceUrls: promotionPieceUrls,
+          }),
+        ],
+      });
+
+      updateAutoPromoteButton();
+
+      orientationButton.addEventListener("click", toggleOrientation);
+      resetButton.addEventListener("click", resetPosition);
+      autoPromoteButton.addEventListener("click", toggleAutoPromotion);
+    </script>
+  </body>
+</html>
