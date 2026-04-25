@@ -73,6 +73,32 @@
         width: min(72vmin, 720px, 100%);
       }
 
+      .board-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .board-controls button {
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        font: inherit;
+        color: var(--text);
+      }
+
+      .board-controls button.button {
+        background: var(--panel);
+        border-color: var(--line);
+      }
+
+      .board-controls button.button.primary {
+        background: var(--accent);
+        color: #0a1020;
+        border-color: transparent;
+      }
+
       #board {
         width: 100%;
         aspect-ratio: 1 / 1;
@@ -120,6 +146,15 @@
           width: 100%;
           padding: 12px;
           border-radius: 20px;
+        }
+
+        .board-controls {
+          gap: 10px;
+        }
+
+        .board-controls .button {
+          flex: 1 1 auto;
+          padding-inline: 12px;
         }
 
         #board {
@@ -185,7 +220,20 @@
           </div>
 
           <div class="example-board-panel">
+            <div class="board-controls" aria-label="Chessboard controls">
+              <button class="button" type="button" id="orientationButton">
+                Orientation: white
+              </button>
+              <button class="button" type="button" id="resetButton">
+                Reset position
+              </button>
+              <button class="button" type="button" id="randomMoveButton">
+                Random move
+              </button>
+            </div>
+
             <div id="board"></div>
+
             <p class="example-note">
               Loaded from <code>@mirasen/chessboard</code> via CDN.
             </p>
@@ -202,12 +250,21 @@
     <script type="module">
       import { createBoard } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/+esm";
       import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/extensions/+esm";
+
       let board;
+      let orientation = "white";
 
       const boardElement = document.getElementById("board");
+      const orientationButton = document.getElementById("orientationButton");
+      const resetButton = document.getElementById("resetButton");
+      const randomMoveButton = document.getElementById("randomMoveButton");
 
       if (!boardElement) {
         throw new Error("Board element not found");
+      }
+
+      if (!orientationButton || !resetButton || !randomMoveButton) {
+        throw new Error("Chessboard controls not found");
       }
 
       const chessnutBaseUrl =
@@ -228,6 +285,53 @@
         bP: `${chessnutBaseUrl}bP.svg`,
       };
 
+      function fileOf(square) {
+        return "abcdefgh"[square % 8];
+      }
+
+      function rankOf(square) {
+        return Math.floor(square / 8) + 1;
+      }
+
+      function algebraic(square) {
+        return `${fileOf(square)}${rankOf(square)}`;
+      }
+
+      function toggleOrientation() {
+        orientation = orientation === "white" ? "black" : "white";
+        board.setOrientation(orientation);
+        orientationButton.textContent = `Orientation: ${orientation}`;
+      }
+
+      function resetPosition() {
+        board.setPosition("start");
+        board.select(null);
+      }
+
+      function randomMove() {
+        const snapshot = board.getSnapshot();
+
+        let pieceCode = 0;
+        let fromSquare = "";
+
+        while (pieceCode <= 0) {
+          const square = Math.floor(Math.random() * 64);
+          pieceCode = snapshot.state.board.pieces[square];
+          fromSquare = algebraic(square);
+        }
+
+        let toSquare = fromSquare;
+
+        while (toSquare === fromSquare) {
+          toSquare = algebraic(Math.floor(Math.random() * 64));
+        }
+
+        board.move({
+          from: fromSquare,
+          to: toSquare,
+        });
+      }
+
       board = createBoard({
         element: boardElement,
         extensions: [
@@ -243,9 +347,14 @@
           "promotion",
         ],
       });
+
       board.setMovability({
         mode: "free",
       });
+
+      orientationButton.addEventListener("click", toggleOrientation);
+      resetButton.addEventListener("click", resetPosition);
+      randomMoveButton.addEventListener("click", randomMove);
     </script>
   </body>
 </html>
