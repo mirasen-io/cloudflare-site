@@ -9,4 +9,16 @@
   <url>
     <loc>https://mirasen.io/chessboard/</loc>
   </url>
+  <url>
+    <loc>https://mirasen.io/chessboard/examples/</loc>
+  </url>
+  <url>
+    <loc>https://mirasen.io/chessboard/examples/minimal</loc>
+  </url>
+  <url>
+    <loc>https://mirasen.io/chessboard/examples/legal-moves</loc>
+  </url>
+  <url>
+    <loc>https://mirasen.io/chessboard/examples/promotion</loc>
+  </url>
 </urlset>
