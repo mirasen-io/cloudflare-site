@@ -16,9 +16,9 @@
     <loc>https://mirasen.io/chessboard/examples/minimal</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/legal-moves</loc>
+    <loc>https://mirasen.io/chessboard/examples/promotion</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/promotion</loc>
+    <loc>https://mirasen.io/chessboard/examples/chessjs</loc>
   </url>
 </urlset>
