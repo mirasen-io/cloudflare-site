@@ -4,12 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mirasen Chessboard — Promotion Example</title>
+    <title>Mirasen Chessboard — chess.js Game Example</title>
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/assets/logo-short.svg" />
     <link rel="stylesheet" href="/assets/styles.css" />
-
     <link rel="stylesheet" href="/assets/examples.css" />
 
   </head>
@@ -45,14 +44,16 @@
       <main class="example-main">
         <section
           class="example-layout"
-          aria-label="Mirasen Chessboard promotion example"
+          aria-label="Mirasen Chessboard chess.js game example"
         >
           <div class="example-copy">
-            <p class="kicker">Promotion example</p>
-            <h1>Promotion flow</h1>
+            <p class="kicker">chess.js game example</p>
+            <h1>Play against a random-move computer</h1>
             <p class="lead">
-              A compact promotion scenario with deferred promotion selection and
-              optional auto-promotion to queen.
+              This example connects Mirasen Chessboard to chess.js through the
+              built-in adapter. chess.js owns the rules and game state; the
+              board owns interaction, legal targets, promotion UI, and
+              animation.
             </p>
 
             <div class="hero-actions">
@@ -82,18 +83,21 @@
                 Orientation: white
               </button>
               <button class="button" type="button" id="resetButton">
-                Reset position
+                Reset game
               </button>
               <button class="button" type="button" id="autoPromoteButton">
                 Auto promote to queen: off
               </button>
             </div>
 
+            <p class="game-status" id="statusText">Your move</p>
+
             <div id="board"></div>
 
             <p class="example-note">
-              Move one of the pawns to a promotion target. Toggle auto-promotion
-              to compare manual and automatic resolution.
+              You play white. The computer replies with random legal moves.
+              Legal targets, promotion choices, castling, and en passant all
+              come from chess.js through adapter helpers.
             </p>
           </div>
         </section>
@@ -101,34 +105,45 @@
 
       <footer>
         <span>© 2026 Mirasen</span>
-        <span>Mirasen Chessboard — promotion example.</span>
+        <span>Mirasen Chessboard — chess.js game example.</span>
       </footer>
     </div>
 
     <script type="module">
       import { createBoard } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/+esm";
+      import {
+        toBoardMove,
+        toBoardMoveDestinations,
+        toGameMove,
+      } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/adapters/chessjs/+esm";
       import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/extensions/+esm";
+      import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js/+esm";
 
       let board;
+      let chess = new Chess();
       let orientation = "white";
+      let computerTimeout = null;
+      let gameVersion = 0;
 
-      const START_POSITION = {
-        e2: "wP",
-        f7: "wP",
-        d7: "bP",
-        c2: "bP",
-      };
+      const playerColor = "w";
+      const computerTimeoutDuration = 3000;
 
       const boardElement = document.getElementById("board");
       const orientationButton = document.getElementById("orientationButton");
       const resetButton = document.getElementById("resetButton");
       const autoPromoteButton = document.getElementById("autoPromoteButton");
+      const statusText = document.getElementById("statusText");
 
       if (!boardElement) {
         throw new Error("Board element not found");
       }
 
-      if (!resetButton || !autoPromoteButton || !orientationButton) {
+      if (
+        !orientationButton ||
+        !resetButton ||
+        !autoPromoteButton ||
+        !statusText
+      ) {
         throw new Error("Chessboard controls not found");
       }
 
@@ -161,18 +176,14 @@
         bN: `${chessnutBaseUrl}bN.svg`,
       };
 
+      function updateStatus() {
+        statusText.textContent = getStatus();
+      }
+
       function updateAutoPromoteButton() {
         autoPromoteButton.textContent = `Auto promote to queen: ${
           board.extensions.autoPromote.toQueen ? "on" : "off"
         }`;
-      }
-
-      function resetPosition() {
-        board.setPosition({
-          pieces: START_POSITION,
-          turn: "w",
-        });
-        board.select(null);
       }
 
       function toggleAutoPromotion() {
@@ -187,51 +198,46 @@
         orientationButton.textContent = `Orientation: ${orientation}`;
       }
 
+      function getStatus() {
+        if (chess.isCheckmate()) return "Checkmate";
+        if (chess.isDraw()) return "Draw";
+        if (chess.isGameOver()) return "Game over";
+        if (chess.isCheck()) return "Check";
+        return chess.turn() === playerColor ? "Your move" : "Computer thinking…";
+      }
+
+      function clearComputerTimeout() {
+        if (computerTimeout !== null) {
+          clearTimeout(computerTimeout);
+          computerTimeout = null;
+        }
+      }
+
+      function makeComputerMove() {
+        const moves = chess.moves({ verbose: true });
+
+        if (moves.length === 0) {
+          updateStatus();
+          return;
+        }
+
+        const randomMove = moves[Math.floor(Math.random() * moves.length)];
+        const appliedMove = chess.move(randomMove);
+        board.move(toBoardMove(appliedMove));
+        updateStatus();
+      }
+
+      function resetGame() {
+        gameVersion += 1;
+        clearComputerTimeout();
+        chess = new Chess();
+        board.setPosition(chess.fen());
+        board.select(null);
+        updateStatus();
+      }
+
       board = createBoard({
         element: boardElement,
-        state: {
-          board: {
-            turn: "w",
-            pieces: START_POSITION,
-          },
-          interaction: {
-            movability: {
-              mode: "strict",
-              destinations: (source) => {
-                if (source === "e2") {
-                  return [
-                    { to: "e8", promotedTo: ["B", "N"] },
-                    { to: "d8", promotedTo: ["R", "N", "Q"] },
-                    { to: "f8", promotedTo: ["R", "N", "Q"] },
-                  ];
-                }
-
-                if (source === "f7") {
-                  return [
-                    { to: "f8", promotedTo: ["B", "R", "N", "Q"] },
-                    { to: "g8", promotedTo: ["B", "R", "N", "Q"] },
-                  ];
-                }
-
-                if (source === "d7") {
-                  return [
-                    { to: "d1", promotedTo: ["B", "N"] },
-                    { to: "e1", promotedTo: ["R", "N", "Q"] },
-                  ];
-                }
-
-                if (source === "c2") {
-                  return [
-                    { to: "c1", promotedTo: ["B", "R", "N", "Q"] },
-                    { to: "b1", promotedTo: ["B", "R", "N", "Q"] },
-                  ];
-                }
-
-                return undefined;
-              },
-            },
-          },
-        },
         extensions: [
           builtInExtensionFactoryMap.renderer({
             pieceUrls,
@@ -242,7 +248,6 @@
           "legalMoves",
           "events",
           "autoPromote",
-          //"promotion",
           builtInExtensionFactoryMap.promotion({
             pieceUrls: promotionPieceUrls,
           }),
@@ -250,9 +255,37 @@
       });
 
       updateAutoPromoteButton();
+      board.setPosition(chess.fen());
+      board.setMovability({
+        mode: "strict",
+        destinations: (source) => {
+          if (chess.turn() !== playerColor) {
+            return undefined;
+          }
+
+          const moves = chess.moves({ square: source, verbose: true });
+          const destinations = toBoardMoveDestinations(moves);
+
+          return destinations.length > 0 ? destinations : undefined;
+        },
+      });
+
+      board.extensions.events.setOnUIMove((move) => {
+        chess.move(toGameMove(move));
+        updateStatus();
+
+        if (!chess.isGameOver()) {
+          const scheduledVersion = gameVersion;
+          computerTimeout = setTimeout(() => {
+            if (scheduledVersion !== gameVersion || !board) return;
+            makeComputerMove();
+            computerTimeout = null;
+          }, computerTimeoutDuration);
+        }
+      });
 
       orientationButton.addEventListener("click", toggleOrientation);
-      resetButton.addEventListener("click", resetPosition);
+      resetButton.addEventListener("click", resetGame);
       autoPromoteButton.addEventListener("click", toggleAutoPromotion);
     </script>
   </body>
