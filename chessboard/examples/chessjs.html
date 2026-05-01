@@ -171,6 +171,11 @@
         console.log(line);
       }
 
+      import chessboardPackageJson from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/package.json/+esm";
+      logDebug(
+        `@mirasen/chessboard package.json version: ${chessboardPackageJson.version}`,
+      );
+
       window.addEventListener("error", (event) => {
         logDebug(`ERROR: ${event.message}`);
       });
