@@ -279,7 +279,9 @@
           const scheduledVersion = gameVersion;
           computerTimeout = setTimeout(() => {
             if (scheduledVersion !== gameVersion || !board) return;
-            makeComputerMove();
+            requestAnimationFrame(() => {
+              makeComputerMove();
+            });
             computerTimeout = null;
           }, computerTimeoutDuration);
         }
