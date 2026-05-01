@@ -91,6 +91,30 @@
 
             <p class="game-status" id="statusText">Your move</p>
 
+            <textarea
+              id="debugLog"
+              readonly
+              style="
+                width: 100%;
+                min-height: 220px;
+                margin: 12px 0;
+                padding: 8px;
+                font:
+                  12px/1.4 ui-monospace,
+                  SFMono-Regular,
+                  Menlo,
+                  Monaco,
+                  Consolas,
+                  monospace;
+                color: #d1d5db;
+                background: #111827;
+                border: 1px solid #374151;
+                border-radius: 8px;
+                box-sizing: border-box;
+                white-space: pre;
+              "
+            ></textarea>
+
             <div id="board"></div>
 
             <p class="example-note">
@@ -132,6 +156,30 @@
       const resetButton = document.getElementById("resetButton");
       const autoPromoteButton = document.getElementById("autoPromoteButton");
       const statusText = document.getElementById("statusText");
+
+      const debugLog = document.getElementById("debugLog");
+
+      function logDebug(message) {
+        const time = new Date().toISOString().slice(11, 23);
+        const line = `${time} ${message}`;
+
+        if (debugLog) {
+          debugLog.value += `${line}\n`;
+          debugLog.scrollTop = debugLog.scrollHeight;
+        }
+
+        console.log(line);
+      }
+
+      window.addEventListener("error", (event) => {
+        logDebug(`ERROR: ${event.message}`);
+      });
+
+      window.addEventListener("unhandledrejection", (event) => {
+        logDebug(`UNHANDLED REJECTION: ${event.reason}`);
+      });
+
+      logDebug("debug build: ios-safari-logs-001");
 
       if (!boardElement) {
         throw new Error("Board element not found");
@@ -215,17 +263,46 @@
       }
 
       function makeComputerMove() {
-        const moves = chess.moves({ verbose: true });
+        logDebug("makeComputerMove:start");
 
-        if (moves.length === 0) {
+        try {
+          const moves = chess.moves({ verbose: true });
+          logDebug(`legal moves: ${moves.length}, turn=${chess.turn()}`);
+
+          if (moves.length === 0) {
+            logDebug("makeComputerMove:no moves");
+            updateStatus();
+            logDebug(`status after no moves: ${statusText.textContent}`);
+            return;
+          }
+
+          const randomMove = moves[Math.floor(Math.random() * moves.length)];
+          logDebug(
+            `randomMove: ${randomMove.from}-${randomMove.to}${randomMove.promotion ?? ""}`,
+          );
+
+          const appliedMove = chess.move(randomMove);
+          logDebug(
+            `chess.move applied: ${appliedMove.from}-${appliedMove.to}${appliedMove.promotion ?? ""}, turn=${chess.turn()}`,
+          );
+
+          board.move(toBoardMove(appliedMove));
+          logDebug("board.move done");
+
           updateStatus();
-          return;
-        }
+          logDebug(`status updated: ${statusText.textContent}`);
 
-        const randomMove = moves[Math.floor(Math.random() * moves.length)];
-        const appliedMove = chess.move(randomMove);
-        board.move(toBoardMove(appliedMove));
-        updateStatus();
+          requestAnimationFrame(() => {
+            logDebug("raf after board.move");
+          });
+
+          setTimeout(() => {
+            logDebug("timeout 0 after board.move");
+          }, 0);
+        } catch (error) {
+          logDebug(`makeComputerMove ERROR: ${error?.stack ?? error}`);
+          throw error;
+        }
       }
 
       function resetGame() {
@@ -272,18 +349,47 @@
       });
 
       board.extensions.events.setOnUIMove((move) => {
-        chess.move(toGameMove(move));
-        updateStatus();
+        logDebug(`onUIMove: ${move.from}-${move.to}${move.promotedTo ?? ""}`);
 
-        if (!chess.isGameOver()) {
-          const scheduledVersion = gameVersion;
-          computerTimeout = setTimeout(() => {
-            if (scheduledVersion !== gameVersion || !board) return;
-            requestAnimationFrame(() => {
-              makeComputerMove();
-            });
-            computerTimeout = null;
-          }, computerTimeoutDuration);
+        try {
+          chess.move(toGameMove(move));
+          logDebug(`player move applied, turn=${chess.turn()}`);
+
+          updateStatus();
+          logDebug(`status after player move: ${statusText.textContent}`);
+
+          if (!chess.isGameOver()) {
+            const scheduledVersion = gameVersion;
+            logDebug(
+              `schedule computer move, scheduledVersion=${scheduledVersion}, delay=${computerTimeoutDuration}`,
+            );
+
+            computerTimeout = setTimeout(() => {
+              logDebug(
+                `computer timeout fired, scheduledVersion=${scheduledVersion}, gameVersion=${gameVersion}, board=${board ? "yes" : "no"}`,
+              );
+
+              computerTimeout = null;
+
+              requestAnimationFrame(() => {
+                logDebug("raf before makeComputerMove");
+
+                if (scheduledVersion !== gameVersion || !board) {
+                  logDebug("computer move cancelled inside raf");
+                  return;
+                }
+
+                makeComputerMove();
+              });
+
+              setTimeout(() => {
+                logDebug("timeout 0 after scheduling raf");
+              }, 0);
+            }, computerTimeoutDuration);
+          }
+        } catch (error) {
+          logDebug(`onUIMove ERROR: ${error?.stack ?? error}`);
+          throw error;
         }
       });
 
