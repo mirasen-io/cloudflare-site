@@ -133,13 +133,13 @@
     </div>
 
     <script type="module">
-      import { createBoard } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/+esm";
+      import { createBoard } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/+esm";
       import {
         toBoardMove,
         toBoardMoveDestinations,
         toGameMove,
-      } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/adapters/chessjs/+esm";
-      import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/extensions/+esm";
+      } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/adapters/chessjs/+esm";
+      import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/extensions/+esm";
       import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js/+esm";
 
       let board;
@@ -171,7 +171,7 @@
         console.log(line);
       }
 
-      import chessboardPackageJson from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard/package.json/+esm";
+      import chessboardPackageJson from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/package.json/+esm";
       logDebug(
         `@mirasen/chessboard package.json version: ${chessboardPackageJson.version}`,
       );
