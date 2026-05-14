@@ -120,6 +120,36 @@
   }
 }
 
+.segment-control {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.segment-control .segment {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.segment-control .segment + .segment {
+  border-left: 1px solid var(--line);
+}
+
+.segment-control .segment.active {
+  background: var(--accent);
+  color: #0a1020;
+}
+
 @media (max-width: 680px) {
   .example-board-panel {
     width: 100%;
@@ -134,5 +164,15 @@
   .board-controls .button {
     flex: 1 1 auto;
     padding-inline: 12px;
+  }
+
+  .segment-control {
+    flex: 1 1 100%;
+  }
+
+  .segment-control .segment {
+    flex: 1;
+    padding: 8px 6px;
+    text-align: center;
   }
 }

@@ -87,6 +87,33 @@
               <button class="button" type="button" id="autoPromoteButton">
                 Auto promote to queen: off
               </button>
+              <button class="button" type="button" id="drawButton">
+                Annotations: right-click
+              </button>
+              <button class="button" type="button" id="clearOnCoreButton">
+                Clear on interaction: on
+              </button>
+              <div class="segment-control" id="drawModifierControl">
+                <button
+                  class="segment active"
+                  type="button"
+                  data-value="keyboard"
+                >
+                  keyboard
+                </button>
+                <button class="segment" type="button" data-value="ctrl">
+                  ctrl
+                </button>
+                <button class="segment" type="button" data-value="shift">
+                  shift
+                </button>
+                <button class="segment" type="button" data-value="alt">
+                  alt
+                </button>
+                <button class="segment" type="button" data-value="meta">
+                  meta
+                </button>
+              </div>
             </div>
 
             <p class="game-status" id="statusText">Your move</p>
@@ -122,8 +149,8 @@
               You play white. The computer replies with random legal moves.
               Legal targets, promotion choices, castling, and en passant all
               come from chess.js through adapter helpers. Use right-click to
-              draw circles and arrows, or switch annotation mode on for
-              primary-button drawing.
+              draw circles and arrows, switch annotations to primary-button
+              drawing, and choose an annotation color from the controls.
             </p>
           </div>
         </section>
@@ -158,6 +185,11 @@
       const orientationButton = document.getElementById("orientationButton");
       const resetButton = document.getElementById("resetButton");
       const autoPromoteButton = document.getElementById("autoPromoteButton");
+      const drawButton = document.getElementById("drawButton");
+      const clearOnCoreButton = document.getElementById("clearOnCoreButton");
+      const drawModifierControl = document.getElementById(
+        "drawModifierControl",
+      );
       const statusText = document.getElementById("statusText");
 
       const debugLog = document.getElementById("debugLog");
@@ -197,6 +229,9 @@
         !orientationButton ||
         !resetButton ||
         !autoPromoteButton ||
+        !drawButton ||
+        !clearOnCoreButton ||
+        !drawModifierControl ||
         !statusText
       ) {
         throw new Error("Chessboard controls not found");
@@ -251,6 +286,45 @@
         orientation = orientation === "white" ? "black" : "white";
         board.setOrientation(orientation);
         orientationButton.textContent = `Orientation: ${orientation}`;
+      }
+
+      function updateDrawButton() {
+        const primary = board.extensions.annotations.drawButton === 0;
+        drawButton.textContent = `Annotations: ${primary ? "primary" : "right-click"}`;
+      }
+
+      function toggleDrawButton() {
+        const current = board.extensions.annotations.drawButton;
+        board.extensions.annotations.drawButton = current === 0 ? 2 : 0;
+        updateDrawButton();
+      }
+
+      function updateClearOnCoreButton() {
+        const on = board.extensions.annotations.clearOnCoreInteraction;
+        clearOnCoreButton.textContent = `Clear on interaction: ${on ? "on" : "off"}`;
+      }
+
+      function toggleClearOnCore() {
+        board.extensions.annotations.clearOnCoreInteraction =
+          !board.extensions.annotations.clearOnCoreInteraction;
+        updateClearOnCoreButton();
+      }
+
+      function updateDrawModifierSegment() {
+        const current = board.extensions.annotations.drawModifier;
+        const value = current === null ? "keyboard" : current;
+        for (const seg of drawModifierControl.querySelectorAll(".segment")) {
+          seg.classList.toggle("active", seg.dataset.value === value);
+        }
+      }
+
+      function onDrawModifierClick(e) {
+        const seg = e.target.closest(".segment");
+        if (!seg) return;
+        const value =
+          seg.dataset.value === "keyboard" ? null : seg.dataset.value;
+        board.extensions.annotations.drawModifier = value;
+        updateDrawModifierSegment();
       }
 
       function getStatus() {
@@ -406,6 +480,13 @@
       orientationButton.addEventListener("click", toggleOrientation);
       resetButton.addEventListener("click", resetGame);
       autoPromoteButton.addEventListener("click", toggleAutoPromotion);
+      drawButton.addEventListener("click", toggleDrawButton);
+      clearOnCoreButton.addEventListener("click", toggleClearOnCore);
+      drawModifierControl.addEventListener("click", onDrawModifierClick);
+
+      updateDrawButton();
+      updateClearOnCoreButton();
+      updateDrawModifierSegment();
     </script>
   </body>
 </html>
