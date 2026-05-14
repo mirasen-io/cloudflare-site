@@ -51,8 +51,8 @@
             <p class="lead">
               This example connects Mirasen Chessboard to chess.js through the
               built-in adapter. chess.js owns the rules and game state; the
-              board owns interaction, legal targets, promotion UI, and
-              animation.
+              board owns interaction, legal targets, annotations, promotion UI,
+              and animation.
             </p>
 
             <div class="hero-actions">
@@ -121,7 +121,9 @@
             <p class="example-note">
               You play white. The computer replies with random legal moves.
               Legal targets, promotion choices, castling, and en passant all
-              come from chess.js through adapter helpers.
+              come from chess.js through adapter helpers. Use right-click to
+              draw circles and arrows, or switch annotation mode on for
+              primary-button drawing.
             </p>
           </div>
         </section>
@@ -336,6 +338,7 @@
           builtInExtensionFactoryMap.promotion({
             pieceUrls: promotionPieceUrls,
           }),
+          "annotations",
         ],
       });
 
