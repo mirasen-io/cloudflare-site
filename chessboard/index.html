@@ -30,22 +30,69 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Mirasen Chessboard",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web",
-        "url": "https://mirasen.io/chessboard/",
-        "description": "Mirasen Chessboard is an open-source chessboard platform by Mirasen, built for real chess interaction, modern web chess applications, and the broader Mirasen learning ecosystem.",
-        "author": {
-          "@type": "Organization",
-          "name": "Mirasen",
-          "url": "https://mirasen.io/"
-        },
-        "sameAs": [
-          "https://github.com/mirasen-io/chessboard",
-          "https://www.npmjs.com/package/@mirasen/chessboard",
-          "https://github.com/mirasen-io/react-chessboard",
-          "https://www.npmjs.com/package/@mirasen/react-chessboard"
+        "@graph": [
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "@mirasen/chessboard",
+            "alternateName": "Mirasen Chessboard",
+            "description": "Framework-agnostic TypeScript chessboard library with built-in interaction, annotations, promotion UI, animation, DOM/SVG rendering, and extension-driven architecture.",
+            "url": "https://mirasen.io/chessboard/",
+            "codeRepository": "https://github.com/mirasen-io/chessboard",
+            "programmingLanguage": "TypeScript",
+            "runtimePlatform": "Web",
+            "license": "https://github.com/mirasen-io/chessboard/blob/main/LICENSE",
+            "sameAs": [
+              "https://github.com/mirasen-io/chessboard",
+              "https://www.npmjs.com/package/@mirasen/chessboard"
+            ],
+            "subjectOf": [
+              {
+                "@type": "CreativeWork",
+                "name": "@mirasen/chessboard README",
+                "url": "https://github.com/mirasen-io/chessboard/blob/main/README.md"
+              },
+              {
+                "@type": "CreativeWork",
+                "name": "@mirasen/chessboard changelog",
+                "url": "https://github.com/mirasen-io/chessboard/blob/main/CHANGELOG.md"
+              },
+              {
+                "@type": "CreativeWork",
+                "name": "@mirasen/chessboard live examples",
+                "url": "https://mirasen.io/chessboard/examples/"
+              }
+            ],
+            "publisher": {
+              "@type": "Organization",
+              "name": "Mirasen",
+              "url": "https://mirasen.io/"
+            }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "@mirasen/react-chessboard",
+            "alternateName": "Mirasen React Chessboard",
+            "description": "React wrapper for Mirasen Chessboard, providing a React component with the same built-in chess interaction, annotations, promotion UI, animation, and chess.js integration.",
+            "url": "https://mirasen.io/chessboard/",
+            "codeRepository": "https://github.com/mirasen-io/react-chessboard",
+            "programmingLanguage": "TypeScript",
+            "runtimePlatform": "React",
+            "license": "https://github.com/mirasen-io/react-chessboard/blob/main/LICENSE",
+            "sameAs": [
+              "https://github.com/mirasen-io/react-chessboard",
+              "https://www.npmjs.com/package/@mirasen/react-chessboard"
+            ],
+            "isBasedOn": {
+              "@type": "SoftwareSourceCode",
+              "name": "@mirasen/chessboard",
+              "codeRepository": "https://github.com/mirasen-io/chessboard"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Mirasen",
+              "url": "https://mirasen.io/"
+            }
+          }
         ]
       }
     </script>
