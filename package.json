@@ -14,6 +14,8 @@
   },
   "homepage": "https://github.com/mirasen-io/cloudflare-site#readme",
   "dependencies": {
+    "@mirasen/chessboard": "^1.2.4",
+    "chess.js": "^1.4.0",
     "wrangler": "^4.93.0"
   }
 }
