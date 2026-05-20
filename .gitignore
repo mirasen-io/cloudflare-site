@@ -6,3 +6,12 @@
 !.env.example
 
 artifacts
+
+.claude/settings.local.json
+.claude/cache/
+.claude/sessions/
+
+node_modules
+dist
+build
+coverage*

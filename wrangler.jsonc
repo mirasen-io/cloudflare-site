@@ -6,7 +6,7 @@
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": "./deploy-site"
   },
   "compatibility_flags": [
     "nodejs_compat"
