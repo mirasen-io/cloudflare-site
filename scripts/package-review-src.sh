@@ -57,7 +57,7 @@ if [[ ! -d "$ROOT_DIR/deploy-site" ]]; then
 fi
 
 # Standard payload
-cp -R "$ROOT_DIR/deploy-site" "$STAGING_DIR/src"
+cp -R "$ROOT_DIR/deploy-site" "$STAGING_DIR/deploy-site"
 copy_if_exists "tests"
 copy_if_exists "scripts"
 copy_if_exists "docs"
