@@ -10,7 +10,7 @@ The static chess.js play example at [deploy-site/chessboard/examples/chessjs.htm
   - `Reset game` → `Reset`
   - `Orientation: white` / `Orientation: black` → `White` / `Black`
   - `Auto promote to queen: on/off` → `Auto queen: On/Off`
-  - `Clear on interaction: on/off` → `Clear: On/Off`
+  - `Clear on interaction: on/off` → `Auto-clear: On/Off`
   - `Annotations: right-click` / `primary` → `Draw: Right` / `Draw: Primary` (or similarly compact).
 - Locally tighten board-controls button padding/min-width in [examples.css](deploy-site/assets/examples.css) under `.board-controls .button` so labels fit on mobile without horizontal scrolling, while keeping tap targets usable.
 - Import `DefaultMainRendererDesktopConfig` and `DefaultMainRendererMobileConfig` from `@mirasen/chessboard/extensions` via the matching jsDelivr `+esm` URL already used by this page; pass only the `.drag` subconfig into `renderer.setConfig`.

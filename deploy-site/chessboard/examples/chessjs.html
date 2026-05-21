@@ -78,21 +78,73 @@
 
           <div class="example-board-panel">
             <div class="board-controls" aria-label="Chessboard controls">
-              <button class="button" type="button" id="orientationButton">
-                Orientation: white
+              <button
+                class="button"
+                type="button"
+                id="orientationButton"
+                aria-label="Orientation: white"
+              >
+                White
               </button>
               <button class="button" type="button" id="resetButton">
-                Reset game
+                Reset
               </button>
-              <button class="button" type="button" id="autoPromoteButton">
-                Auto promote to queen: off
+              <button
+                class="button"
+                type="button"
+                id="autoPromoteButton"
+                aria-label="Auto promote to queen: off"
+              >
+                Auto queen: Off
               </button>
-              <button class="button" type="button" id="drawButton">
-                Annotations: right-click
+              <button
+                class="button"
+                type="button"
+                id="drawButton"
+                aria-label="Annotations: right-click"
+              >
+                Draw: Right
               </button>
-              <button class="button" type="button" id="clearOnCoreButton">
-                Clear on interaction: on
+              <button
+                class="button"
+                type="button"
+                id="clearOnCoreButton"
+                aria-label="Clear on interaction: on"
+              >
+                Auto-clear: On
               </button>
+              <div
+                class="segment-control"
+                id="dragPresetControl"
+                role="group"
+                aria-label="Drag preset"
+              >
+                <span class="segment segment-prefix">Drag</span>
+                <button
+                  class="segment active"
+                  type="button"
+                  data-value="desktop"
+                >
+                  Desktop
+                </button>
+                <button class="segment" type="button" data-value="mobile">
+                  Mobile
+                </button>
+              </div>
+              <div
+                class="segment-control"
+                id="animControl"
+                role="group"
+                aria-label="Animation"
+              >
+                <span class="segment segment-prefix">Anim</span>
+                <button class="segment active" type="button" data-value="on">
+                  On
+                </button>
+                <button class="segment" type="button" data-value="off">
+                  Off
+                </button>
+              </div>
               <div class="segment-control" id="drawModifierControl">
                 <button
                   class="segment active"
@@ -149,8 +201,9 @@
               You play white. The computer replies with random legal moves.
               Legal targets, promotion choices, castling, and en passant all
               come from chess.js through adapter helpers. Use right-click to
-              draw circles and arrows, switch annotations to primary-button
-              drawing, and choose an annotation color from the controls.
+              draw circles and arrows, switch Draw to Primary for primary-button
+              annotation drawing, choose annotation colors from the controls,
+              and use Auto-clear to remove annotations after board interaction.
             </p>
           </div>
         </section>
@@ -169,7 +222,11 @@
         toBoardMoveDestinations,
         toGameMove,
       } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/adapters/chessjs/+esm";
-      import { builtInExtensionFactoryMap } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/extensions/+esm";
+      import {
+        builtInExtensionFactoryMap,
+        DefaultMainRendererDesktopConfig,
+        DefaultMainRendererMobileConfig,
+      } from "https://cdn.jsdelivr.net/npm/@mirasen/chessboard@latest/extensions/+esm";
       import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js/+esm";
 
       let board;
@@ -190,6 +247,8 @@
       const drawModifierControl = document.getElementById(
         "drawModifierControl",
       );
+      const dragPresetControl = document.getElementById("dragPresetControl");
+      const animControl = document.getElementById("animControl");
       const statusText = document.getElementById("statusText");
 
       const debugLog = document.getElementById("debugLog");
@@ -232,6 +291,8 @@
         !drawButton ||
         !clearOnCoreButton ||
         !drawModifierControl ||
+        !dragPresetControl ||
+        !animControl ||
         !statusText
       ) {
         throw new Error("Chessboard controls not found");
@@ -271,9 +332,12 @@
       }
 
       function updateAutoPromoteButton() {
-        autoPromoteButton.textContent = `Auto promote to queen: ${
-          board.extensions.autoPromote.toQueen ? "on" : "off"
-        }`;
+        const on = board.extensions.autoPromote.toQueen;
+        autoPromoteButton.textContent = `Auto queen: ${on ? "On" : "Off"}`;
+        autoPromoteButton.setAttribute(
+          "aria-label",
+          `Auto promote to queen: ${on ? "on" : "off"}`,
+        );
       }
 
       function toggleAutoPromotion() {
@@ -285,12 +349,21 @@
       function toggleOrientation() {
         orientation = orientation === "white" ? "black" : "white";
         board.setOrientation(orientation);
-        orientationButton.textContent = `Orientation: ${orientation}`;
+        orientationButton.textContent =
+          orientation === "white" ? "White" : "Black";
+        orientationButton.setAttribute(
+          "aria-label",
+          `Orientation: ${orientation}`,
+        );
       }
 
       function updateDrawButton() {
         const primary = board.extensions.annotations.drawButton === 0;
-        drawButton.textContent = `Annotations: ${primary ? "primary" : "right-click"}`;
+        drawButton.textContent = `Draw: ${primary ? "Primary" : "Right"}`;
+        drawButton.setAttribute(
+          "aria-label",
+          `Annotations: ${primary ? "primary" : "right-click"}`,
+        );
       }
 
       function toggleDrawButton() {
@@ -301,13 +374,72 @@
 
       function updateClearOnCoreButton() {
         const on = board.extensions.annotations.clearOnCoreInteraction;
-        clearOnCoreButton.textContent = `Clear on interaction: ${on ? "on" : "off"}`;
+        clearOnCoreButton.textContent = `Auto-clear: ${on ? "On" : "Off"}`;
+        clearOnCoreButton.setAttribute(
+          "aria-label",
+          `Clear on interaction: ${on ? "on" : "off"}`,
+        );
       }
 
       function toggleClearOnCore() {
         board.extensions.annotations.clearOnCoreInteraction =
           !board.extensions.annotations.clearOnCoreInteraction;
         updateClearOnCoreButton();
+      }
+
+      function setActiveSegment(container, value) {
+        for (const seg of container.querySelectorAll(".segment")) {
+          if (seg.classList.contains("segment-prefix")) continue;
+          seg.classList.toggle("active", seg.dataset.value === value);
+        }
+      }
+
+      function applyDragPreset(value) {
+        if (value === "desktop") {
+          board.setInteractionConfig({
+            drag: { liftedActivation: { thresholdPx: 0 } },
+          });
+          board.extensions.renderer.setConfig({
+            drag: DefaultMainRendererDesktopConfig.drag,
+          });
+        } else if (value === "mobile") {
+          board.setInteractionConfig({
+            drag: { liftedActivation: { thresholdPx: 5 } },
+          });
+          board.extensions.renderer.setConfig({
+            drag: DefaultMainRendererMobileConfig.drag,
+          });
+        } else {
+          return;
+        }
+        setActiveSegment(dragPresetControl, value);
+      }
+
+      function applyAnimSetting(value) {
+        if (value === "on") {
+          board.extensions.renderer.setConfig({
+            animation: { durationMs: 180 },
+          });
+        } else if (value === "off") {
+          board.extensions.renderer.setConfig({
+            animation: { durationMs: 0 },
+          });
+        } else {
+          return;
+        }
+        setActiveSegment(animControl, value);
+      }
+
+      function onDragPresetClick(e) {
+        const seg = e.target.closest(".segment");
+        if (!seg || seg.classList.contains("segment-prefix")) return;
+        applyDragPreset(seg.dataset.value);
+      }
+
+      function onAnimControlClick(e) {
+        const seg = e.target.closest(".segment");
+        if (!seg || seg.classList.contains("segment-prefix")) return;
+        applyAnimSetting(seg.dataset.value);
       }
 
       function updateDrawModifierSegment() {
@@ -483,6 +615,8 @@
       drawButton.addEventListener("click", toggleDrawButton);
       clearOnCoreButton.addEventListener("click", toggleClearOnCore);
       drawModifierControl.addEventListener("click", onDrawModifierClick);
+      dragPresetControl.addEventListener("click", onDragPresetClick);
+      animControl.addEventListener("click", onAnimControlClick);
 
       updateDrawButton();
       updateClearOnCoreButton();

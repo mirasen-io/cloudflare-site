@@ -93,9 +93,9 @@ The chess.js example page SHALL display compact labels for board controls so the
 #### Scenario: Clear-on-interaction label is compact
 
 - **WHEN** clear-on-core-interaction is on
-- **THEN** the clear button's visible label reads `Clear: On`
+- **THEN** the clear button's visible label reads `Auto-clear: On`
 - **WHEN** clear-on-core-interaction is off
-- **THEN** the clear button's visible label reads `Clear: Off`
+- **THEN** the clear button's visible label reads `Auto-clear: Off`
 
 #### Scenario: Annotation draw-mode label is compact
 

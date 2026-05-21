@@ -71,6 +71,13 @@
   border-color: var(--line);
 }
 
+.board-controls .button {
+  padding: 8px 12px;
+  border-radius: 12px;
+  min-height: 36px;
+  font-size: 0.85rem;
+}
+
 .game-status {
   margin: 0 0 16px;
   color: var(--text);
@@ -143,6 +150,16 @@
 
 .segment-control .segment + .segment {
   border-left: 1px solid var(--line);
+}
+
+.segment-control .segment-prefix {
+  background: transparent;
+  color: var(--muted);
+  cursor: default;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .segment-control .segment.active {
