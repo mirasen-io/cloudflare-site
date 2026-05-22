@@ -1,6 +1,7 @@
 ## Context
 
 Repo root today is a hand-rolled static site:
+
 - `wrangler.jsonc` `assets.directory = ./deploy-site`
 - `deploy-site/index.html` + `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml`
 - Root `package.json` declares `wrangler ^4.93.0`, `chess.js ^1.4.0`, `@mirasen/chessboard ^1.2.4`
@@ -9,6 +10,7 @@ Repo root today is a hand-rolled static site:
 - `.claude/` contains project-level Claude config
 
 A working SvelteKit replacement exists under `artifacts/main-web/`:
+
 - SvelteKit 2 + Svelte 5 + Skeleton UI v4 + Tailwind v4
 - `@sveltejs/adapter-static` → `build/`
 - Vitest + Playwright already wired
@@ -22,12 +24,14 @@ The user will migrate `deploy-site/` routes into SvelteKit incrementally in foll
 ## Goals / Non-Goals
 
 **Goals:**
+
 - The SvelteKit project lives at the repo root: `npm install`, `npm run dev`, `npm run build`, `npm run check`, `npm run lint`, `npm run test:unit` all work from the root.
 - The live site is unchanged: `wrangler dev` and any existing deploy path still serve `deploy-site/`.
 - `artifacts/main-web/` remains on disk and untracked.
 - Root `openspec/`, root `.claude/`, `scripts/`, `wrangler.jsonc`, `deploy-site/` are untouched.
 
 **Non-Goals:**
+
 - Porting any route from `deploy-site/` to SvelteKit.
 - Switching the deploy/Wrangler target to `./build`.
 - Removing or modifying `deploy-site/`.
@@ -39,15 +43,19 @@ The user will migrate `deploy-site/` routes into SvelteKit incrementally in foll
 ## Decisions
 
 ### D1. Replace `package.json` with SvelteKit base, then re-add `wrangler` and `chess.js`
+
 Take `artifacts/main-web/package.json` as the base and overwrite the root file. Then add `wrangler ^4.93.0` to `devDependencies` and `chess.js ^1.4.0` to `dependencies` (the pre-migration root versions). Drop `@mirasen/chessboard`. Regenerate `package-lock.json` via `npm install`.
 **Why**: explicit user direction. `wrangler` is needed locally for `npx wrangler dev` against `deploy-site/` (the deploy continues to point there); declaring it in `devDependencies` keeps `npm` install reproducible. `chess.js` is kept as a runtime dep because the legacy `deploy-site/chessboard/` page or upcoming SvelteKit ports may consume it. `@mirasen/chessboard` is dropped because it isn't requested back; if a follow-up route needs it, that change re-adds it explicitly. **Alternative**: copy verbatim and never re-add — rejected, breaks `wrangler` workflow. **Alternative**: full merge — rejected, the user prefers a fresh manifest with two explicit adds rather than a merge of unrelated metadata fields.
 
 ### D2. Copy, don't move; don't touch `artifacts/main-web/.git`
+
 Use `cp -R` for every transferred file. `artifacts/main-web/` stays in place as a local backup. We do not pull in its `.git`, `.claude/`, `openspec/`, `node_modules/`, `build/`, or `.svelte-kit/`.
 **Why**: `/artifacts` is gitignored; keeping the source tree intact gives a free rollback point until the user is confident. Not pulling in a parallel `.git` keeps history clean. Not pulling in `artifacts/main-web/openspec/` is an explicit user instruction — root `openspec/` stays authoritative until the user re-inits it manually after this change.
 
 ### D3. `.gitignore` is a sensible union
+
 Final root `.gitignore` is the union of root + `artifacts/main-web/.gitignore`. Required entries:
+
 - Wrangler/env: `.wrangler`, `.dev.vars*`, `!.dev.vars.example`, `.env*`, `!.env.example`
 - Node/build: `node_modules`, `dist`, `coverage*`, `/build`, `/.svelte-kit`, `.output`, `.vercel`, `.netlify`
 - Vite/Playwright: `vite.config.js.timestamp-*`, `vite.config.ts.timestamp-*`, `test-results`
@@ -58,10 +66,12 @@ Final root `.gitignore` is the union of root + `artifacts/main-web/.gitignore`. 
 **Why**: a strict union covers both worlds, with `/artifacts` explicitly preserved.
 
 ### D4. Don't touch `wrangler.jsonc`, `deploy-site/`, `scripts/`, `openspec/`, `.claude/`
+
 Per user direction. Live deploy keeps serving `deploy-site/`; the SvelteKit project at the root is for `npm run dev` / `npm run build` only at this stage.
 **Why**: minimum-risk migration. Switching the deploy target while the new site is still a Skeleton demo would visibly break the live site. Re-init of `openspec/` is a manual follow-up the user wants to do themselves.
 
 ### D5. No conflict between SvelteKit `static/` and legacy `deploy-site/`
+
 The SvelteKit project's `static/` (currently just `robots.txt`) is the only `static/` at the root. We do **not** copy any legacy assets into it. If a SvelteKit `dev`/`build` happens to expose a route that also exists under `deploy-site/`, that's irrelevant — `wrangler` still serves `deploy-site/`, and `npm run dev`/`preview` only matter for incremental development.
 **Why**: separation of concerns. Mixing legacy static into SvelteKit `static/` was the previous plan; with the new approach it's pure noise.
 
