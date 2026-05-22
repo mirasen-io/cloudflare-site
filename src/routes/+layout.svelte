@@ -8,10 +8,24 @@
 	let { children } = $props();
 
 	const nav = $derived<NavConfig>((page.data as { nav?: NavConfig }).nav ?? rootNav);
+	const year = new Date().getFullYear();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<AppBar brand={nav.brand} links={nav.links} />
+<div class="flex min-h-dvh flex-col">
+	<AppBar brand={nav.brand} links={nav.links} />
 
-{@render children()}
+	<div class="flex-1">
+		{@render children()}
+	</div>
+
+	<footer class="border-surface-200-800 border-t">
+		<div
+			class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm opacity-80 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+		>
+			<p>© {year} Mirasen</p>
+			<p>Structured chess learning. Become Dangerous.</p>
+		</div>
+	</footer>
+</div>
