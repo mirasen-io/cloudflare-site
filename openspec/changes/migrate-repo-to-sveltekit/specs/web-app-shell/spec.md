@@ -6,103 +6,105 @@ The repository root SHALL be a SvelteKit 2 application using Svelte 5, Skeleton 
 
 #### Scenario: Layout at repo root
 
-- **WHEN** an engineer clones the repo and lists the top level
-- **THEN** they see `src/`, `static/`, `svelte.config.js`, `vite.config.ts`, `tsconfig.json`, `eslint.config.js`, `playwright.config.ts`, `.prettierrc`, `.prettierignore`, `.npmrc`, `AGENTS.md`, `package.json`, `package-lock.json`, `wrangler.jsonc`, `.gitignore`
-- **AND** they do NOT see `deploy-site/`
+- **WHEN** an engineer lists the top-level files of a fresh clone after `npm install`
+- **THEN** they see `src/`, `static/`, `svelte.config.js`, `vite.config.ts`, `tsconfig.json`, `eslint.config.js`, `playwright.config.ts`, `.prettierrc`, `.prettierignore`, `.npmrc`, `AGENTS.md`, `package.json`, `package-lock.json`, `.gitignore`
+- **AND** legacy artefacts `wrangler.jsonc`, `deploy-site/`, `scripts/`, `openspec/`, `.claude/` are also present and unchanged
 
-#### Scenario: SvelteKit toolchain reachable from root
+#### Scenario: SvelteKit dev server starts
 
-- **WHEN** they run `npm install` followed by `npm run check`
-- **THEN** the command exits 0 and reports zero type errors
+- **WHEN** the engineer runs `npm run dev`
+- **THEN** the SvelteKit dev server (vite) starts and serves `/` from `src/routes/+page.svelte`
 
-### Requirement: Static-asset build output for Cloudflare Workers
+### Requirement: Static-asset build output
 
-The project SHALL build to `build/` via `@sveltejs/adapter-static`, and the Cloudflare Workers configuration SHALL serve assets from that directory. `wrangler.jsonc` MUST set `assets.directory` to `./build`.
+The project SHALL build to `build/` via `@sveltejs/adapter-static`.
 
 #### Scenario: Build produces a static bundle
 
 - **WHEN** an engineer runs `npm run build`
 - **THEN** a `build/` directory is created at the repo root containing `index.html` and the SvelteKit asset bundle
 
-#### Scenario: Wrangler points at the build output
+### Requirement: Live deploy untouched
 
-- **WHEN** `wrangler.jsonc` is read
-- **THEN** `assets.directory` is `./build`
-- **AND** no other directory is referenced as the asset source
+The migration SHALL NOT change what `wrangler.jsonc` serves. `wrangler.jsonc` MUST continue to set `assets.directory` to `./deploy-site`, and `deploy-site/` MUST remain on disk with its previous contents intact.
 
-#### Scenario: Wrangler dev serves the built site
+#### Scenario: Wrangler config unchanged
 
-- **WHEN** an engineer runs `npm run build` then `npx wrangler dev`
-- **THEN** wrangler starts and `/` returns the SvelteKit-rendered home page
+- **WHEN** `wrangler.jsonc` is read after the migration
+- **THEN** `assets.directory` is `./deploy-site`
 
-### Requirement: Legacy URL stability
+#### Scenario: Legacy site directory unchanged
 
-The migrated site SHALL continue to serve every URL the previous `deploy-site/` site served, except for `/` (which is now SvelteKit-rendered). Specifically, `/chessboard/`, `/chess-lore/`, `/sitemap.xml`, `/favicon.ico`, and `/assets/*` MUST resolve and return the same content as before. The legacy content MUST be sourced from `static/` so SvelteKit serves it verbatim at build time.
+- **WHEN** `deploy-site/` is listed after the migration
+- **THEN** it contains the same files it had before the migration: at minimum `index.html`, `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml`
 
-#### Scenario: Legacy chessboard page still loads
+#### Scenario: Wrangler dev still serves the legacy site
 
-- **WHEN** the built site is served (via `npm run preview` or `npx wrangler dev`) and a request hits `/chessboard/`
-- **THEN** the response is the same legacy HTML/JS/CSS bundle that previously lived at `deploy-site/chessboard/`
+- **WHEN** an engineer runs `npx wrangler dev`
+- **THEN** wrangler serves the contents of `deploy-site/` and `/` returns the legacy `deploy-site/index.html`
 
-#### Scenario: Legacy chess-lore page still loads
+### Requirement: Replaced dependency manifest
 
-- **WHEN** a request hits `/chess-lore/`
-- **THEN** the response is the same legacy content that previously lived at `deploy-site/chess-lore/`
-
-#### Scenario: sitemap and favicon and assets
-
-- **WHEN** requests hit `/sitemap.xml`, `/favicon.ico`, or any `/assets/<path>`
-- **THEN** each returns byte-equivalent content to the previous `deploy-site/` version
-
-#### Scenario: Root path is owned by SvelteKit
-
-- **WHEN** a request hits `/`
-- **THEN** the response is rendered from `src/routes/+page.svelte`
-- **AND** the previous `deploy-site/index.html` is NOT present anywhere in `static/` or `build/` apart from the SvelteKit-generated `build/index.html`
-
-### Requirement: Merged dependency manifest
-
-The root `package.json` SHALL declare the SvelteKit/Svelte 5/Skeleton/Tailwind/Vitest/Playwright stack as the project base, AND SHALL retain `chess.js` and `@mirasen/chessboard` as runtime dependencies, AND SHALL declare `wrangler` as a dev dependency. `package-lock.json` MUST be regenerated by `npm install` and MUST be committed.
-
-#### Scenario: Runtime deps for legacy chessboard page
-
-- **WHEN** the root `package.json` is read
-- **THEN** `dependencies` contains `chess.js` and `@mirasen/chessboard`
-
-#### Scenario: Wrangler is a dev tool
-
-- **WHEN** the root `package.json` is read
-- **THEN** `devDependencies` contains `wrangler`
-- **AND** `dependencies` does NOT contain `wrangler`
+The root `package.json` SHALL be derived from `artifacts/main-web/package.json` (the SvelteKit base), with `wrangler ^4.93.0` added to `devDependencies` and `chess.js ^1.4.0` added to `dependencies`. The previous root entry `@mirasen/chessboard` MUST NOT be carried over. `package-lock.json` MUST be regenerated by `npm install`.
 
 #### Scenario: SvelteKit base intact
 
-- **WHEN** the root `package.json` is read
+- **WHEN** the root `package.json` is read after the migration
 - **THEN** `devDependencies` contains at minimum `@sveltejs/kit`, `@sveltejs/adapter-static`, `svelte`, `vite`, `typescript`, `vitest`, `@playwright/test`, `@skeletonlabs/skeleton`, `@skeletonlabs/skeleton-svelte`, `tailwindcss`, `@tailwindcss/vite`
 
-#### Scenario: Lockfile reflects manifest
+#### Scenario: Wrangler restored as dev tool
+
+- **WHEN** the root `package.json` is read after the migration
+- **THEN** `devDependencies` contains `wrangler` at version `^4.93.0`
+- **AND** `dependencies` does NOT contain `wrangler`
+
+#### Scenario: chess.js restored as runtime dep
+
+- **WHEN** the root `package.json` is read after the migration
+- **THEN** `dependencies` contains `chess.js` at version `^1.4.0`
+
+#### Scenario: chessboard not carried over
+
+- **WHEN** the root `package.json` is read after the migration
+- **THEN** neither `dependencies` nor `devDependencies` contain `@mirasen/chessboard`
+
+#### Scenario: Lockfile resolves cleanly
 
 - **WHEN** an engineer runs `npm install` in a clean clone
 - **THEN** the install completes without errors and `package-lock.json` resolves every entry in `package.json`
 
-### Requirement: Backup directory preserved and ignored
+### Requirement: Merged `.gitignore` keeps `artifacts/` ignored
 
-The directory `artifacts/main-web/` SHALL remain on disk after migration as a local backup. The repo `.gitignore` MUST keep `artifacts/` (or `/artifacts`) ignored so the backup is not tracked.
-
-#### Scenario: Backup remains on disk
-
-- **WHEN** the migration is complete
-- **THEN** `artifacts/main-web/` still exists with its original contents (including its own `.git`, `node_modules`, `build/`)
+The root `.gitignore` SHALL be a sensible union of the previous root `.gitignore` and `artifacts/main-web/.gitignore`. It MUST keep `/artifacts` (or equivalent) so `artifacts/main-web/` remains untracked.
 
 #### Scenario: Backup is git-ignored
 
-- **WHEN** an engineer runs `git status` after migration
-- **THEN** `artifacts/main-web/` and its descendants do NOT appear as untracked or modified
-- **AND** `git check-ignore artifacts/main-web` exits 0
+- **WHEN** an engineer runs `git check-ignore -v artifacts/main-web` after the migration
+- **THEN** the path is reported as ignored
+- **AND** `git status` does not list `artifacts/main-web/` or any of its descendants as untracked or modified
+
+#### Scenario: Build artefacts ignored
+
+- **WHEN** the engineer runs `npm run build`
+- **THEN** `git status` does not list `build/` or `.svelte-kit/` as untracked
+
+### Requirement: Untouched legacy artefacts
+
+The migration SHALL NOT modify or remove `wrangler.jsonc`, `deploy-site/`, `scripts/`, the root `openspec/`, the root `.claude/`, or `artifacts/main-web/`.
+
+#### Scenario: Files preserved verbatim
+
+- **WHEN** the contents of `wrangler.jsonc`, `scripts/`, root `openspec/` (excluding the in-flight change itself), and root `.claude/` are compared before and after the migration
+- **THEN** they are byte-identical
+
+#### Scenario: Backup directory preserved
+
+- **WHEN** `artifacts/main-web/` is listed after the migration
+- **THEN** it still exists with its original contents, including its own `.git`, `.claude/`, `openspec/`, `node_modules/`, and `build/`
 
 ### Requirement: Verification commands succeed
 
-After migration the standard verification commands SHALL all succeed at the repo root.
+After migration the standard SvelteKit verification commands SHALL all succeed at the repo root.
 
 #### Scenario: Type check passes
 
@@ -118,8 +120,3 @@ After migration the standard verification commands SHALL all succeed at the repo
 
 - **WHEN** `npm run test:unit -- --run` is run
 - **THEN** it exits 0
-
-#### Scenario: Build produces legacy paths
-
-- **WHEN** `npm run build` is run
-- **THEN** `build/` contains `index.html`, `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml`

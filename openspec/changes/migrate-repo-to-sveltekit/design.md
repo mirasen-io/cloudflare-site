@@ -1,97 +1,90 @@
 ## Context
 
-Today the repo root is a hand-rolled static site:
+Repo root today is a hand-rolled static site:
 - `wrangler.jsonc` `assets.directory = ./deploy-site`
 - `deploy-site/index.html` + `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml`
-- `package.json` carries `wrangler ^4.93.0`, `chess.js ^1.4.0`, `@mirasen/chessboard ^1.2.4`
+- Root `package.json` declares `wrangler ^4.93.0`, `chess.js ^1.4.0`, `@mirasen/chessboard ^1.2.4`
+- Root `openspec/` contains this in-flight change and `specs/chessjs-example-controls/`
+- `scripts/` contains repo automation
+- `.claude/` contains project-level Claude config
 
-A working SvelteKit replacement was prepared under `artifacts/main-web/`:
+A working SvelteKit replacement exists under `artifacts/main-web/`:
 - SvelteKit 2 + Svelte 5 + Skeleton UI v4 + Tailwind v4
-- `@sveltejs/adapter-static` → emits `build/`
+- `@sveltejs/adapter-static` → `build/`
 - Vitest + Playwright already wired
-- Currently a Skeleton demo: `/` and `/demo`, no chess content
-- Has its own `.git` (unrelated to the repo's git), its own `.claude/`, its own `openspec/`
+- Has its own `.git`, `.claude/`, `openspec/` (independent of root)
+- Currently a Skeleton demo with `/` and `/demo` — no chess content
 
-The legacy `chessboard/` and `chess-lore/` pages are out of scope to rewrite — they continue to ship as static assets. The contract we MUST honour is **URL stability** for every legacy path.
+`/artifacts` is already in root `.gitignore`, so leaving `artifacts/main-web/` in place is safe — it stays as an untracked local backup.
 
-`artifacts/` is already in the root `.gitignore`, so leaving `artifacts/main-web/` in place after the migration is safe — it stays as a local backup, untracked.
+The user will migrate `deploy-site/` routes into SvelteKit incrementally in follow-up changes, leaning on `skeleton.dev` components. So this change is intentionally a narrow scaffold-promotion: get the SvelteKit project to the root, leave the legacy site running, do nothing destructive.
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Repo root becomes the SvelteKit project; `npm run build` produces `build/`; `wrangler` serves `build/`.
-- Every URL the legacy site exposed today still resolves after migration: `/` (now SvelteKit), `/chessboard/`, `/chess-lore/`, `/sitemap.xml`, `/favicon.ico`, `/assets/*`.
-- `npm install` produces a clean lockfile; `npm run build`, `npm run check`, `npm run lint`, `npm run test:unit`, `npx wrangler dev` all succeed.
-- `artifacts/main-web/` remains untouched on disk and untracked in git.
-- Root `.claude/` and root `openspec/` remain authoritative.
+- The SvelteKit project lives at the repo root: `npm install`, `npm run dev`, `npm run build`, `npm run check`, `npm run lint`, `npm run test:unit` all work from the root.
+- The live site is unchanged: `wrangler dev` and any existing deploy path still serve `deploy-site/`.
+- `artifacts/main-web/` remains on disk and untracked.
+- Root `openspec/`, root `.claude/`, `scripts/`, `wrangler.jsonc`, `deploy-site/` are untouched.
 
 **Non-Goals:**
-- Rewriting `chessboard/` or `chess-lore/` as SvelteKit routes.
-- Setting up Cloudflare GitHub Actions deploy (separate change).
-- New content, styling, or routes beyond what's already in the Skeleton demo.
+- Porting any route from `deploy-site/` to SvelteKit.
+- Switching the deploy/Wrangler target to `./build`.
+- Removing or modifying `deploy-site/`.
+- Merging `package.json` (we replace wholesale, per user direction).
+- Touching `artifacts/main-web/openspec/` or root `openspec/`.
+- Configuring Cloudflare GitHub Actions deploy.
 - Preserving git history from `artifacts/main-web/.git` (no subtree merge).
-- Removing or relocating `artifacts/main-web/`.
 
 ## Decisions
 
-### D1. Adapter and asset directory
-Keep `@sveltejs/adapter-static`; `wrangler.jsonc` `assets.directory` becomes `./build`.
-**Why**: zero behaviour change at the edge — Cloudflare keeps serving a static asset bundle, only the source dir moves. **Alternatives considered**: switching to `adapter-cloudflare` for Worker-side rendering — rejected, out of scope and would change the deploy story we're explicitly deferring.
+### D1. Replace `package.json` with SvelteKit base, then re-add `wrangler` and `chess.js`
+Take `artifacts/main-web/package.json` as the base and overwrite the root file. Then add `wrangler ^4.93.0` to `devDependencies` and `chess.js ^1.4.0` to `dependencies` (the pre-migration root versions). Drop `@mirasen/chessboard`. Regenerate `package-lock.json` via `npm install`.
+**Why**: explicit user direction. `wrangler` is needed locally for `npx wrangler dev` against `deploy-site/` (the deploy continues to point there); declaring it in `devDependencies` keeps `npm` install reproducible. `chess.js` is kept as a runtime dep because the legacy `deploy-site/chessboard/` page or upcoming SvelteKit ports may consume it. `@mirasen/chessboard` is dropped because it isn't requested back; if a follow-up route needs it, that change re-adds it explicitly. **Alternative**: copy verbatim and never re-add — rejected, breaks `wrangler` workflow. **Alternative**: full merge — rejected, the user prefers a fresh manifest with two explicit adds rather than a merge of unrelated metadata fields.
 
-### D2. File transfer strategy: copy, no git-history merge
-Copy files from `artifacts/main-web/` into the repo root with `cp -R`; do not touch `artifacts/main-web/.git`.
-**Why**: history of the SvelteKit scaffold is not load-bearing — these files were generated by `npx sv create`. A subtree merge would pull a parallel commit graph into this repo for no benefit. **Alternative**: `git subtree add` — rejected, adds noise and complicates blame.
+### D2. Copy, don't move; don't touch `artifacts/main-web/.git`
+Use `cp -R` for every transferred file. `artifacts/main-web/` stays in place as a local backup. We do not pull in its `.git`, `.claude/`, `openspec/`, `node_modules/`, `build/`, or `.svelte-kit/`.
+**Why**: `/artifacts` is gitignored; keeping the source tree intact gives a free rollback point until the user is confident. Not pulling in a parallel `.git` keeps history clean. Not pulling in `artifacts/main-web/openspec/` is an explicit user instruction — root `openspec/` stays authoritative until the user re-inits it manually after this change.
 
-### D3. `package.json` merge
-Base = `artifacts/main-web/package.json`. Add to root `dependencies`: `chess.js`, `@mirasen/chessboard`. Add to root `devDependencies`: `wrangler` (it is a dev tool, not a runtime dep — it does not ship with the site). Keep the SvelteKit project's `name`, `scripts`, `type`, `private`. Preserve repo metadata (`repository`, `author`, `bugs`, `homepage`) from the current root `package.json` if non-empty. Regenerate `package-lock.json` via `npm install`.
-**Why**: `chess.js` and `@mirasen/chessboard` are referenced by the legacy `chessboard/` page that now lives under `static/` — keeping them as runtime deps is the safest signal that they're not dev-only. `wrangler` is correctly classified as a dev tool. **Alternative**: keep `wrangler` in `dependencies` to match the previous root — rejected, it's only used at build/deploy time.
+### D3. `.gitignore` is a sensible union
+Final root `.gitignore` is the union of root + `artifacts/main-web/.gitignore`. Required entries:
+- Wrangler/env: `.wrangler`, `.dev.vars*`, `!.dev.vars.example`, `.env*`, `!.env.example`
+- Node/build: `node_modules`, `dist`, `coverage*`, `/build`, `/.svelte-kit`, `.output`, `.vercel`, `.netlify`
+- Vite/Playwright: `vite.config.js.timestamp-*`, `vite.config.ts.timestamp-*`, `test-results`
+- OS: `.DS_Store`, `Thumbs.db`
+- Claude: `.claude/settings.local.json`, `.claude/cache/`, `.claude/sessions/`
+- **`/artifacts`** — load-bearing for keeping the backup untracked
 
-### D4. `.gitignore` merge
-Final root `.gitignore` is the union of both, with these entries guaranteed: wrangler entries (`.wrangler`, `.dev.vars*`, `!.dev.vars.example`), env entries (`.env*`, `!.env.example`), `node_modules`, `dist`, `build`, `coverage*`, `.svelte-kit`, `.DS_Store`, `.claude/settings.local.json`, `.claude/cache/`, `.claude/sessions/`, and **`/artifacts`** (so `artifacts/main-web/` remains untracked).
-**Why**: a strict union preserves intent from both sides; explicitly keeping `/artifacts` is the load-bearing line that lets us leave the backup in place.
+**Why**: a strict union covers both worlds, with `/artifacts` explicitly preserved.
 
-### D5. Static-asset overlay from `deploy-site/` → `static/`
-Copy `deploy-site/{chessboard,chess-lore,assets,favicon.ico,sitemap.xml}` into `static/` preserving paths. **Do not** copy `deploy-site/index.html` — `src/routes/+page.svelte` owns `/`. The SvelteKit project already ships `static/robots.txt`; keep it.
-**Why**: SvelteKit serves `static/` verbatim at the root. Path-preserving copy is the minimum-surprise way to keep all legacy URLs alive. **Alternative**: serve legacy assets from a Cloudflare Worker route — rejected, out of scope and adds runtime complexity for no gain.
+### D4. Don't touch `wrangler.jsonc`, `deploy-site/`, `scripts/`, `openspec/`, `.claude/`
+Per user direction. Live deploy keeps serving `deploy-site/`; the SvelteKit project at the root is for `npm run dev` / `npm run build` only at this stage.
+**Why**: minimum-risk migration. Switching the deploy target while the new site is still a Skeleton demo would visibly break the live site. Re-init of `openspec/` is a manual follow-up the user wants to do themselves.
 
-### D6. `.claude/` and `openspec/` provenance
-Root `.claude/` and root `openspec/` are authoritative and untouched, except for one targeted port: scan `artifacts/main-web/.claude/settings.json` for non-trivial permissions (Bash allows, hooks) and merge the useful ones into the root `.claude/settings.json`. Do NOT copy `.claude/cache/`, `.claude/sessions/`, or `settings.local.json`.
-**Why**: keeps the root the single source of truth; avoids accidentally regressing project-level Claude config. **Alternative**: blanket-copy — rejected, drags in machine-local state.
-
-### D7. Order of operations and reversibility
-Do all destructive steps last. Specifically:
-1. Copy in SvelteKit scaffold and merge config files (proposal/`package.json`/`.gitignore`/`wrangler.jsonc`).
-2. Copy static legacy content into `static/`.
-3. `npm install` and run all verifications (`build`, `preview`, `wrangler dev` smoke check, `check`, `lint`, `test:unit`).
-4. Only after green: `rm -rf deploy-site/`.
-
-**Why**: until step 4 the legacy site is still recoverable by reverting `wrangler.jsonc`. After step 4, recovery is a `git restore`. **Alternative**: delete `deploy-site/` early to avoid duplication — rejected, keeps a working fallback during the riskiest phase.
+### D5. No conflict between SvelteKit `static/` and legacy `deploy-site/`
+The SvelteKit project's `static/` (currently just `robots.txt`) is the only `static/` at the root. We do **not** copy any legacy assets into it. If a SvelteKit `dev`/`build` happens to expose a route that also exists under `deploy-site/`, that's irrelevant — `wrangler` still serves `deploy-site/`, and `npm run dev`/`preview` only matter for incremental development.
+**Why**: separation of concerns. Mixing legacy static into SvelteKit `static/` was the previous plan; with the new approach it's pure noise.
 
 ## Risks / Trade-offs
 
-- **[Risk]** A legacy file under `deploy-site/chessboard/` or `deploy-site/chess-lore/` references an absolute path that collides with a SvelteKit-reserved one (e.g., `/_app/...`). → **Mitigation**: after `npm run build`, walk the legacy directory listing under `build/` and confirm `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml` exist; spot-check `wrangler dev` for those URLs.
-- **[Risk]** `@mirasen/chessboard` or `chess.js` ESM/CJS resolution breaks under Vite when the legacy page loads them via `<script type="module">`. → **Mitigation**: legacy pages are served as plain static HTML from `static/` — Vite does not process them, so the risk surface is limited to whatever the legacy HTML expects from `node_modules`. If the legacy page imports from a path that previously worked, verify via `wrangler dev` and patch the asset paths inside the static copy if needed.
-- **[Risk]** Skeleton demo `/` page is visibly less than the previous `index.html`. → **Acceptable**: out of scope for this change; documented in the proposal. Content/styling is a follow-up.
-- **[Trade-off]** Regenerating `package-lock.json` from scratch loses the previously pinned root versions of `chess.js` / `@mirasen/chessboard`. → Acceptable: caret ranges in `package.json` keep them current; legacy chessboard page is the only consumer and is a static HTML harness.
-- **[Trade-off]** `artifacts/main-web/` stays on disk as a duplicate of the SvelteKit scaffold. → Acceptable: it's git-ignored; serves as a local backup until we're confident in the migration.
+- **[Risk]** `npm install` against the SvelteKit base + the two re-added entries pulls a slightly different lockfile shape than the original SvelteKit project's lockfile. → **Mitigation**: regenerate `package-lock.json` from scratch in this change; future installs are deterministic against the new lock.
+- **[Risk]** Dropping `@mirasen/chessboard` makes it unavailable at the root. → **Mitigation**: nothing in the SvelteKit scaffold imports it; the legacy `deploy-site/chessboard/` is plain static HTML/JS served by Cloudflare and does not consume root `node_modules`. A future port that needs it adds it back explicitly.
+- **[Risk]** Two `package.json` files coexist — root (now SvelteKit) and `artifacts/main-web/package.json` (still there as backup) — which can confuse tooling. → **Mitigation**: `artifacts/` is gitignored and lives outside any `npm` workspace; tooling at the root doesn't see it.
+- **[Trade-off]** Wholesale replace loses the previous `repository`/`author` metadata. → Acceptable: it can be added back trivially, and the SvelteKit `package.json` already reflects the project.
+- **[Trade-off]** Two openspec folders coexist on disk (root + `artifacts/main-web/openspec/`). → Acceptable: `artifacts/` is gitignored, root is authoritative; the user will re-init root `openspec/` after archiving this change.
 
 ## Migration Plan
 
-1. **Pre-flight**: `git status` clean on `migrate/sk`. Confirm `artifacts/main-web/` exists and matches expectations from the proposal.
-2. **Copy SvelteKit scaffold** from `artifacts/main-web/` to root: `src/`, `static/`, `svelte.config.js`, `vite.config.ts`, `tsconfig.json`, `eslint.config.js`, `playwright.config.ts`, `.prettierrc`, `.prettierignore`, `.npmrc`, `AGENTS.md`. Do not copy `node_modules`, `build`, `.svelte-kit`, `.git`, `.claude`, `openspec`, `package-lock.json`, `README.md`.
-3. **Merge `package.json`** per D3 and write to root.
-4. **Merge `.gitignore`** per D4 and write to root.
-5. **Repoint `wrangler.jsonc`**: `assets.directory` from `./deploy-site` to `./build`.
-6. **Copy static legacy content** per D5.
-7. **Port `.claude/settings.json`** entries per D6 if any exist.
-8. **`rm -rf node_modules package-lock.json` then `npm install`** at root.
-9. **Verify**: `npm run build`, then check `build/` contains expected legacy paths; `npm run preview` and visit `/`, `/chessboard/`, `/chess-lore/`, `/sitemap.xml`; `npx wrangler dev` and re-check the same URLs; `npm run check`, `npm run lint`, `npm run test:unit`.
-10. **Delete legacy**: `rm -rf deploy-site/`.
-11. **Confirm**: `git status` shows `deploy-site/` removed, SvelteKit files added, `artifacts/main-web/` not listed (ignored).
+1. **Pre-flight**: `git status` clean on `migrate/sk` (modulo this in-flight openspec change). Confirm `artifacts/main-web/` exists and has the expected files.
+2. **Copy SvelteKit scaffold** from `artifacts/main-web/` to root: `src/`, `static/`, `svelte.config.js`, `vite.config.ts`, `tsconfig.json`, `eslint.config.js`, `playwright.config.ts`, `.prettierrc`, `.prettierignore`, `.npmrc`, `AGENTS.md`.
+3. **Replace `package.json`** with `artifacts/main-web/package.json`. Then add `wrangler ^4.93.0` to `devDependencies` and `chess.js ^1.4.0` to `dependencies`. Remove the old root `node_modules/` and `package-lock.json`.
+4. **Merge `.gitignore`** per D3. Verify `git check-ignore -v artifacts/main-web` reports the path as ignored.
+5. **`npm install`** at the root (regenerates `package-lock.json`).
+6. **Verify**: `npm run dev` starts the dev server (smoke check `/` and `/demo`). `npm run build` produces `build/`. `npm run check`, `npm run lint`, `npm run test:unit` all pass.
+7. **Confirm legacy intact**: `wrangler.jsonc` still says `./deploy-site`; `deploy-site/` is unchanged; `scripts/` is unchanged; root `openspec/` is unchanged; root `.claude/` is unchanged; `artifacts/main-web/` is on disk and `git status` doesn't list it.
 
-**Rollback**: `git restore .` (and `git clean -fd` if needed) reverts all changes since this migration is a single working-tree operation; `artifacts/main-web/` is untouched on disk so the source remains available.
+**Rollback**: `git restore .` and `git clean -fd` undo all changes; `artifacts/main-web/` is untouched on disk so the SvelteKit source is still available.
 
 ## Open Questions
 
-- Is `wrangler.jsonc` `compatibility_flags: ["nodejs_compat"]` still needed once the site is purely static under `adapter-static`? (Defer: keeping it costs nothing and avoids surprise if a later change adds a Worker route.)
-- Does `artifacts/main-web/.claude/settings.json` actually contain useful permissions worth porting? (Resolved at apply time by inspection; if empty/uninteresting, skip step 7.)
+- After this change, does the user want a follow-up that re-adds `wrangler` to `devDependencies` so existing scripts in `scripts/` keep working? (Resolved out-of-band: user will inspect and decide.)
