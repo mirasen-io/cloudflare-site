@@ -1,0 +1,9 @@
+.board-wrap {
+	width: min(80vw, 640px);
+}
+
+.board {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	overflow: visible;
+}
