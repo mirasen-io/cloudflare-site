@@ -5,7 +5,7 @@ coverage*
 
 # SvelteKit / Vite output
 /.svelte-kit
-/build
+/build*
 .output
 .vercel
 .netlify
