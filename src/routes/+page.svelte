@@ -56,113 +56,113 @@
 	<meta property="og:url" content={pageUrl} />
 </svelte:head>
 
-<main class="mx-auto max-w-6xl space-y-20 px-4 py-12 sm:px-6 md:py-16">
-	<section class="grid gap-8 md:grid-cols-[1.5fr_1fr] md:items-start">
-		<div class="space-y-5">
-			<p class="badge preset-tonal">Structured chess learning, training, and study</p>
-			<h1 class="h1">Become Dangerous</h1>
-			<p class="text-xl opacity-90">Build stronger chess understanding through structured study.</p>
-			<p class="opacity-80">
+<main class="page-shell">
+	<section class="hero">
+		<div class="hero-copy">
+			<p class="eyebrow">Structured chess learning, training, and study</p>
+			<h1 class="hero-title">Become Dangerous</h1>
+			<p class="lead">Build stronger chess understanding through structured study.</p>
+			<p class="hero-subcopy">
 				Mirasen builds tools and systems for structured chess learning — helping turn training,
 				study, and teaching material into clearer workflows, stronger retention, and deeper
 				understanding over time.
 			</p>
-			<div class="flex flex-wrap gap-3 pt-2">
+			<div class="hero-actions">
 				<a class="btn preset-filled-primary-500" href={chessLoreHref}>Explore Chess Lore</a>
 				<a class="btn preset-tonal" href={chessboardHref}>View Chessboard</a>
 			</div>
 		</div>
 
-		<aside class="card preset-filled-surface-100-900 space-y-4 p-6">
-			<h2 class="h4">What Mirasen is building</h2>
-			<ul class="grid gap-2">
+		<aside class="card hero-side p-6">
+			<h2 class="card-title">What Mirasen is building</h2>
+			<ul class="hero-point-list">
 				{#each heroBuildingPoints as point (point.title)}
-					<li class="preset-tonal space-y-1 rounded-lg p-3">
-						<p class="text-sm font-semibold">{point.title}</p>
-						<p class="text-xs opacity-80">{point.body}</p>
+					<li class="inner-panel">
+						<p class="inner-panel-title">{point.title}</p>
+						<p class="inner-panel-body">{point.body}</p>
 					</li>
 				{/each}
 			</ul>
 		</aside>
 	</section>
 
-	<section aria-labelledby="chess-lore-heading" class="space-y-6">
-		<header class="space-y-2">
-			<p class="text-xs tracking-wide uppercase opacity-70">Current product direction</p>
-			<h2 id="chess-lore-heading" class="h2">Mirasen Chess Lore</h2>
-			<p class="max-w-3xl opacity-90">
+	<section aria-labelledby="chess-lore-heading" class="site-section">
+		<header class="section-header">
+			<p class="kicker">Current product direction</p>
+			<h2 id="chess-lore-heading" class="section-title">Mirasen Chess Lore</h2>
+			<p class="section-lead">
 				Chess Lore is the current main product direction inside Mirasen: a workflow-first system for
 				structured chess learning, starting with trainer workflows and expanding into broader chess
 				learning over time.
 			</p>
 		</header>
 
-		<div class="card preset-tonal p-6 md:p-10">
-			<div class="grid gap-8 md:grid-cols-2 md:items-start">
-				<div class="space-y-5">
-					<p class="opacity-90">
+		<div class="card spotlight p-6 md:p-10">
+			<div class="spotlight-grid">
+				<div class="spotlight-copy">
+					<p>
 						The current direction focuses on helping trainers assign, organize, review, and
 						reinforce chess learning with more structure. The same learning logic also supports
 						self-directed learners who want clearer review, stronger retention, and more meaningful
 						progress visibility.
 					</p>
-					<div class="flex flex-wrap gap-2" aria-label="Core themes">
+					<div class="theme-list" aria-label="Core themes">
 						{#each chessLoreThemes as theme (theme)}
 							<span class="badge preset-filled-surface-50-950">{theme}</span>
 						{/each}
 					</div>
 				</div>
 
-				<ul class="divide-surface-200-800 divide-y">
+				<ul class="numbered-list">
 					{#each chessLorePoints as point, index (point)}
-						<li class="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
-							<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true"
-								>{index + 1}</span
-							>
-							<p class="opacity-90">{point}</p>
+						<li>
+							<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true">
+								{index + 1}
+							</span>
+							<p>{point}</p>
 						</li>
 					{/each}
 				</ul>
 			</div>
 		</div>
 
-		<div class="flex flex-wrap gap-3">
+		<div class="section-actions">
 			<a class="btn preset-filled-primary-500" href={chessLoreHref}>
 				Learn more about Chess Lore
 			</a>
 		</div>
 	</section>
 
-	<section aria-labelledby="chessboard-heading" class="space-y-6">
-		<header class="space-y-2">
-			<p class="text-xs tracking-wide uppercase opacity-70">Foundation layer</p>
-			<h2 id="chessboard-heading" class="h2">Mirasen Chessboard</h2>
-			<p class="max-w-3xl opacity-90">
+	<section aria-labelledby="chessboard-heading" class="site-section">
+		<header class="section-header">
+			<p class="kicker">Foundation layer</p>
+			<h2 id="chessboard-heading" class="section-title">Mirasen Chessboard</h2>
+			<p class="section-lead">
 				Mirasen Chessboard is the open-source chessboard platform inside the broader Mirasen
 				ecosystem — a modern foundation for real chess interaction, rendering, and richer chess
 				applications.
 			</p>
 		</header>
 
-		<div class="grid gap-6 md:grid-cols-2">
-			<article class="card preset-filled-surface-100-900 space-y-3 p-6">
-				<h3 class="h4">Why it exists</h3>
-				<p class="opacity-90">
+		<div class="card-grid two-up">
+			<article class="card p-6">
+				<h3 class="card-title">Why it exists</h3>
+				<p>
 					The board is not the product story by itself. It is the platform foundation that supports
 					richer learning workflows, review interactions, and future Mirasen tools.
 				</p>
 			</article>
 
-			<article class="card preset-filled-surface-100-900 space-y-3 p-6">
-				<h3 class="h4">How it fits</h3>
-				<p class="opacity-90">
+			<article class="card p-6">
+				<h3 class="card-title">How it fits</h3>
+				<p>
 					Chessboard supports the broader Mirasen learning ecosystem while remaining a distinct
 					open-source platform with its own public GitHub and npm presence.
 				</p>
 			</article>
 		</div>
 
-		<div class="flex flex-wrap gap-3">
+		<div class="section-actions">
 			<a class="btn preset-filled-primary-500" href={chessboardHref}>
 				Learn more about Chessboard
 			</a>
@@ -177,21 +177,21 @@
 		</div>
 	</section>
 
-	<section aria-labelledby="brand-heading" class="space-y-6">
-		<header class="space-y-2">
-			<p class="text-xs tracking-wide uppercase opacity-70">Brand structure</p>
-			<h2 id="brand-heading" class="h2">One brand, multiple layers</h2>
-			<p class="max-w-3xl opacity-90">
+	<section aria-labelledby="brand-heading" class="site-section">
+		<header class="section-header">
+			<p class="kicker">Brand structure</p>
+			<h2 id="brand-heading" class="section-title">One brand, multiple layers</h2>
+			<p class="section-lead">
 				Mirasen is structured as a brand hub with a current main product direction and an
 				open-source platform layer.
 			</p>
 		</header>
 
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="card-grid three-up">
 			{#each brandLayers as layer (layer.title)}
-				<article class="card preset-filled-surface-100-900 space-y-3 p-6">
-					<h3 class="h4">{layer.title}</h3>
-					<p class="opacity-90">{layer.body}</p>
+				<article class="card p-6">
+					<h3 class="card-title">{layer.title}</h3>
+					<p>{layer.body}</p>
 				</article>
 			{/each}
 		</div>

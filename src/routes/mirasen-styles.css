@@ -1,0 +1,309 @@
+:where([data-theme='mirasen']) {
+	--mirasen-line: oklch(96.12% 0.018 269.09deg / 0.12);
+	--mirasen-panel: oklch(96.12% 0.018 269.09deg / 0.05);
+	--mirasen-panel-strong: oklch(96.12% 0.018 269.09deg / 0.08);
+	--mirasen-shadow: 0 10px 30px oklch(0% 0 0deg / 0.28);
+
+	--mirasen-text: #edf2ff;
+	--mirasen-muted: #b7c1dd;
+	--mirasen-accent-2: #c7d6ff;
+}
+
+:where([data-theme='mirasen']) body {
+	background:
+		radial-gradient(circle at top, oklch(78.86% 0.106 267.42deg / 0.16), transparent 30%),
+		linear-gradient(
+			180deg,
+			oklch(17.14% 0.03 268.18deg) 0%,
+			oklch(20% 0.04 268deg) 48%,
+			oklch(18% 0.035 268deg) 100%
+		);
+}
+
+/* Page shell */
+
+:where([data-theme='mirasen'] .page-shell) {
+	width: min(1120px, calc(100% - 32px));
+	margin: 0 auto;
+	padding: 48px 0 64px;
+}
+
+/* Hero */
+
+:where([data-theme='mirasen'] .hero) {
+	display: grid;
+	grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+:where([data-theme='mirasen'] .hero-copy) {
+	padding: 10px 0;
+}
+
+:where([data-theme='mirasen'] .eyebrow) {
+	display: inline-flex;
+	align-items: center;
+	margin: 0 0 18px;
+	padding: 8px 12px;
+	border: 1px solid var(--mirasen-line);
+	border-radius: 999px;
+	background: oklch(100% 0 0deg / 0.04);
+	font-size: 13px;
+	line-height: 1.2;
+}
+
+:where([data-theme='mirasen'] .hero-title) {
+	margin: 0 0 16px;
+	max-width: 760px;
+	color: var(--mirasen-text);
+	font-size: clamp(32px, 4.4vw, 54px);
+	font-weight: 800;
+	letter-spacing: -0.03em;
+	line-height: 1.05;
+}
+
+:where([data-theme='mirasen'] .lead) {
+	margin: 0;
+	max-width: 720px;
+	color: var(--mirasen-muted);
+	font-size: 20px;
+	line-height: 1.72;
+}
+
+:where([data-theme='mirasen'] .hero-subcopy) {
+	margin: 14px 0 0;
+	max-width: 700px;
+	color: var(--mirasen-muted);
+	font-size: 17px;
+	line-height: 1.68;
+}
+
+:where([data-theme='mirasen'] .hero-actions) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-top: 28px;
+}
+
+:where([data-theme='mirasen'] .hero-side) {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+:where([data-theme='mirasen'] .hero-point-list) {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Sections */
+
+:where([data-theme='mirasen'] .site-section) {
+	margin-top: 80px;
+}
+
+:where([data-theme='mirasen'] .section-header) {
+	max-width: 760px;
+	margin-bottom: 22px;
+}
+
+:where([data-theme='mirasen'] .section-header .kicker) {
+	margin: 0 0 10px;
+	color: var(--mirasen-accent-2);
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	line-height: 1.72;
+	text-transform: uppercase;
+}
+
+:where([data-theme='mirasen'] .section-title) {
+	margin: 0 0 12px;
+	color: var(--mirasen-text);
+	font-size: 24px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.2;
+}
+
+:where([data-theme='mirasen'] .section-lead) {
+	margin: 0;
+	color: var(--mirasen-muted);
+	font-size: 18px;
+	line-height: 1.72;
+}
+
+/* Material layer */
+
+:where([data-theme='mirasen'] .card) {
+	border: 1px solid var(--mirasen-line);
+	background-color: var(--mirasen-panel);
+	box-shadow: var(--mirasen-shadow);
+	backdrop-filter: blur(12px);
+}
+
+:where([data-theme='mirasen'] .card .card) {
+	background-color: var(--mirasen-panel-strong);
+	box-shadow: none;
+}
+
+:where([data-theme='mirasen'] .inner-panel) {
+	margin: 0;
+	padding: 12px;
+	border: 1px solid var(--mirasen-line);
+	border-radius: 12px;
+	background-color: var(--mirasen-panel-strong);
+}
+
+:where([data-theme='mirasen'] .inner-panel-title) {
+	margin: 0 0 4px;
+	color: var(--mirasen-text);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+:where([data-theme='mirasen'] .inner-panel-body) {
+	margin: 0;
+	color: var(--mirasen-muted);
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+/* Buttons */
+
+:where([data-theme='mirasen'] .btn) {
+	border: 1px solid var(--mirasen-line);
+	font-weight: 600;
+	box-shadow: var(--mirasen-shadow);
+}
+
+:where([data-theme='mirasen'] .btn.preset-tonal) {
+	background-color: var(--mirasen-panel);
+	backdrop-filter: blur(12px);
+}
+
+:where([data-theme='mirasen'] .btn.preset-filled-primary-500) {
+	border-color: transparent;
+}
+
+/* Cards and content */
+
+:where([data-theme='mirasen'] .card-title) {
+	margin: 0 0 10px;
+	color: var(--mirasen-text);
+	font-size: 20px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.25;
+}
+
+:where([data-theme='mirasen'] .card > p),
+:where([data-theme='mirasen'] .spotlight-copy p),
+:where([data-theme='mirasen'] .numbered-list p) {
+	color: var(--mirasen-muted);
+	line-height: 1.68;
+}
+
+:where([data-theme='mirasen'] .card > p:last-child),
+:where([data-theme='mirasen'] .card > :last-child) {
+	margin-bottom: 0;
+}
+
+/* Chess Lore spotlight */
+
+:where([data-theme='mirasen'] .spotlight-grid) {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 32px;
+	align-items: start;
+}
+
+:where([data-theme='mirasen'] .spotlight-copy) {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+:where([data-theme='mirasen'] .spotlight-copy p) {
+	margin: 0;
+}
+
+:where([data-theme='mirasen'] .theme-list) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+:where([data-theme='mirasen'] .numbered-list) {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+:where([data-theme='mirasen'] .numbered-list li) {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	padding: 16px 0;
+	border-top: 1px solid var(--mirasen-line);
+}
+
+:where([data-theme='mirasen'] .numbered-list li:first-child) {
+	padding-top: 0;
+	border-top: 0;
+}
+
+:where([data-theme='mirasen'] .numbered-list li:last-child) {
+	padding-bottom: 0;
+}
+
+:where([data-theme='mirasen'] .numbered-list p) {
+	margin: 0;
+}
+
+/* Grids and actions */
+
+:where([data-theme='mirasen'] .card-grid) {
+	display: grid;
+	gap: 24px;
+}
+
+:where([data-theme='mirasen'] .two-up) {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where([data-theme='mirasen'] .three-up) {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+:where([data-theme='mirasen'] .section-actions) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 24px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+	:where([data-theme='mirasen'] .page-shell) {
+		width: min(100% - 32px, 1120px);
+		padding: 40px 0 56px;
+	}
+
+	:where([data-theme='mirasen'] .hero),
+	:where([data-theme='mirasen'] .spotlight-grid),
+	:where([data-theme='mirasen'] .two-up),
+	:where([data-theme='mirasen'] .three-up) {
+		grid-template-columns: 1fr;
+	}
+
+	:where([data-theme='mirasen'] .site-section) {
+		margin-top: 64px;
+	}
+}
