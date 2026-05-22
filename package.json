@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build:chessboard": "npm run build --prefix ../chessboard",
-		"build": "npm run build:chessboard && vite build",
+		"build": "vite build",
+		"build:full": "npm run build:chessboard && npm install && npm run build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
