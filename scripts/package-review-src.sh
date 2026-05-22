@@ -77,6 +77,8 @@ copy_if_exists "vitest.config.ts"
 copy_if_exists "README.md"
 copy_if_exists ".npmignore"
 
+copy_if_exists "deploy-site"
+
 # Optional extras in full mode
 if [[ "$FULL_MODE" == "true" ]]; then
   copy_if_exists "scripts"
