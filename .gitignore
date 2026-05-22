@@ -36,3 +36,6 @@ Thumbs.db
 
 # Local backup of the SvelteKit source (artifacts/main-web/)
 /artifacts
+
+# Local input artifacts
+/deploy-site.zip
