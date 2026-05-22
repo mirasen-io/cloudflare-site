@@ -17,9 +17,11 @@ Out of scope: rewriting `chessboard/` and `chess-lore/` as SvelteKit routes (the
 ## Capabilities
 
 ### New Capabilities
+
 - `web-app-shell`: SvelteKit 2 + Svelte 5 + Skeleton UI v4 + Tailwind v4 application shell at the repo root, built with `@sveltejs/adapter-static` into `build/`, fronted by Cloudflare Workers via `wrangler.jsonc`. Defines the build/preview workflow, the static-asset overlay (legacy `chessboard/`, `chess-lore/`, `assets/`, `favicon.ico`, `sitemap.xml` served from `static/`), and the URL-stability contract for legacy paths.
 
 ### Modified Capabilities
+
 <!-- None: chessjs-example-controls is unrelated to the deploy/build shell; this change does not alter its requirements. -->
 
 ## Impact
