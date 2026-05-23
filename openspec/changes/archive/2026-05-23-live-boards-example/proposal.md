@@ -2,7 +2,7 @@
 
 `/chessboard/examples/live-games-grid` currently ships as a placeholder that says the page "is being migrated." The real Live Games Grid is one of the most distinctive Mirasen Chessboard demos — twelve independent boards, each running its own chess.js engine on its own randomized timer — and the new SvelteKit/Skeleton site does not yet host it. We need the page to do real work, demonstrate multi-instance orchestration, and route visitors to the interactive `chessjs` example.
 
-This page is also intentionally *not* like the other example routes. Minimal, Promotion, and chess.js use the library's default extension set through `useBoard`. The live grid wants a deliberately reduced setup (renderer + lastMove only, movability disabled) so each card is cheap, non-interactive, and visually clean — making it the natural place to formalize the "reduced-extensions" path through the existing `useBoard` API.
+This page is also intentionally _not_ like the other example routes. Minimal, Promotion, and chess.js use the library's default extension set through `useBoard`. The live grid wants a deliberately reduced setup (renderer + lastMove only, movability disabled) so each card is cheap, non-interactive, and visually clean — making it the natural place to formalize the "reduced-extensions" path through the existing `useBoard` API.
 
 ## What Changes
 

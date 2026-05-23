@@ -117,3 +117,141 @@
 		margin-right: calc(50% - 50vw);
 	}
 }
+
+/* ── Live Games Grid ──────────────────────────────────────────────────────
+   Twelve-board grid for /chessboard/examples/live-games-grid. The page wrap
+   is wider than other example pages (12 cards need horizontal room) and the
+   grid uses explicit per-breakpoint column counts so 12 cards always lay out
+   as 1×12 / 2×6 / 3×4 / 4×3 — no auto-fill leftovers. */
+
+[data-theme='mirasen'] .page-shell.live-grid-page {
+	width: min(1600px, calc(100% - 32px));
+}
+
+:where([data-theme='mirasen'] .live-grid-intro) {
+	max-width: 760px;
+	margin-bottom: 28px;
+}
+
+:where([data-theme='mirasen'] .live-grid-section) {
+	width: 100%;
+}
+
+:where([data-theme='mirasen'] .live-grid) {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	align-items: start;
+}
+
+:where([data-theme='mirasen'] .live-card) {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 10px;
+	border: 1px solid var(--mirasen-line);
+	border-radius: 14px;
+	background-color: var(--mirasen-panel);
+	min-width: 0;
+}
+
+:where([data-theme='mirasen'] .live-card__row) {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	min-width: 0;
+	font-size: 12px;
+	line-height: 1.3;
+}
+
+:where([data-theme='mirasen'] .live-card__player-name) {
+	flex: 1 1 auto;
+	min-width: 0;
+	color: var(--mirasen-text);
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+:where([data-theme='mirasen'] .live-card__player-rating) {
+	flex: 0 0 auto;
+	color: var(--mirasen-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+:where([data-theme='mirasen'] .live-card__status) {
+	flex: 0 0 auto;
+	margin-left: 4px;
+	color: var(--mirasen-accent-2);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+:where([data-theme='mirasen'] .live-card__board-wrap) {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	border-radius: 6px;
+	overflow: hidden;
+	box-shadow: var(--mirasen-shadow);
+}
+
+:where([data-theme='mirasen'] .live-card__board) {
+	position: absolute;
+	inset: 0;
+}
+
+:where([data-theme='mirasen'] .live-card__board svg) {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+:where([data-theme='mirasen'] .live-card__overlay) {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: block;
+	border-radius: inherit;
+}
+
+:where([data-theme='mirasen'] .live-card__overlay:focus-visible) {
+	outline: 2px solid var(--mirasen-accent-2);
+	outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+	[data-theme='mirasen'] .page-shell.live-grid-page {
+		width: 100%;
+	}
+
+	:where([data-theme='mirasen'] .live-grid) {
+		gap: 12px;
+	}
+
+	:where([data-theme='mirasen'] .live-card) {
+		padding: 8px;
+	}
+}
+
+@media (min-width: 560px) {
+	:where([data-theme='mirasen'] .live-grid) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 960px) {
+	:where([data-theme='mirasen'] .live-grid) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1320px) {
+	:where([data-theme='mirasen'] .live-grid) {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
