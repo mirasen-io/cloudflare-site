@@ -126,7 +126,7 @@
 	);
 </script>
 
-<article class="live-card">
+<article class="live-card" data-testid="live-game-card">
 	<div class="live-card__row live-card__row--top">
 		<span class="live-card__player-name">{meta.topName}</span>
 		<span class="live-card__player-rating">{meta.topRating}</span>
@@ -137,6 +137,7 @@
 		<div bind:this={boardEl} class="live-card__board"></div>
 		<a
 			class="live-card__overlay"
+			data-testid="live-board-link"
 			href={chessjsHref}
 			aria-label={`Open the chess.js example — game ${index + 1}: ${meta.bottomName} vs ${meta.topName}`}
 		></a>

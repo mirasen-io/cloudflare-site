@@ -39,7 +39,7 @@ Add to `src/routes/+layout.svelte`:
 ```ts
 import { onMount } from 'svelte';
 onMount(() => {
-  document.documentElement.classList.add('app-started');
+	document.documentElement.classList.add('app-started');
 });
 ```
 
@@ -100,40 +100,47 @@ Add `e2e/utils/page-errors.ts`. The helper MUST collect errors only — no throw
 import type { Page } from '@playwright/test';
 
 const ALLOWED_CONSOLE_ERRORS: readonly RegExp[] = [
-  // Add entries only with a comment explaining the third-party source.
+	// Add entries only with a comment explaining the third-party source.
 ];
 
 export function trapPageErrors(page: Page): () => void {
-  const pageErrors: Error[] = [];
-  const consoleErrors: string[] = [];
+	const pageErrors: Error[] = [];
+	const consoleErrors: string[] = [];
 
-  page.on('pageerror', (err) => {
-    pageErrors.push(err);
-  });
+	page.on('pageerror', (err) => {
+		pageErrors.push(err);
+	});
 
-  page.on('console', (msg) => {
-    if (msg.type() !== 'error') return;
-    const text = msg.text();
-    if (ALLOWED_CONSOLE_ERRORS.some((pattern) => pattern.test(text))) return;
-    consoleErrors.push(text);
-  });
+	page.on('console', (msg) => {
+		if (msg.type() !== 'error') return;
+		const text = msg.text();
+		if (ALLOWED_CONSOLE_ERRORS.some((pattern) => pattern.test(text))) return;
+		consoleErrors.push(text);
+	});
 
-  return function assertNoPageErrors(): void {
-    if (pageErrors.length === 0 && consoleErrors.length === 0) return;
-    const lines: string[] = [];
-    if (pageErrors.length > 0) {
-      lines.push(`Captured ${pageErrors.length} uncaught page error(s):`);
-      for (const err of pageErrors) {
-        lines.push(`  - ${err.message}`);
-        if (err.stack) lines.push(err.stack.split('\n').slice(1, 4).map((l) => `    ${l}`).join('\n'));
-      }
-    }
-    if (consoleErrors.length > 0) {
-      lines.push(`Captured ${consoleErrors.length} console.error message(s):`);
-      for (const text of consoleErrors) lines.push(`  - ${text}`);
-    }
-    throw new Error(lines.join('\n'));
-  };
+	return function assertNoPageErrors(): void {
+		if (pageErrors.length === 0 && consoleErrors.length === 0) return;
+		const lines: string[] = [];
+		if (pageErrors.length > 0) {
+			lines.push(`Captured ${pageErrors.length} uncaught page error(s):`);
+			for (const err of pageErrors) {
+				lines.push(`  - ${err.message}`);
+				if (err.stack)
+					lines.push(
+						err.stack
+							.split('\n')
+							.slice(1, 4)
+							.map((l) => `    ${l}`)
+							.join('\n')
+					);
+			}
+		}
+		if (consoleErrors.length > 0) {
+			lines.push(`Captured ${consoleErrors.length} console.error message(s):`);
+			for (const text of consoleErrors) lines.push(`  - ${text}`);
+		}
+		throw new Error(lines.join('\n'));
+	};
 }
 ```
 
@@ -141,11 +148,11 @@ Per-spec usage:
 
 ```ts
 test('minimal example renders', async ({ page }) => {
-  const assertNoPageErrors = trapPageErrors(page);
-  await page.goto('/chessboard/examples/minimal');
-  await page.locator('html.app-started').waitFor();
-  // … assertions and one interaction …
-  assertNoPageErrors();
+	const assertNoPageErrors = trapPageErrors(page);
+	await page.goto('/chessboard/examples/minimal');
+	await page.locator('html.app-started').waitFor();
+	// … assertions and one interaction …
+	assertNoPageErrors();
 });
 ```
 
