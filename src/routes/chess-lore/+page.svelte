@@ -10,7 +10,7 @@
 	const ogTitle = 'Mirasen Chess Lore — Become Dangerous in chess';
 	const ogDescription =
 		'Workflow-first chess learning focused on structured study, review, retention, and semantic annotation.';
-	const pageUrl = 'https://mirasen.io/chess-lore/';
+	const pageUrl = 'https://mirasen.io/chess-lore';
 
 	const jsonLd = JSON.stringify({
 		'@context': 'https://schema.org',
@@ -23,7 +23,7 @@
 		author: {
 			'@type': 'Organization',
 			name: 'Mirasen',
-			url: 'https://mirasen.io/'
+			url: 'https://mirasen.io'
 		}
 	});
 

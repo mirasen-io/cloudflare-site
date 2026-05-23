@@ -44,6 +44,30 @@
 			body: 'Open-source chessboard platform supporting the broader Mirasen ecosystem.'
 		}
 	];
+
+	const ogDescription =
+		'Tools and systems for structured chess learning, training, and study — including Mirasen Chess Lore and Mirasen Chessboard.';
+
+	const organizationLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: 'Mirasen',
+		url: pageUrl,
+		description:
+			'Mirasen builds tools and systems for structured chess learning, training, and study.',
+		sameAs: ['https://github.com/mirasen-io', 'https://www.npmjs.com/org/mirasen']
+	});
+
+	const websiteLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: 'Mirasen',
+		url: pageUrl
+	});
+
+	const organizationLdScript =
+		`<` + `script type="application/ld+json">${organizationLd}</` + `script>`;
+	const websiteLdScript = `<` + `script type="application/ld+json">${websiteLd}</` + `script>`;
 </script>
 
 <svelte:head>
@@ -51,9 +75,13 @@
 	<meta name="description" content={pageDescription} />
 	<link rel="canonical" href={pageUrl} />
 	<meta property="og:title" content={pageTitle} />
-	<meta property="og:description" content={pageDescription} />
+	<meta property="og:description" content={ogDescription} />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={pageUrl} />
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html organizationLdScript}
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html websiteLdScript}
 </svelte:head>
 
 <main class="page-shell">
