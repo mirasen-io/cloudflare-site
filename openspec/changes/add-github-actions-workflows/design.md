@@ -1,6 +1,6 @@
 ## Context
 
-The site repo (`@mirasen/main-website`, `private: true`) is a SvelteKit 2 + Svelte 5 app built with Vite 8, deployed to Cloudflare via Wrangler. It depends on `@mirasen/chessboard` through a local file dependency (`"@mirasen/chessboard": "file:../chessboard"`). CI checks out `./site` and `./chessboard` side-by-side, the kt-workflows wrapper's `install-script` installs both repos, and the wrapper's `run-script` calls `npm run build:full` (which builds `../chessboard` before the site build runs and reconciles the file: link). The reference patterns come from `mirasen-io/chessboard`, which is a published library — its `release.yml` is built around `kt-workflows/actions/npm-release@main`, which wraps `changesets/action@v1` and is wired to publish to npm. The site reuses the *shape* of that pipeline for CI but invokes `changesets/action@v1` directly in `release.yml` and replaces npm publish with a Cloudflare deploy.
+The site repo (`@mirasen/main-website`, `private: true`) is a SvelteKit 2 + Svelte 5 app built with Vite 8, deployed to Cloudflare via Wrangler. It depends on `@mirasen/chessboard` through a local file dependency (`"@mirasen/chessboard": "file:../chessboard"`). CI checks out `./site` and `./chessboard` side-by-side, the kt-workflows wrapper's `install-script` installs both repos, and the wrapper's `run-script` calls `npm run build:full` (which builds `../chessboard` before the site build runs and reconciles the file: link). The reference patterns come from `mirasen-io/chessboard`, which is a published library — its `release.yml` is built around `kt-workflows/actions/npm-release@main`, which wraps `changesets/action@v1` and is wired to publish to npm. The site reuses the _shape_ of that pipeline for CI but invokes `changesets/action@v1` directly in `release.yml` and replaces npm publish with a Cloudflare deploy.
 
 Inspected facts that drive the design:
 
@@ -20,7 +20,7 @@ Inspected kt-workflows actions (under `/Users/d050316/SAPDevelop/git/personal/kt
   - **`checkout` input** (default `'true'`), gating the inner `actions/checkout@v6` so workflow-level sibling checkout is preserved when `checkout: false` is set.
   - **`working-directory` input** (default `'.'`), propagated as the inner `kt-workflows/actions/npm-run-script@main`'s `working-directory` AND as both `changesets/action@v1` invocations' `cwd`.
   - **`published` output** (`steps.changesets.outputs.published == 'true' || steps.changesets-fallback.outputs.published == 'true'`), so callers can gate post-release steps (e.g. Cloudflare deploy) on whether a release actually happened.
-  Wraps `changesets/action@v1` with two attempts (`continue-on-error` first, `NPM_TOKEN`-fallback second). Sets `NPM_CONFIG_PROVENANCE: true`. Forces `npm install -g npm@11` if npm major < 12. `publish-script` defaults to `npm run changeset:publish`, `version-script` defaults to `npm run changeset:version`, `build-script` defaults to `npm run build:release`. All three are configurable.
+    Wraps `changesets/action@v1` with two attempts (`continue-on-error` first, `NPM_TOKEN`-fallback second). Sets `NPM_CONFIG_PROVENANCE: true`. Forces `npm install -g npm@11` if npm major < 12. `publish-script` defaults to `npm run changeset:publish`, `version-script` defaults to `npm run changeset:version`, `build-script` defaults to `npm run build:release`. All three are configurable.
 - `dependabot-auto-merge/`, `dependabot-auto-release/`, `get-associated-pr/`, `create-github-app-token/` — used as-is by chessboard; no special considerations for the site beyond the repo-name guard.
 
 ## Goals / Non-Goals
@@ -41,7 +41,7 @@ Inspected kt-workflows actions (under `/Users/d050316/SAPDevelop/git/personal/kt
 - Switching `@mirasen/chessboard` to a published pinned dependency.
 - SonarCloud / coverage upload (the site is not a published library; coverage gates add cost without benefit here).
 - Cloudflare Pages preview deployments per PR (out of scope; can be a follow-up).
-- Migrating Wrangler config or moving the deploy artifact away from `./deploy-site/`. *(superseded — this change DOES update Wrangler config and move the deploy artifact away from `./deploy-site/`; see Decision 7. Listed here only to flag that the previous revision treated this as out-of-scope; it now is in scope.)*
+- Migrating Wrangler config or moving the deploy artifact away from `./deploy-site/`. _(superseded — this change DOES update Wrangler config and move the deploy artifact away from `./deploy-site/`; see Decision 7. Listed here only to flag that the previous revision treated this as out-of-scope; it now is in scope.)_
 - npm provenance, OIDC trusted publishing, NPM_TOKEN handling.
 - Modifying `kt-workflows` actions in this change. (We may suggest enhancements separately.)
 
@@ -71,15 +71,15 @@ The `auto-merge.yml`, `auto-release.yml`, `contribution-update.yml`, `contributi
 
 ### 3. Per-workflow porting decisions
 
-| Workflow | Decision | Notes |
-|---|---|---|
-| `ci.yml` | **Port with semantic changes**: keep `check-execution`, `config`, `required-main`, `required-contribution`; reuse `kt-workflows/actions/npm-ci-check@main` and `npm-ci-test@main` with `checkout: false`, after workflow-level sibling checkouts. Drop the `sonar` job. | No SonarCloud secret/job. |
-| `codeql.yml` | **Port mostly as-is**. | Identical structure; only the repo path is implicit. |
-| `auto-merge.yml` | **Port mostly as-is**. | Same kt-workflows action and secrets. |
-| `auto-release.yml` | **Port with one change**: `if: github.repository == 'mirasen-io/<this-site-repo-slug>'` (verify the actual repo slug at implementation). | Cron + manual dispatch unchanged. Open question: keep at all for a private site (see Open Questions). |
-| `contribution-update.yml` | **Port mostly as-is** (just the repo guard). | Uses `get-associated-pr` + `create-github-app-token`. |
-| `contribution-reset.yml` | **Port mostly as-is** (just the repo guard). | |
-| `release.yml` | **Port with major semantic changes**: changeset-driven for a private package, no npm publish, GitHub Release via `changesets/action@v1`, deploys to Cloudflare. See Decision 4. | |
+| Workflow                  | Decision                                                                                                                                                                                                                                                                | Notes                                                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `ci.yml`                  | **Port with semantic changes**: keep `check-execution`, `config`, `required-main`, `required-contribution`; reuse `kt-workflows/actions/npm-ci-check@main` and `npm-ci-test@main` with `checkout: false`, after workflow-level sibling checkouts. Drop the `sonar` job. | No SonarCloud secret/job.                                                                             |
+| `codeql.yml`              | **Port mostly as-is**.                                                                                                                                                                                                                                                  | Identical structure; only the repo path is implicit.                                                  |
+| `auto-merge.yml`          | **Port mostly as-is**.                                                                                                                                                                                                                                                  | Same kt-workflows action and secrets.                                                                 |
+| `auto-release.yml`        | **Port with one change**: `if: github.repository == 'mirasen-io/<this-site-repo-slug>'` (verify the actual repo slug at implementation).                                                                                                                                | Cron + manual dispatch unchanged. Open question: keep at all for a private site (see Open Questions). |
+| `contribution-update.yml` | **Port mostly as-is** (just the repo guard).                                                                                                                                                                                                                            | Uses `get-associated-pr` + `create-github-app-token`.                                                 |
+| `contribution-reset.yml`  | **Port mostly as-is** (just the repo guard).                                                                                                                                                                                                                            |                                                                                                       |
+| `release.yml`             | **Port with major semantic changes**: changeset-driven for a private package, no npm publish, GitHub Release via `changesets/action@v1`, deploys to Cloudflare. See Decision 4.                                                                                         |                                                                                                       |
 
 ### 4. Release workflow: changeset-driven for a private package, no npm publish
 
@@ -133,8 +133,8 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write       # tag + GitHub Release
-  pull-requests: write  # changesets version PR
+  contents: write # tag + GitHub Release
+  pull-requests: write # changesets version PR
 
 jobs:
   release:
@@ -231,10 +231,10 @@ Workspace root after the two checkouts contains `./site` and `./chessboard`. CI 
 
 - `test` job (matrix over `["22", "24"]`): `kt-workflows/actions/npm-ci-test@main` with `checkout: false`, same `install-script`; `run-script`:
 
-    ```sh
-    npm run build:full --prefix site
-    npm run test --prefix site
-    ```
+  ```sh
+  npm run build:full --prefix site
+  npm run test --prefix site
+  ```
 
   `npm run test` already runs unit + e2e (`test:e2e` itself does `playwright install`). **Do not** call `npm run test:e2e` separately. The e2e webServer rebuilds via `npm run build && npm run preview`, so the site is rebuilt during e2e — slight redundancy with `build:full`, but kept for parity with the maintainer's preferred install/build entrypoint.
 
@@ -266,11 +266,12 @@ Maintainer direction: **drop `./deploy-site/` from the deploy path; deploy `./bu
 After the migration, `./deploy-site/` is no longer referenced anywhere in the deployment path. Apply phase deletes its tree from git (or leaves only items that are demonstrably still required and not produced by `vite build`; default expectation is full removal).
 
 The apply phase produces:
+
 - modified `wrangler.jsonc` (`assets.directory: ./build`),
 - new files under `./site/static/` (the migrated static assets),
 - adjusted SvelteKit page configs where pre-rendered HTML must land in a directory shape,
 - removed `./site/deploy-site/` content,
-and validates locally with `npx wrangler deploy --dry-run` from `./site/` to confirm Wrangler resolves `./build/` and the file set matches the prior deployment surface.
+  and validates locally with `npx wrangler deploy --dry-run` from `./site/` to confirm Wrangler resolves `./build/` and the file set matches the prior deployment surface.
 
 ### 8. Playwright setup
 
@@ -286,6 +287,7 @@ Rely on `npm run test` as-is (it calls `playwright install` via `test:e2e`). The
 - `workingDirectory: ./site` (camelCase per the action's input contract; the action then resolves `assets.directory: ./build` relative to that working directory, i.e. `./site/build`)
 
 Required **secrets** (not vars):
+
 - `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit + Account Settings: Read)
 - `CLOUDFLARE_ACCOUNT_ID`
 
@@ -317,19 +319,19 @@ Concurrency group on every workflow: `${{ github.repository }}-${{ github.workfl
 
 ```json
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [],
-  "linked": [],
-  "access": "restricted",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": [],
-  "privatePackages": {
-    "version": true,
-    "tag": true
-  }
+	"$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "restricted",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": [],
+	"privatePackages": {
+		"version": true,
+		"tag": true
+	}
 }
 ```
 
@@ -341,11 +343,12 @@ Differences from chessboard's config: `access: "restricted"` (cosmetic for a nev
 
 - `changeset:version`: `changeset version && npm install && npm run format && git add --all` (matches chessboard's pattern; the `npm install` + format + add ensures the version PR has a coherent lockfile and formatted CHANGELOG).
 - `changeset:publish`: `changeset publish` (vanilla; for the private site package it skips npm publish but emits the tag line).
-- *(No `release:stage-deploy` script. Decision 7 rejects deploy-staging scripts.)*
+- _(No `release:stage-deploy` script. Decision 7 rejects deploy-staging scripts.)_
 
 ### 15. Caches and artifacts
 
 Inherit kt-workflows cache behavior:
+
 - `actions/setup-node` via `setup-node-minmax`: `cache: npm` keyed on `cache-dependency-path` (here, both `site/package-lock.json` and `chessboard/package-lock.json`).
 - `actions/cache@v5` for `**/node_modules` + `cache-additional-path` (which includes `~/.cache/ms-playwright`).
 
@@ -388,5 +391,5 @@ Every workflow that has secrets or write effects guards with `if: github.reposit
 - Decision 7 A vs B for deploy staging — pick one based on actual file inspection in apply phase.
 - Whether `auto-release.yml` should run for this private site at all — port for shape parity now, but defer the keep/skip decision to the maintainer review.
 - Whether to pin `kt-workflows/actions/*` to a SHA rather than `@main` for hardening. Keep `@main` for parity with chessboard; flag as a follow-up.
-- *(closed)* Whether to use `kt-workflows/actions/npm-release@main` for the release flow. **Resolved**: not used. The wrapper is technically capable (Decision 4.1) but is semantically tied to npm publishing, which does not match this private site. `release.yml` invokes `changesets/action@v1` directly.
+- _(closed)_ Whether to use `kt-workflows/actions/npm-release@main` for the release flow. **Resolved**: not used. The wrapper is technically capable (Decision 4.1) but is semantically tied to npm publishing, which does not match this private site. `release.yml` invokes `changesets/action@v1` directly.
 - Whether to delete `./deploy-site/` from git wholesale once the migration to `./static/` and `./build/` is verified, vs. leaving an empty placeholder. Default: full removal.

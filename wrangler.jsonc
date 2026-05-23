@@ -6,7 +6,8 @@
     "enabled": true
   },
   "assets": {
-    "directory": "./deploy-site"
+    "directory": "./build",
+    "html_handling": "drop-trailing-slash"
   },
   "compatibility_flags": [
     "nodejs_compat"

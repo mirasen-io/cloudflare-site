@@ -1,0 +1,201 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - contribution
+  pull_request:
+
+# cancel in-progress runs on new commits to same ref
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+  actions: write # to delete cache (actions/cache)
+  pull-requests: read # to check for open PRs (gh pr list)
+
+env:
+  # set the default node version to use in the matrix
+  DEFAULT_MATRIX_NODE_VERSION: '["22", "24"]'
+  DEFAULT_CACHE_RESET: false
+
+jobs:
+  check-execution:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.finalize.outputs.should-run }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - id: check-event
+        name: Check if there are no open PRs for contribution -> main on push to contribution
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo "Checking if the workflow should execute for this event"
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/contribution" ]]; then
+            echo "This is a push event to contribution branch, checking for open PRs..."
+            pr_count=$(gh pr list --head contribution --base main --state open --limit 1 --json number --jq 'length')
+            if [[ "$pr_count" -gt 0 ]]; then
+              echo "There is an open PR for contribution -> main, skipping this workflow to avoid duplicate runs."
+              echo "should-run=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "No open PRs for contribution -> main, proceeding with this workflow."
+              echo "should-run=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "This is not a push event to contribution branch, proceeding with this workflow."
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: check-sync
+        name: Check that push to contribution does not produce content identical to main
+        if: steps.check-event.outputs.should-run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" != "push" || "${{ github.ref }}" != "refs/heads/contribution" ]]; then
+            echo "This is not a push event to contribution branch, proceeding with this workflow."
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Checking whether contribution content is identical to main..."
+
+          git fetch origin main
+
+          main_tree="$(git rev-parse origin/main^{tree})"
+          head_tree="$(git rev-parse HEAD^{tree})"
+
+          echo "origin/main tree: $main_tree"
+          echo "HEAD tree:        $head_tree"
+
+          if [[ "$main_tree" == "$head_tree" ]]; then
+            echo "Contribution content is identical to main, skipping duplicate run."
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Contribution content differs from main, proceeding with this workflow."
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: finalize
+        name: Finalize whether the workflow should run based on previous checks
+        shell: bash
+        run: |
+          if [[ "${{ steps.check-event.outputs.should-run }}" != "true" ]]; then
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ steps.check-sync.outputs.should-run }}" != "true" ]]; then
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  config:
+    needs: check-execution
+    if: needs.check-execution.outputs.should-run == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix-node-version: ${{ steps.matrix-node-version.outputs.matrix-node-version }}
+      cache-reset: ${{ steps.cache-reset.outputs.cache-reset }}
+    steps:
+      - id: matrix-node-version
+        shell: bash
+        run: |
+          # Set the node version to use in the matrix
+          value='${{ vars.MATRIX_NODE_VERSION || env.DEFAULT_MATRIX_NODE_VERSION || '' }}'
+          printf 'matrix-node-version=%s\n' "$value" >> "$GITHUB_OUTPUT"
+
+      - id: cache-reset
+        run: |
+          # Set the cache reset to use
+          echo "cache-reset=${{ vars.CACHE_RESET || env.DEFAULT_CACHE_RESET }}" >> "$GITHUB_OUTPUT"
+
+  check:
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: site
+
+      - uses: actions/checkout@v6
+        with:
+          repository: mirasen-io/chessboard
+          path: chessboard
+          ref: main
+
+      - uses: kt-workflows/actions/npm-ci-check@main
+        with:
+          checkout: false
+          matrix-node-version: ${{ needs.config.outputs.matrix-node-version }}
+          cache-reset: ${{ needs.config.outputs.cache-reset }}
+          install-script: |
+            npm ci --prefix chessboard
+            npm ci --prefix site
+          run-script: |
+            npm run build:full --prefix site
+            npm run lint --prefix site
+            npm run check --prefix site
+
+  test:
+    needs: config
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ${{ fromJson(needs.config.outputs.matrix-node-version) }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: site
+
+      - uses: actions/checkout@v6
+        with:
+          repository: mirasen-io/chessboard
+          path: chessboard
+          ref: main
+
+      - uses: kt-workflows/actions/npm-ci-test@main
+        with:
+          checkout: false
+          node-version: ${{ matrix.node-version }}
+          cache-reset: ${{ needs.config.outputs.cache-reset }}
+          install-script: |
+            npm ci --prefix chessboard
+            npm ci --prefix site
+          run-script: |
+            npm run build:full --prefix site
+            npm run test --prefix site
+
+  # Stable aggregate required-* checks for branch protection rules.
+  # This avoids depending directly on individual matrix job statuses.
+  required-main:
+    name: required-main (${{ github.event_name }})
+    needs:
+      - check
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify required jobs for main
+        shell: bash
+        run: |
+          echo "Required jobs for main are fulfilled"
+
+  required-contribution:
+    name: required-contribution (${{ github.event_name }})
+    needs:
+      - check
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify required jobs for contribution
+        shell: bash
+        run: |
+          echo "Required jobs for contribution are fulfilled"
