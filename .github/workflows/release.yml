@@ -74,10 +74,9 @@ jobs:
       # Install both repos and build the site via build:full from workflow root.
       # build:full = build:chessboard && npm install && build, so it reconciles
       # the file: link to chessboard's freshly built dist/.
-      - uses: kt-workflows/actions/npm-ci-check@main
+      - uses: kt-workflows/actions/npm-run-script@main
         with:
-          checkout: false
-          matrix-node-version: '["24"]'
+          matrix-node-version: ${{ vars.MATRIX_NODE_VERSION }}
           install-script: |
             npm ci --prefix chessboard
             npm ci --prefix site
