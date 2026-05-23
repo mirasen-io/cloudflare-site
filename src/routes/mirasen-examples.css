@@ -1,0 +1,65 @@
+/* Reusable layout for interactive example pages.
+   Mobile-first priority: the board area must be allowed to span the
+   viewport edge-to-edge so it can be compared faithfully against
+   chess.com on a phone. Controls and notes keep safe horizontal padding
+   from the page-shell; only the board element itself breaks out. */
+
+:where([data-theme='mirasen'] .example-layout) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+:where([data-theme='mirasen'] .example-copy) {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+:where([data-theme='mirasen'] .example-board-area) {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	align-items: stretch;
+	min-width: 0;
+}
+
+:where([data-theme='mirasen'] .example-controls) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+/* The board edge is the only element allowed to break out of the
+   page-shell on mobile. On desktop it's transparent — just a centering
+   wrapper around .board-wrap. */
+:where([data-theme='mirasen'] .example-board-edge) {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+:where([data-theme='mirasen'] .example-note) {
+	margin: 0;
+	color: var(--mirasen-muted);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+	:where([data-theme='mirasen'] .example-layout) {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	/* Edge-to-edge board breakout: cancels the page-shell's 16px gutter
+	   (and any ancestor padding) so the board fills the full viewport
+	   width. Only .example-board-edge breaks out — controls and note
+	   stay aligned with the page content. */
+	:where([data-theme='mirasen'] .example-board-edge) {
+		width: 100vw;
+		margin-left: calc(50% - 50vw);
+		margin-right: calc(50% - 50vw);
+	}
+}
