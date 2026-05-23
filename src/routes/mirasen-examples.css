@@ -47,6 +47,60 @@
 	line-height: 1.6;
 }
 
+:where([data-theme='mirasen'] .example-status) {
+	margin: 0;
+	color: var(--mirasen-text);
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+/* Compact segment control — used by chess.js example for mutually-exclusive
+   options like drag preset, animation, draw modifier. Sits inline in
+   .example-controls alongside .btn buttons. */
+
+:where([data-theme='mirasen'] .example-segment) {
+	display: inline-flex;
+	align-items: stretch;
+	gap: 0;
+	border: 1px solid var(--mirasen-line);
+	border-radius: 999px;
+	background-color: var(--mirasen-panel);
+	overflow: hidden;
+}
+
+:where([data-theme='mirasen'] .example-segment-label) {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 12px;
+	color: var(--mirasen-muted);
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	border-right: 1px solid var(--mirasen-line);
+}
+
+:where([data-theme='mirasen'] .example-segment-btn) {
+	padding: 6px 12px;
+	border: none;
+	background: transparent;
+	color: var(--mirasen-muted);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+}
+
+:where([data-theme='mirasen'] .example-segment-btn:hover) {
+	color: var(--mirasen-text);
+}
+
+:where([data-theme='mirasen'] .example-segment-btn.is-active) {
+	background-color: var(--mirasen-panel-strong);
+	color: var(--mirasen-text);
+}
+
 @media (max-width: 768px) {
 	:where([data-theme='mirasen'] .example-layout) {
 		grid-template-columns: 1fr;
