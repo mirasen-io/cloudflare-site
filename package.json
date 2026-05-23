@@ -16,9 +16,12 @@
 		"format": "prettier --write .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright install && playwright test"
+		"test:e2e": "playwright install && playwright test",
+		"changeset:version": "changeset version && npm install && npm run format && git add --all",
+		"changeset:publish": "changeset publish"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.31.0",
 		"@eslint/compat": "^2.0.4",
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.59.1",
@@ -51,7 +54,7 @@
 		"wrangler": "^4.93.0"
 	},
 	"dependencies": {
-		"chess.js": "^1.4.0",
-		"@mirasen/chessboard": "file:../chessboard"
+		"@mirasen/chessboard": "file:../chessboard",
+		"chess.js": "^1.4.0"
 	}
 }
