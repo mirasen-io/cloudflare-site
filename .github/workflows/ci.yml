@@ -13,9 +13,10 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read # to fetch code (actions/checkout)
-  actions: write # to delete cache (actions/cache)
-  pull-requests: read # to check for open PRs (gh pr list)
+  contents: read
+  actions: write
+  pull-requests: read
+  deployments: write
 
 env:
   # set the default node version to use in the matrix
@@ -104,6 +105,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix-node-version: ${{ steps.matrix-node-version.outputs.matrix-node-version }}
+      sonar: ${{ steps.sonar.outputs.sonar }}
+      cloudflare: ${{ steps.cloudflare.outputs.cloudflare }}
       cache-reset: ${{ steps.cache-reset.outputs.cache-reset }}
     steps:
       - id: matrix-node-version
@@ -112,6 +115,28 @@ jobs:
           # Set the node version to use in the matrix
           value='${{ vars.MATRIX_NODE_VERSION || env.DEFAULT_MATRIX_NODE_VERSION || '' }}'
           printf 'matrix-node-version=%s\n' "$value" >> "$GITHUB_OUTPUT"
+
+      - id: sonar
+        run: |
+          # Check if the SONAR_TOKEN secret is set, if not skip the sonar job
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "SONAR_TOKEN is not set, skipping sonar job"
+            echo "sonar=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "SONAR_TOKEN is set, running sonar job"
+            echo "sonar=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: cloudflare
+        run: |
+          # Check if the CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID secrets are set, if not skip the cloudflare job
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] || [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID is not set, skipping cloudflare job"
+            echo "cloudflare=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are set, running cloudflare job"
+            echo "cloudflare=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - id: cache-reset
         run: |
@@ -199,3 +224,40 @@ jobs:
         shell: bash
         run: |
           echo "Required jobs for contribution are fulfilled"
+
+  cloudflare:
+    if: github.repository == 'mirasen-io/cloudflare-site' && github.event_name == 'pull_request' && needs.config.outputs.cloudflare == 'true'
+    needs:
+      - config
+      - check
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: site
+
+      - uses: actions/checkout@v6
+        with:
+          repository: mirasen-io/chessboard
+          path: chessboard
+          ref: main
+
+      - uses: kt-workflows/actions/npm-run-script@main
+        with:
+          matrix-node-version: ${{ needs.config.outputs.matrix-node-version }}
+          cache-reset: ${{ needs.config.outputs.cache-reset }}
+          install-script: |
+            npm ci --prefix chessboard
+            npm ci --prefix site
+          run-script: |
+            npm run build:full --prefix site
+
+      - name: Cloudflare deploy preview
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload --preview-alias pr-${{ github.event.pull_request.number }}
+          workingDirectory: ./site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
