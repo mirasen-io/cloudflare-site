@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mirasen.io/</loc>
+    <loc>https://mirasen.io</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chess-lore/</loc>
+    <loc>https://mirasen.io/chess-lore</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/</loc>
+    <loc>https://mirasen.io/chessboard</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/</loc>
+    <loc>https://mirasen.io/chessboard/examples</loc>
   </url>
   <url>
     <loc>https://mirasen.io/chessboard/examples/minimal</loc>
