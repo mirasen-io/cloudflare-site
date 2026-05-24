@@ -1,5 +1,11 @@
 # @mirasen/main-website
 
+## 1.0.1
+
+### Patch Changes
+
+- 8c284a4: sitemap added
+
 ## 1.0.0
 
 ### Major Changes
