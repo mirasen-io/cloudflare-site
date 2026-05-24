@@ -1,17 +1,41 @@
-# wrangler files
+# Node / npm
+node_modules
+dist
+coverage*
+
+# SvelteKit / Vite output
+/.svelte-kit
+/build*
+.output
+.vercel
+.netlify
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Playwright
+test-results
+
+# Wrangler
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# Env
 .env*
 !.env.example
+!.env.test
 
-artifacts
+# OS
+.DS_Store
+Thumbs.db
 
+# Claude
 .claude/settings.local.json
 .claude/cache/
 .claude/sessions/
 
-node_modules
-dist
-build
-coverage*
+# Local backup of the SvelteKit source (artifacts/main-web/)
+/artifacts
+
+# Local input artifacts
+/deploy-site.zip

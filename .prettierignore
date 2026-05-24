@@ -1,0 +1,24 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Miscellaneous
+/static/
+
+# Legacy site (untouched by SvelteKit migration)
+/deploy-site/
+
+# Editor / tooling config (managed manually)
+/.vscode/
+/.claude/
+/wrangler.jsonc
+
+# Repo automation
+/scripts/
+
+# OpenSpec — only the in-flight change is formatted; archived changes and existing specs stay verbatim
+/openspec/changes/archive/
+/openspec/specs/

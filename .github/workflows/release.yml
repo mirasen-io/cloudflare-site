@@ -1,0 +1,104 @@
+name: Release
+
+# Changeset-driven site release for the private @mirasen/main-website package,
+# plus Cloudflare Workers deployment via cloudflare/wrangler-action@v4.
+#
+# Why no kt-workflows/actions/npm-release@main?
+#   The wrapper is technically capable here (checkout: false, working-directory,
+#   published output) but is semantically tied to npm-package releases. This
+#   site is private and never publishes to npm, so we invoke changesets/action@v1
+#   directly. See openspec/changes/add-github-actions-workflows/design.md
+#   Decision 4.1.
+#
+# How GitHub Releases happen without npm publish:
+#   .changeset/config.json sets privatePackages: { version: true, tag: true }.
+#   With that, `changeset publish` skips `npm publish` for the private package
+#   but still emits a `🦋  New tag: <name>@<version>` line on stdout.
+#   `changesets/action@v1` parses that line, sets `published=true`, and creates
+#   a Git tag and a GitHub Release for each tag entry.
+#
+# Fallback if Changesets ever drops the tag-emit for private packages:
+#   Detect `steps.changesets.outputs.published == 'false'` while the Version PR
+#   was merged, then run `gh release create "<tag>" --notes-file CHANGELOG.md`
+#   (or `softprops/action-gh-release`) before the deploy step.
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write # tag + GitHub Release (changesets/action)
+  pull-requests: write # to create the version PR (changesets/action)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: >-
+      github.repository == 'mirasen-io/cloudflare-site' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.event == 'push' &&
+         github.event.workflow_run.conclusion == 'success')
+      )
+    steps:
+      - id: app-token
+        uses: kt-workflows/actions/create-github-app-token@main
+        with:
+          app-id: ${{ secrets.WORKFLOW_APP_ID }}
+          private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}
+          configure-git: false
+          default-to-github-token: true
+
+      - uses: actions/checkout@v6
+        with:
+          path: site
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || 'main' }}
+
+      - uses: actions/checkout@v6
+        with:
+          repository: mirasen-io/chessboard
+          path: chessboard
+          ref: main
+
+      # Install both repos and build the site via build:full from workflow root.
+      # build:full = build:chessboard && npm install && build, so it reconciles
+      # the file: link to chessboard's freshly built dist/.
+      - uses: kt-workflows/actions/npm-run-script@main
+        with:
+          matrix-node-version: ${{ vars.MATRIX_NODE_VERSION }}
+          install-script: |
+            npm ci --prefix chessboard
+            npm ci --prefix site
+          run-script: |
+            npm run build:full --prefix site
+
+      - id: changesets
+        uses: changesets/action@v1
+        with:
+          cwd: site
+          version: npm run changeset:version
+          publish: npm run changeset:publish
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - if: ${{ steps.changesets.outputs.published == 'true' }}
+        name: Cloudflare deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+          workingDirectory: ./site

@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
+
+@import './mirasen-theme.css';
+@import './mirasen-styles.css';
+@import './mirasen-examples.css';
+@import './board-styles.css';

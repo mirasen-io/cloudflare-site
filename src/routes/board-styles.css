@@ -1,0 +1,21 @@
+.board-wrap {
+	width: min(100%, 640px);
+	margin: 0 auto;
+}
+
+.board {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	overflow: visible;
+}
+
+/* On mobile, the board fills its container, which is .example-board-edge
+   broken out to 100vw — no max-width clamp that would shrink the board
+   below the viewport. */
+@media (max-width: 768px) {
+	.board-wrap {
+		width: 100%;
+		max-width: none;
+		margin: 0;
+	}
+}

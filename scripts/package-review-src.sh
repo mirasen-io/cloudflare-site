@@ -57,7 +57,7 @@ if [[ ! -d "$ROOT_DIR/deploy-site" ]]; then
 fi
 
 # Standard payload
-cp -R "$ROOT_DIR/deploy-site" "$STAGING_DIR/deploy-site"
+cp -R "$ROOT_DIR/src" "$STAGING_DIR/src"
 copy_if_exists "tests"
 copy_if_exists "scripts"
 copy_if_exists "docs"
@@ -77,11 +77,14 @@ copy_if_exists "vitest.config.ts"
 copy_if_exists "README.md"
 copy_if_exists ".npmignore"
 
+copy_if_exists ".github"
+
+copy_if_exists "deploy-site"
+
 # Optional extras in full mode
 if [[ "$FULL_MODE" == "true" ]]; then
   copy_if_exists "scripts"
   copy_if_exists "examples"
-  copy_if_exists ".github"
   copy_if_exists "CHANGELOG.md"
 fi
 
