@@ -258,6 +258,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload --preview-alias pr-${{ github.event.pull_request.number }}
+          command: versions upload --preview-alias pr-${{ github.event.pull_request.number }} --tag ${{ github.event.pull_request.head.sha }}
           workingDirectory: ./site
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
