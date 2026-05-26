@@ -254,6 +254,7 @@ jobs:
             npm run build:full --prefix site
 
       - name: Cloudflare deploy preview
+        id: deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -261,3 +262,9 @@ jobs:
           command: versions upload --preview-alias pr-${{ github.event.pull_request.number }} --tag ${{ github.event.pull_request.head.sha }}
           workingDirectory: ./site
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: E2E against preview
+        working-directory: ./site
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.deployment-url }}
