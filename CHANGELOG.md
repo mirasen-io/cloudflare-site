@@ -1,5 +1,16 @@
 # @mirasen/main-website
 
+## 1.0.2
+
+### Patch Changes
+
+- 14b47e3: dependabot: directory '/', update @sveltejs/kit
+- 14b47e3: dependabot: directory '/', update typescript-eslint
+- 14b47e3: dependabot: directory '/', update wrangler
+- d2bfb5c: dependabot: directory '/', update eslint-plugin-svelte
+- d2bfb5c: dependabot: directory '/', update eslint
+- d2bfb5c: dependabot: directory '/', update svelte
+
 ## 1.0.1
 
 ### Patch Changes
