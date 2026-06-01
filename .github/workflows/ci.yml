@@ -148,14 +148,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          path: site
-
-      - uses: actions/checkout@v6
-        with:
-          repository: mirasen-io/chessboard
-          path: chessboard
-          ref: main
 
       - uses: kt-workflows/actions/npm-ci-check@main
         with:
@@ -163,12 +155,11 @@ jobs:
           matrix-node-version: ${{ needs.config.outputs.matrix-node-version }}
           cache-reset: ${{ needs.config.outputs.cache-reset }}
           install-script: |
-            npm ci --prefix chessboard
-            npm ci --prefix site
+            npm ci
           run-script: |
-            npm run build:full --prefix site
-            npm run lint --prefix site
-            npm run check --prefix site
+            npm run build
+            npm run lint
+            npm run check
 
   test:
     needs: config
@@ -178,14 +169,6 @@ jobs:
         node-version: ${{ fromJson(needs.config.outputs.matrix-node-version) }}
     steps:
       - uses: actions/checkout@v6
-        with:
-          path: site
-
-      - uses: actions/checkout@v6
-        with:
-          repository: mirasen-io/chessboard
-          path: chessboard
-          ref: main
 
       - uses: kt-workflows/actions/npm-ci-test@main
         with:
@@ -193,11 +176,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache-reset: ${{ needs.config.outputs.cache-reset }}
           install-script: |
-            npm ci --prefix chessboard
-            npm ci --prefix site
+            npm ci
           run-script: |
-            npm run build:full --prefix site
-            npm run test --prefix site
+            npm run build
+            npm run test
 
   # Stable aggregate required-* checks for branch protection rules.
   # This avoids depending directly on individual matrix job statuses.
@@ -234,24 +216,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          path: site
-
-      - uses: actions/checkout@v6
-        with:
-          repository: mirasen-io/chessboard
-          path: chessboard
-          ref: main
 
       - uses: kt-workflows/actions/npm-run-script@main
         with:
           matrix-node-version: ${{ needs.config.outputs.matrix-node-version }}
           cache-reset: ${{ needs.config.outputs.cache-reset }}
           install-script: |
-            npm ci --prefix chessboard
-            npm ci --prefix site
+            npm ci
           run-script: |
-            npm run build:full --prefix site
+            npm run build
 
       - name: Cloudflare deploy preview
         id: deploy
@@ -260,11 +233,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload --preview-alias pr-${{ github.event.pull_request.number }} --tag ${{ github.event.pull_request.head.sha }}
-          workingDirectory: ./site
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: E2E against preview
-        working-directory: ./site
         run: npm run test:e2e
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.deployment-url }}

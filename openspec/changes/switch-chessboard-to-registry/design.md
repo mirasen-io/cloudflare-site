@@ -13,12 +13,14 @@ The desire is twofold: (a) consume the registry version like a normal npm dep so
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Replace `file:../chessboard` with a registry semver range so Dependabot updates flow naturally and npm download counters reflect real installs.
 - Simplify CI to a single-repo checkout + single-repo `npm ci` + `npm run build`.
 - Provide an explicit, opt-in, per-developer path to substitute a locally-developed `@mirasen/chessboard` for the registry copy during development without modifying `package.json`.
 - Keep the substitution path safe-by-default: if no global link is present, the helper does nothing and the registry version is used as-is.
 
 **Non-Goals:**
+
 - Converting the two repositories into a monorepo (npm/pnpm workspaces, turborepo).
 - Building a generic, cross-project `npm-link` tool. The script is per-project; its allowlist is hard-coded for this repo.
 - Automating the `npm link` registration step inside the chessboard clone — that remains a one-time manual step per developer machine.
@@ -33,6 +35,7 @@ Use `"@mirasen/chessboard": "^1.3.2"` (caret range against the latest published 
 **Rationale:** Caret allows minor/patch updates which Dependabot will pick up via the existing `minor-and-patch` group. Major bumps will arrive through the `major` group as separate PRs. This matches how every other dependency in the project is already managed.
 
 **Alternatives considered:**
+
 - `link:../chessboard` — same problems as `file:` for Dependabot and downloads; just different syntax.
 - Pinned exact version `"1.3.2"` — disables Dependabot minor/patch automation; rejected.
 - `workspace:*` (npm workspaces) — would require restructuring the two repos as a monorepo. Larger change than the problem warrants.
@@ -50,6 +53,7 @@ LINK_PACKAGES=(
 **Rationale:** Each project has different needs — some want chessboard linked, others (future) might want a different package, most want neither. A hard-coded allowlist makes the intent visible at the top of the file and means an empty list is a safe default. This is per-project configuration; it belongs to the project, not to a shared tool.
 
 **Alternatives considered:**
+
 - Auto-discover all globally linked packages that appear in `package.json` deps — risks accidentally linking unrelated packages a developer happened to link globally for a different reason. Rejected.
 - Allowlist by scope (e.g. `@mirasen`, `@ktarmyshov`) — broader than necessary; one developer might want only some of those linked. Rejected per user direction.
 - External config file (`.npmlinkrc`) or `package.json` field — over-engineering for a single-package allowlist that changes ~never. Rejected.
@@ -57,16 +61,19 @@ LINK_PACKAGES=(
 ### Decision 3: Triple intersection — declared ∩ direct deps ∩ globally linked
 
 The script links a package only if all three sets agree:
+
 1. The package name appears in `LINK_PACKAGES`.
 2. The package appears as a direct entry in `dependencies` or `devDependencies` of this project's `package.json` (no transitive walk).
 3. The package is currently registered as a global npm link (`npm ls -g --link=true`).
 
 **Rationale:**
+
 - (1) is the per-project intent.
 - (2) is defense-in-depth: copying this script to a new project without updating `LINK_PACKAGES` will silently no-op rather than link an unrelated package; also blocks linking transitive dependencies that the project doesn't directly own.
 - (3) is the actual availability check.
 
 **Alternatives considered:**
+
 - Skip (2) and link any allowlisted package regardless of direct-dep status — risks linking transitive deps that another package controls; tighter coupling reduces surprise. Rejected.
 - Skip (3) and always run `npm link` — fails noisily on any developer machine that hasn't pre-registered a global link. Rejected; the silent no-op is a feature, not a bug.
 
@@ -83,6 +90,7 @@ The script has no `$CI` or `$NODE_ENV` early-exit guard. Safety is provided enti
 **Rationale:** `postinstall` runs after every local `npm install` AND every `npm ci` (npm 7+ runs full lifecycle on `npm ci`), self-healing any link that npm dropped during dependency resolution — exactly the behavior we want. It does NOT run during `npm publish` (unlike `prepare`), which is irrelevant here (`"private": true`) but is the cleaner choice. An environment guard would be redundant defense-in-depth: the triple intersection already guarantees no-op behavior wherever links don't exist, and it works correctly even on CI systems that don't set `$CI` (which a guard would fail to handle anyway).
 
 **Alternatives considered:**
+
 - `prepare` instead of `postinstall` — runs on `npm publish` and on `npm install` from git URLs, neither of which we want triggering link logic. Rejected in favor of `postinstall`.
 - `[ -n "$CI" ] && exit 0` guard — redundant with the triple intersection; not portable across all CI systems; adds a code path that has to be reasoned about. Rejected.
 - No lifecycle hook; require manual `npm run link` after every `npm install` — every `npm install` / `npm ci` (e.g. `changeset:version`'s embedded install) drops the link, requiring constant manual re-linking. Rejected as user-hostile.
@@ -99,6 +107,7 @@ npm ls -g --depth=0 --link=true --json 2>/dev/null \
 **Rationale:** Authoritative parse, three lines, scope-agnostic, works whether or not `LINK_PACKAGES` ever grows to include non-scoped entries.
 
 **Alternatives considered:**
+
 - Patch the `awk`/`sed` pipeline — fragile; would still need re-validation if npm changes its output format. Rejected.
 
 ### Decision 6: Drop `build:full` / `build:chessboard` scripts and the sibling-checkout in CI
@@ -108,6 +117,7 @@ Delete both scripts from `package.json` and remove from CI workflows: the second
 **Rationale:** These scripts existed only to reconcile the `file:` link by rebuilding the sibling on each CI run. With the registry dep, the published tarball already contains the built artifact; the build is a single-repo operation.
 
 **Alternatives considered:**
+
 - Keep the sibling checkout behind a feature flag for emergencies — adds permanent complexity for a rarely-used escape hatch. Rejected; reverting this change via git is the escape hatch.
 
 ### Decision 7: Dependabot ignore entry removed; existing groups absorb it

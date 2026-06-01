@@ -16,7 +16,6 @@ updates:
     ignore:
       - dependency-name: 'npm'
         versions: ['<10.0.0', '>=11.0.0']
-      - dependency-name: '@mirasen/chessboard'
 
     groups:
       minor-and-patch:

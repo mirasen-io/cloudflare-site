@@ -11,8 +11,8 @@ The site consumes `@mirasen/chessboard` via `"file:../chessboard"`, which forces
   - hard-coded `LINK_PACKAGES` allowlist (per-project list of packages to link)
   - direct dependencies only (intersection of `LINK_PACKAGES` ∩ `package.json` direct deps + devDeps ∩ globally linked packages)
   - clean `npm ls -g --json | jq` parsing (replaces fragile `awk`/`sed` pipeline)
-  - CI guard (`$CI` set ⇒ no-op exit 0)
-- **BREAKING** `.github/workflows/ci.yml` (3 jobs) and `.github/workflows/release.yml` (1 job): remove the second `actions/checkout` of `mirasen-io/chessboard`, remove `npm ci --prefix chessboard`, remove the `--prefix site` indirection, and replace `npm run build:full` with `npm run build`.
+  - safety provided by the empty intersection on CI (no global links registered) — no separate `$CI`/env guard needed
+- **BREAKING** `.github/workflows/ci.yml` (3 jobs) and `.github/workflows/release.yml` (1 job): remove the second `actions/checkout` of `mirasen-io/chessboard`, remove the `path: site` argument from the remaining checkout, remove `npm ci --prefix chessboard`, drop `--prefix site` from all `npm` invocations, drop `workingDirectory: ./site` from `cloudflare/wrangler-action@v4`, drop `cwd: site` from `changesets/action@v1`, and replace `npm run build:full` with `npm run build`. The site is now checked out at the workflow root.
 - `.github/dependabot.yml`: remove the `dependency-name: '@mirasen/chessboard'` entry from `ignore` so Dependabot starts opening update PRs.
 - Regenerate `package-lock.json` to reference the registry tarball for `@mirasen/chessboard`.
 - Document the local development workflow (one-time `npm link` in the chessboard checkout; site `npm install` self-links via `postinstall`).
@@ -21,9 +21,11 @@ The site consumes `@mirasen/chessboard` via `"file:../chessboard"`, which forces
 ## Capabilities
 
 ### New Capabilities
+
 - `local-dev-link`: opt-in `scripts/npm-link.sh` helper, its allowlist semantics, the `postinstall` integration, and the documented local-development flow that pairs it with the registry dependency.
 
 ### Modified Capabilities
+
 - `ci-validation`: drops the sibling-checkout requirement and the `file:../chessboard` invariant; jobs install only this repo and build via `npm run build`.
 - `cloudflare-release`: same — release pipeline no longer checks out chessboard or runs `build:full`.
 - `dependabot-automation`: `@mirasen/chessboard` is no longer in the Dependabot ignore list and SHALL flow through the existing `minor-and-patch` / `major` groups like any other dependency.
