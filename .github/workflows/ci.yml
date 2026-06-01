@@ -177,6 +177,7 @@ jobs:
           cache-reset: ${{ needs.config.outputs.cache-reset }}
           install-script: |
             npm ci
+            npx playwright install
           run-script: |
             npm run build
             npm run test
