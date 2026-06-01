@@ -5,11 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build:chessboard": "npm run build --prefix ../chessboard",
 		"build": "vite build",
-		"build:full": "npm run build:chessboard && npm install && npm run build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
+		"postinstall": "./scripts/npm-link.sh",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
@@ -54,7 +53,7 @@
 		"wrangler": "^4.95.0"
 	},
 	"dependencies": {
-		"@mirasen/chessboard": "file:../chessboard",
+		"@mirasen/chessboard": "^1.3.2",
 		"chess.js": "^1.4.0"
 	}
 }
