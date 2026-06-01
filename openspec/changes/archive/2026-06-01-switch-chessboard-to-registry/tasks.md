@@ -66,9 +66,9 @@
 
 ## 10. Push and verify CI
 
-- [ ] 10.1 Commit all changes with a descriptive message; do NOT commit while the local link is active (verify `package-lock.json` shows registry URL, not `file:`)
-- [ ] 10.2 Push to a feature branch and open a PR
-- [ ] 10.3 Verify all `ci.yml` jobs (`check`, `test`, `e2e` if separate, `required-main`) pass green
-- [ ] 10.4 If any job fails, fix and re-run; do not merge until all required CI checks are green
-- [ ] 10.5 After merge, monitor the next `release.yml` run (triggered by CI on `main`) and confirm the deploy step runs successfully against the registry-installed chessboard
-- [ ] 10.6 After merge, watch for Dependabot's next weekly run and confirm it begins picking up `@mirasen/chessboard` updates
+- [x] 10.1 Commit all changes with a descriptive message; do NOT commit while the local link is active (verify `package-lock.json` shows registry URL, not `file:`)
+- [x] 10.2 Push to a feature branch and open a PR
+- [x] 10.3 Verify all `ci.yml` jobs (`check`, `test`, `e2e` if separate, `required-main`) pass green
+- [x] 10.4 If any job fails, fix and re-run; do not merge until all required CI checks are green
+- [x] 10.5 After merge, monitor the next `release.yml` run (triggered by CI on `main`) and confirm the deploy step runs successfully against the registry-installed chessboard
+- [x] 10.6 After merge, watch for Dependabot's next weekly run and confirm it begins picking up `@mirasen/chessboard` updates

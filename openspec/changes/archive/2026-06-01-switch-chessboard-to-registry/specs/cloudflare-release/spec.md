@@ -1,8 +1,8 @@
 ## MODIFIED Requirements
 
-### Requirement: Release single-repo checkout, build via `npm run build`, deploy `./build/` directly
+### Requirement: Release sibling-checkout, build via `build:full`, deploy `./build/` directly
 
-The release workflow SHALL use a single-repo checkout layout — only this repository is checked out, at the workflow root (no `path:` argument) — and SHALL install dependencies through the kt-workflows wrapper's `install-script` input (not as a separate run step). The `install-script` and `run-script` SHALL NOT use `--prefix` arguments. The build SHALL run via `npm run build`. `@mirasen/chessboard` SHALL be installed from the npm registry as declared in `package.json`. The release workflow SHALL deploy the resulting SvelteKit build output directly via `cloudflare/wrangler-action@v4` without a `workingDirectory` argument; `wrangler.jsonc` SHALL declare `assets.directory: ./build` (relative to the workflow root, where `package.json` and the build output now live), and `./deploy-site/` SHALL no longer be on the deployment path. No intermediate staging script (e.g. `release:stage-deploy`) SHALL be introduced.
+The release workflow SHALL use a single-repo checkout layout — only this repository is checked out, at the workflow root (no `path:` argument) — and SHALL install dependencies through the kt-workflows wrapper's `install-script` input (not as a separate run step). The `install-script` and `run-script` SHALL NOT use `--prefix` arguments. The build SHALL run via `npm run build` (the `build:full` and `build:chessboard` scripts SHALL NOT exist in `package.json`). `@mirasen/chessboard` SHALL be installed from the npm registry as declared in `package.json`. The release workflow SHALL deploy the resulting SvelteKit build output directly via `cloudflare/wrangler-action@v4` without a `workingDirectory` argument; `wrangler.jsonc` SHALL declare `assets.directory: ./build` (relative to the workflow root, where `package.json` and the build output now live), and `./deploy-site/` SHALL no longer be on the deployment path. No intermediate staging script (e.g. `release:stage-deploy`) SHALL be introduced.
 
 #### Scenario: Install order
 
