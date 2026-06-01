@@ -67,9 +67,16 @@ jobs:
 
       # Install and build the site from workflow root.
       # @mirasen/chessboard is consumed from the npm registry, no sibling checkout needed.
+      #
+      # matrix-node-version-earliest: true picks the lowest Node from the matrix
+      # (= oldest npm) so the package-lock.json that `changeset:version` emits is
+      # readable by every Node in the CI matrix. npm 11 (Node 24) strips optional
+      # peer dependency entries that npm 10 (Node 22) still requires for `npm ci`,
+      # which would break the Version Packages PR's CI on the older matrix entry.
       - uses: kt-workflows/actions/npm-run-script@main
         with:
           matrix-node-version: ${{ vars.MATRIX_NODE_VERSION }}
+          matrix-node-version-earliest: true
           install-script: |
             npm ci
           run-script: |
