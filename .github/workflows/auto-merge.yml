@@ -1,6 +1,11 @@
 name: Dependabot auto-merge
 on: pull_request
 
+env:
+  # Mirrors ci.yml so the lockfile regen below runs on the same earliest Node
+  # as CI uses to validate it. Override per-repo via vars.MATRIX_NODE_VERSION.
+  DEFAULT_MATRIX_NODE_VERSION: '["22", "24"]'
+
 permissions:
   contents: write
   pull-requests: write
@@ -10,6 +15,56 @@ jobs:
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
+      # Why we regenerate the lockfile here, BEFORE dependabot-auto-merge:
+      #
+      # Dependabot runs on Node 24 / npm 11 (see dependabot-core's
+      # npm_and_yarn/Dockerfile) and emits a package-lock.json that npm 11's
+      # resolver dedups aggressively — it strips nested entries (e.g.
+      # node_modules/svelte-check/node_modules/picomatch) that npm 10 still
+      # needs. CI on Node 22 then fails `npm ci` with
+      #     Missing: picomatch@4.0.4 from lock file
+      #
+      # We re-run `npm install --package-lock-only` on the earliest Node from
+      # the matrix (= oldest npm = npm 10) so the resulting lockfile is
+      # readable by every Node in the matrix. Same trick as in release.yml.
+      #
+      # We push with the default GITHUB_TOKEN on purpose: pushes from it do
+      # NOT trigger downstream workflows, so this commit lands silently and
+      # the dependabot-auto-merge action below picks it up via its own
+      # `actions/checkout@v6` (which clean-resets to the remote HEAD we just
+      # advanced).
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+
+      - id: matrix
+        shell: bash
+        run: |
+          value='${{ vars.MATRIX_NODE_VERSION || env.DEFAULT_MATRIX_NODE_VERSION }}'
+          echo "node-version=$value" >> "$GITHUB_OUTPUT"
+
+      - uses: kt-workflows/actions/setup-node-minmax@main
+        with:
+          matrix-node-version: ${{ steps.matrix.outputs.node-version }}
+          matrix-node-version-earliest: true
+
+      - name: Regenerate package-lock.json on earliest Node
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install --package-lock-only --ignore-scripts
+          if git diff --quiet -- package-lock.json; then
+            echo "Lockfile already compatible with earliest Node — nothing to do"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json
+          git commit -m "Regenerate package-lock.json on earliest Node"
+          git push origin HEAD:${{ github.head_ref }}
+
       - uses: kt-workflows/actions/dependabot-auto-merge@main
         with:
           app-id: ${{ secrets.WORKFLOW_APP_ID }}
