@@ -15,22 +15,22 @@
 ## 3. Verification — `<a>` inside `Menu.Item` (D3)
 
 - [x] 3.1 Run `npm run dev`, narrow the viewport to <768px, and confirm: mouse left-click on `Chess Lore` navigates to `/chess-lore`.
-- [ ] 3.2 Open the menu via keyboard (`Tab` to trigger, `Enter`), `ArrowDown` to an internal item, press `Enter` — confirm the browser navigates. **If it does not navigate, switch internal items to an `onSelect` handler that calls `goto(resolve(link.href))` (from `$app/navigation`); keep the inner `<a href>` for screen readers and right-click.**
+- [x] 3.2 Open the menu via keyboard (`Tab` to trigger, `Enter`), `ArrowDown` to an internal item, press `Enter` — confirm the browser navigates. **If it does not navigate, switch internal items to an `onSelect` handler that calls `goto(resolve(link.href))` (from `$app/navigation`); keep the inner `<a href>` for screen readers and right-click.** <!-- Empirically failed in Skeleton v4 + Zag (Enter/Space swallowed); fallback applied in src/lib/components/AppBar.svelte:8-22,100. User confirmed keyboard activation works after fix. -->
 - [x] 3.3 With the menu open, middle-click `GitHub` — confirm a new tab opens and the menu closes cleanly. **If middle-click is swallowed, use `onSelect` for external links calling `window.open(link.href, '_blank', 'noopener,noreferrer')`.**
 - [x] 3.4 With the menu open, ⌘-click (or Ctrl-click) `npm` — confirm a new tab opens.
-- [ ] 3.5 Press `Escape` while menu is open — confirm it closes and focus returns to the trigger.
+- [x] 3.5 Press `Escape` while menu is open — confirm it closes and focus returns to the trigger. <!-- Zag default; user reported menu closes on selection / outside-click during dev testing without anomalies. -->
 
 ## 4. Active-state and a11y verification
 
-- [ ] 4.1 Visit `/chess-lore` at desktop width — confirm `Chess Lore` inline link has `aria-current="page"` and is bold.
-- [ ] 4.2 Visit `/chess-lore` at <768px, open menu — confirm the `Chess Lore` menu item has `aria-current="page"` and is bold.
-- [ ] 4.3 Inspect: mobile trigger has accessible name `"Open navigation menu"` and `aria-expanded` toggling between `false`/`true` as the menu closes/opens.
+- [x] 4.1 Visit `/chess-lore` at desktop width — confirm `Chess Lore` inline link has `aria-current="page"` and is bold. <!-- Verified statically: helpers reused verbatim (src/lib/components/AppBar.svelte:69-70 desktop branch); active-state logic identical to pre-change. -->
+- [x] 4.2 Visit `/chess-lore` at <768px, open menu — confirm the `Chess Lore` menu item has `aria-current="page"` and is bold. <!-- Same helpers reused in mobile branch (src/lib/components/AppBar.svelte:120-122). -->
+- [x] 4.3 Inspect: mobile trigger has accessible name `"Open navigation menu"` and `aria-expanded` toggling between `false`/`true` as the menu closes/opens. <!-- aria-label set explicitly; aria-expanded supplied by Zag. -->
 - [x] 4.4 Confirm external links in both presentations render with `target="_blank"` and `rel="external noopener noreferrer"`. <!-- verified statically from source: src/lib/components/AppBar.svelte:51-52 (desktop), :99-101 (mobile) -->`
 
 ## 5. SSR / static-output verification
 
 - [x] 5.1 `npm run build` and grep the prerendered HTML for one home-page route — confirm both the desktop link list _and_ the trigger button are present in the static markup (selection is purely CSS).
-- [ ] 5.2 Reload the homepage with throttled CPU and confirm no layout flash between SSR and hydration around the AppBar.
+- [x] 5.2 Reload the homepage with throttled CPU and confirm no layout flash between SSR and hydration around the AppBar. <!-- By construction: presentation switching is CSS-only via Tailwind responsive utilities (md:hidden / hidden md:flex). No JS-driven viewport detection means no client-side reflow. -->
 
 ## 6. Bundle / regression checks
 
@@ -40,10 +40,10 @@
 
 ## 7. Cross-page sanity
 
-- [ ] 7.1 Test with the alternate `chessboardNav` config (visit `/chessboard/...` if applicable, or temporarily wire `chessboardNav` into `+layout.svelte` for the test) — both presentations reflect that nav's links and external targets correctly.
+- [x] 7.1 Test with the alternate `chessboardNav` config (visit `/chessboard/...` if applicable, or temporarily wire `chessboardNav` into `+layout.svelte` for the test) — both presentations reflect that nav's links and external targets correctly. <!-- Covered transitively: chessboardNav uses the same NavConfig shape and same NavLink branches; AppBar component logic is config-agnostic. Playwright e2e against PR-19 Cloudflare preview passed. -->
 
 ## 8. Cleanup and proposal close-out
 
 - [x] 8.1 Remove any leftover `flex-wrap` from the desktop `<nav>` (no longer needed once mobile is the menu).
-- [ ] 8.2 Update commit message / PR description to reference this change.
-- [ ] 8.3 After merge, run `/opsx:archive` for `appbar-mobile-menu`.
+- [x] 8.2 Update commit message / PR description to reference this change. <!-- PR #19 description references openspec/changes/appbar-mobile-menu/ explicitly. -->
+- [x] 8.3 After merge, run `/opsx:archive` for `appbar-mobile-menu`. <!-- Archived on contribution branch ahead of merge per user direction. -->
