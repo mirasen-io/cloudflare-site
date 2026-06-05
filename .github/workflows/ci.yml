@@ -182,32 +182,6 @@ jobs:
             npm run build
             npm run test
 
-  # Stable aggregate required-* checks for branch protection rules.
-  # This avoids depending directly on individual matrix job statuses.
-  required-main:
-    name: required-main (${{ github.event_name }})
-    needs:
-      - check
-      - test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Verify required jobs for main
-        shell: bash
-        run: |
-          echo "Required jobs for main are fulfilled"
-
-  required-contribution:
-    name: required-contribution (${{ github.event_name }})
-    needs:
-      - check
-      - test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Verify required jobs for contribution
-        shell: bash
-        run: |
-          echo "Required jobs for contribution are fulfilled"
-
   cloudflare:
     if: github.repository == 'mirasen-io/cloudflare-site' && github.event_name == 'pull_request' && needs.config.outputs.cloudflare == 'true'
     needs:
@@ -241,3 +215,30 @@ jobs:
         run: npm run test:e2e
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.deployment-url }}
+
+  # Stable aggregate required-* checks for branch protection rules.
+  # This avoids depending directly on individual matrix job statuses.
+  required-main:
+    name: required-main (${{ github.event_name }})
+    needs:
+      - check
+      - test
+      - cloudflare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify required jobs for main
+        shell: bash
+        run: |
+          echo "Required jobs for main are fulfilled"
+
+  required-contribution:
+    name: required-contribution (${{ github.event_name }})
+    needs:
+      - check
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify required jobs for contribution
+        shell: bash
+        run: |
+          echo "Required jobs for contribution are fulfilled"
