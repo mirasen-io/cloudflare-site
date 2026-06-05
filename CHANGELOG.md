@@ -1,5 +1,38 @@
 # @mirasen/main-website
 
+## 1.1.0
+
+### Minor Changes
+
+- 4b9ab70: AppBar collapses primary links into a hamburger menu on viewports below `md` (768px).
+
+  The four links in `AppBar.Trail` (Chess Lore, Chessboard, GitHub, npm) used to wrap onto a second row on phone-portrait widths next to the brand, producing a cramped two-row header. Below `md` they now hide behind a `lucide`-iconed trigger that opens a Skeleton v4 `Menu` (Zag-backed: outside-click, `Esc`, focus management, ARIA all out of the box). At `md` and above behavior is unchanged. Brand area in `AppBar.Lead` is untouched at every width.
+
+  Both presentations render in the same SSR pass — selection is purely CSS — so the static `adapter-static` output stays viewport-independent and there is no first-paint flash. A single `NavConfig.links` array drives both views; active-state helpers (`aria-current="page"` + `font-bold`) are reused verbatim.
+
+  Keyboard activation (`Enter`/`Space`) inside `Menu.Item` is intercepted by Zag and does not fire the nested `<a>`'s default navigation, so an `onSelect` handler routes those events through `goto()` for internal links and `window.open(..., '_blank', 'noopener,noreferrer')` for external ones. Mouse click, middle-click, ⌘-click, right-click, and screen-reader semantics still flow through the native `<a href>` — only keyboard activation goes through the handler.
+
+  Adds `@lucide/svelte@next` (Svelte 5 build, currently on the `next` dist-tag per the [official guide](https://lucide.dev/guide/svelte/getting-started)) — single icon import, tree-shaken to just the menu glyph in the production bundle.
+
+### Patch Changes
+
+- 3d45e77: Regenerate `package-lock.json` on the earliest matrix Node before `dependabot-auto-merge` runs.
+
+  Dependabot generates lockfiles inside its own container on Node 24 / npm 11 (see `dependabot/dependabot-core`'s `npm_and_yarn/Dockerfile`). npm 11's resolver dedups more aggressively and strips nested entries (e.g. `node_modules/svelte-check/node_modules/picomatch@4.0.4`) that npm 10 still requires. CI on Node 22 then fails `npm ci` with `Missing: picomatch@4.0.4 from lock file` (PR #15 reproduced this).
+
+  `release.yml` already side-stepped the same issue by pinning its lockfile-generating step to the earliest matrix Node. We now do the same in `auto-merge.yml`: a pre-step checks out the PR branch, picks the earliest Node from `vars.MATRIX_NODE_VERSION` (fallback `["22", "24"]`), runs `npm install --package-lock-only --ignore-scripts`, and pushes the regenerated lockfile back to the PR branch with the default `GITHUB_TOKEN`. Pushes from `GITHUB_TOKEN` do not trigger downstream workflows, so this lands silently and the existing `dependabot-auto-merge` action picks it up via its own checkout.
+
+  The fix lives in this repo (not in the shared `kt-workflows/actions/dependabot-auto-merge` action) to avoid changing the action's input contract — every consumer would otherwise need a coordinated bump.
+
+- d027a86: dependabot: directory '/', update @sveltejs/kit
+- d027a86: dependabot: directory '/', update svelte-check
+- d027a86: dependabot: directory '/', update svelte
+- d027a86: dependabot: directory '/', update typescript-eslint
+- d027a86: dependabot: directory '/', update wrangler
+- dee7968: dependabot: directory '/', update svelte
+- dee7968: dependabot: directory '/', update wrangler
+- 455d00d: dependabot: directory '/', update @lucide/svelte
+
 ## 1.0.4
 
 ### Patch Changes
