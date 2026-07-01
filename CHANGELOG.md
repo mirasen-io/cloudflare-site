@@ -1,5 +1,69 @@
 # @mirasen/main-website
 
+## 1.1.1
+
+### Patch Changes
+
+- 9763d65: dependabot: directory '/', update @types/node
+- 230b72f: dependabot: directory '/', update svelte
+- 467aa93: dependabot: directory '/', update @sveltejs/kit
+- e794b9d: dependabot: directory '/', update @tailwindcss/typography
+- 0e7d40f: dependabot: directory '/', update @sveltejs/kit
+- 0e7d40f: dependabot: directory '/', update typescript-eslint
+- dcb4b15: dependabot: directory '/', update prettier
+- dcb4b15: dependabot: directory '/', update wrangler
+- 03c1024: dependabot: directory '/', update @sveltejs/kit
+- 03c1024: dependabot: directory '/', update @types/node
+- ae548c6: dependabot: directory '/', update wrangler
+- 8d50a96: dependabot: directory '/', update @lucide/svelte
+- 59a85d5: dependabot: directory '/', update @tailwindcss/vite
+- 59a85d5: dependabot: directory '/', update eslint
+- 59a85d5: dependabot: directory '/', update tailwindcss
+- f022dcc: dependabot: directory '/', update @sveltejs/kit
+- 85f153b: dependabot: directory '/', update @vitest/browser-playwright
+- 85f153b: dependabot: directory '/', update vitest
+- 5d69f84: dependabot: directory '/', update @playwright/test
+- 5d69f84: dependabot: directory '/', update playwright
+- 27de483: dependabot: directory '/', update prettier-plugin-svelte
+- 27de483: dependabot: directory '/', update typescript-eslint
+- cfe2522: dependabot: directory '/', update @lucide/svelte
+- 2337cef: dependabot: directory '/', update @sveltejs/kit
+- 2337cef: dependabot: directory '/', update wrangler
+- 6fc74f7: dependabot: directory '/', update @lucide/svelte
+- 9554cf7: dependabot: directory '/', update wrangler
+- eb3e85e: dependabot: directory '/', update @sveltejs/kit
+- daa94ed: dependabot: directory '/', update @types/node from 25.9.3 to 26.0.0
+- 0cf1752: dependabot: directory '/', update wrangler
+- 0e8d832: dependabot: directory '/', update globals
+- 0e8d832: dependabot: directory '/', update typescript-eslint
+- 639a1aa: dependabot: directory '/', update @sveltejs/kit
+- 0159b9f: dependabot: directory '/', update vite
+- e5edae5: dependabot: directory '/', update svelte-check
+- e5edae5: dependabot: directory '/', update wrangler
+- 7269026: dependabot: directory '/', update svelte
+- 3aa2ba3: dependabot: directory '/', update @playwright/test
+- 3aa2ba3: dependabot: directory '/', update playwright
+- 388ea88: dependabot: directory '/', update svelte-check
+- eb1bda7: dependabot: directory '/', update @sveltejs/kit
+- eb1bda7: dependabot: directory '/', update @types/node
+- 956e9f5: dependabot: directory '/', update wrangler
+- ebc4a90: dependabot: directory '/', update @mirasen/chessboard
+- ebc4a90: dependabot: directory '/', update eslint-plugin-svelte
+- ebc4a90: dependabot: directory '/', update prettier
+- 93927a1: dependabot: directory '/', update eslint
+- fe424d1: dependabot: directory '/', update prettier
+- 5a42361: dependabot: directory '/', update prettier
+- adc9d95: dependabot: directory '/', update @lucide/svelte
+- 56a17d5: dependabot: directory '/', update @tailwindcss/vite
+- 56a17d5: dependabot: directory '/', update prettier
+- 56a17d5: dependabot: directory '/', update tailwindcss
+- 20e1002: dependabot: directory '/', update typescript-eslint
+- f3fb005: dependabot: directory '/', update prettier
+- f3fb005: dependabot: directory '/', update vitest-browser-svelte
+- aeb6b59: dependabot: directory '/', update vite
+- 78fd624: dependabot: directory '/', update vite
+- 78fd624: dependabot: directory '/', update wrangler
+
 ## 1.1.0
 
 ### Minor Changes
