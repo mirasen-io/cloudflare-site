@@ -26,7 +26,7 @@
 ## 5. Quick Start section
 
 - [ ] 5.1 `section.site-section` with `.section-header` (kicker `"Quick start"`, `h2 "Install and run"`).
-- [ ] 5.2 One `.card.p-6` containing a caption paragraph `"Run it after \`npm ci\`. Unknown or unapproved license strings fail the build."` and a `<pre>` block with the four-line snippet (npm install, `mkdir -p licenses`, echo MIT into `allowed-hard.txt`, `npx license-gate check`).
+- [ ] 5.2 One `.card.p-6` containing a caption paragraph `"Run it after \`npm ci\`. Unknown or unapproved license strings fail the build."`and a`<pre>`block with the four-line snippet (npm install,`mkdir -p licenses`, echo MIT into `allowed-hard.txt`, `npx license-gate check`).
 - [ ] 5.3 Style the `<pre>` with Tailwind utilities `overflow-x-auto rounded bg-surface-100-900 p-4 text-sm` (per design.md D3). Do not add a copy-to-clipboard widget. During implementation, visually verify contrast in both light and dark themes; if the Skeleton `surface-100-900` background does not render with adequate contrast, either (a) switch the block into an `.inner-panel` / `.card`-compatible wrapper, or (b) add a single minimal `.code-block` rule in `mirasen-styles.css`. Do not introduce a broader code-block styling system, a copy button, or a syntax highlighter.
 - [ ] 5.4 Inside the same `.card`, adjacent to the code block, add one short factual line: `"Requires Node.js ≥ 22.9.0."` This line is a plain paragraph, not a heading, and does not get its own section.
 - [ ] 5.5 Below the code block, one short paragraph directing readers to the README for the full command reference, with an inline external link to the GitHub README URL.

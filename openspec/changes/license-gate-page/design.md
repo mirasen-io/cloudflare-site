@@ -89,7 +89,7 @@ main.page-shell
                                                            CHANGELOG.md content (see D6.1)
 ```
 
-**Why this ordering:** hero establishes what and for whom; overview crystallises the two core mental hooks; Quick Start lets a technical reader validate in 30 seconds; policy model earns the trust; "will not do" reinforces the trust story (which is a *feature* here); status closes with links out.
+**Why this ordering:** hero establishes what and for whom; overview crystallises the two core mental hooks; Quick Start lets a technical reader validate in 30 seconds; policy model earns the trust; "will not do" reinforces the trust story (which is a _feature_ here); status closes with links out.
 
 ### D3 — Quick Start block: single `<pre><code>` inside a `.card`
 
@@ -119,19 +119,19 @@ The Node prerequisite does not get its own section header — it is one factual 
 
 ```ts
 export const licenseGateNav: NavConfig = {
-  brand,
-  links: [
-    { href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
-    { href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' },
-    {
-      href: 'https://github.com/mirasen-io/license-gate',
-      ...githubLinkCommon
-    },
-    {
-      href: 'https://www.npmjs.com/package/@mirasen/license-gate',
-      ...npmLinkCommon
-    }
-  ]
+	brand,
+	links: [
+		{ href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
+		{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' },
+		{
+			href: 'https://github.com/mirasen-io/license-gate',
+			...githubLinkCommon
+		},
+		{
+			href: 'https://www.npmjs.com/package/@mirasen/license-gate',
+			...npmLinkCommon
+		}
+	]
 };
 ```
 
@@ -150,9 +150,9 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 - Section lead: one sentence — **"Mirasen also publishes small infrastructure tools built for its own engineering workflow."**
 - A single `article.card.p-6` (not a `.card-grid`, not `.spotlight`) with title `"Mirasen License Gate"`, one-sentence body (`"A strict local license policy gate for npm projects. Built for default-deny CI checks."`), and a `.section-actions` row with one CTA: `"View License Gate"` linking internally to `/license-gate` via `resolve('/license-gate')`.
 
-**Why this labelling:** The kicker `"Open source"` names the *category* of the appendix; the h2 `"Engineering tools"` is a plain factual noun-phrase, not a decorative marketing headline. Together they read as "here is a category note, here is one entry" — matching the intended secondary-appendix weight. An earlier draft used `"Small tools from Mirasen's own workflow"` as the h2 and `"Engineering tools"` as the kicker; that was more decorative and made the section compete visually with the product blocks above. Reverted.
+**Why this labelling:** The kicker `"Open source"` names the _category_ of the appendix; the h2 `"Engineering tools"` is a plain factual noun-phrase, not a decorative marketing headline. Together they read as "here is a category note, here is one entry" — matching the intended secondary-appendix weight. An earlier draft used `"Small tools from Mirasen's own workflow"` as the h2 and `"Engineering tools"` as the kicker; that was more decorative and made the section compete visually with the product blocks above. Reverted.
 
-**Why:** The user explicitly wants this discoverable-but-secondary. A single card in its own section — visually smaller than the existing three-up "brand layers" grid — signals "additional item, not equal pillar." Placing it *after* the brand-structure section, rather than between the existing product blocks, avoids the visual reading "Chess Lore → Chessboard → License Gate as peers."
+**Why:** The user explicitly wants this discoverable-but-secondary. A single card in its own section — visually smaller than the existing three-up "brand layers" grid — signals "additional item, not equal pillar." Placing it _after_ the brand-structure section, rather than between the existing product blocks, avoids the visual reading "Chess Lore → Chessboard → License Gate as peers."
 
 **Trade-off:** A visitor may still read three sections + one appendix as "four products." Mitigation is copy weight: eyebrow / lead / one-sentence body are all deliberately smaller and more prose-like than the existing product sections; no hero-height content; no repetition of "flagship" / "platform" / "foundation" language.
 
