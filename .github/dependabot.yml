@@ -9,7 +9,7 @@ updates:
     directories:
       - '/'
     schedule:
-      interval: 'weekly'
+      interval: 'daily'
       time: '03:37'
       timezone: 'Europe/Berlin'
 
