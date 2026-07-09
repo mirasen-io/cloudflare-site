@@ -3,6 +3,7 @@
 
 	const chessLoreHref = resolve('/chess-lore');
 	const chessboardHref = resolve('/chessboard');
+	const licenseGateHref = resolve('/license-gate');
 	const chessboardRepoHref = 'https://github.com/mirasen-io/chessboard';
 
 	const pageTitle = 'Mirasen — Become Dangerous in chess';
@@ -223,5 +224,23 @@
 				</article>
 			{/each}
 		</div>
+	</section>
+
+	<section aria-labelledby="engineering-tools-heading" class="site-section">
+		<header class="section-header">
+			<p class="kicker">Open source</p>
+			<h2 id="engineering-tools-heading" class="section-title">Engineering tools</h2>
+			<p class="section-lead">
+				Mirasen also publishes small infrastructure tools built for its own engineering workflow.
+			</p>
+		</header>
+
+		<article class="card p-6 max-w-2xl">
+			<h3 class="card-title">Mirasen License Gate</h3>
+			<p>A strict local license policy gate for npm projects. Built for default-deny CI checks.</p>
+			<div class="section-actions">
+				<a class="btn preset-tonal" href={licenseGateHref}>View License Gate</a>
+			</div>
+		</article>
 	</section>
 </main>

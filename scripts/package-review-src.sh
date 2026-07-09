@@ -51,11 +51,6 @@ copy_if_exists() {
 echo "Preparing review package..."
 echo "Mode: $([[ "$FULL_MODE" == "true" ]] && echo full || echo standard)"
 
-if [[ ! -d "$ROOT_DIR/deploy-site" ]]; then
-  echo "Error: deploy-site directory not found"
-  exit 1
-fi
-
 # Standard payload
 cp -R "$ROOT_DIR/src" "$STAGING_DIR/src"
 copy_if_exists "tests"
