@@ -1,5 +1,29 @@
 # @mirasen/main-website
 
+## 1.1.2
+
+### Patch Changes
+
+- 1ba3500: Add the License Gate landing page, page-local navigation, sitemap entry, and a secondary home-page engineering tools link.
+- b4e43b8: dependabot: directory '/', update @types/node
+- baabfbb: dependabot: directory '/', update @lucide/svelte
+- baabfbb: dependabot: directory '/', update @sveltejs/kit
+- e9fc8a8: dependabot: directory '/', update vite
+- 93bda2f: dependabot: directory '/', update wrangler
+- 265eebf: dependabot: directory '/', update @sveltejs/kit
+- ca8b41b: dependabot: directory '/', update @vitest/browser-playwright
+- ca8b41b: dependabot: directory '/', update vitest
+- 778ea42: dependabot: directory '/', update @sveltejs/vite-plugin-svelte
+- 778ea42: dependabot: directory '/', update typescript-eslint
+- 4ddbfea: dependabot: directory '/', update @sveltejs/vite-plugin-svelte
+- ac21f67: dependabot: directory '/', update svelte-check
+- 5fe982c: dependabot: directory '/', update @sveltejs/vite-plugin-svelte
+- 5fe982c: dependabot: directory '/', update wrangler
+- 6672bb4: dependabot: directory '/', update @sveltejs/kit
+- 6672bb4: dependabot: directory '/', update vitest-browser-svelte
+- 09490bb: dependabot: directory '/', update @types/node
+- 2adf150: dependabot: directory '/', update vite
+
 ## 1.1.1
 
 ### Patch Changes
