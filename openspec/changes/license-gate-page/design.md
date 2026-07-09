@@ -81,15 +81,20 @@ main.page-shell
 │         · No license normalization
 │         · No project-root walk-up
 │         · No silent excludes
-│         · npm-first in v1
+│         · npm-first scope
 │
-└── section.site-section         ← Status (section-actions row)
-          copy    : "v1 released. Used in Mirasen projects."
+└── section.site-section         ← Links (section-actions row)
+          kicker  : "Links"
+          h2      : "Use it from npm or inspect the source"
+          lead    : "Install the package from npm, review the README for the full
+                     command reference, or inspect the repository before adding it to CI."
           actions : [Repository] [Package] [Changelog?]  ← Changelog conditional on
                                                            CHANGELOG.md content (see D6.1)
 ```
 
-**Why this ordering:** hero establishes what and for whom; overview crystallises the two core mental hooks; Quick Start lets a technical reader validate in 30 seconds; policy model earns the trust; "will not do" reinforces the trust story (which is a _feature_ here); status closes with links out.
+**Why this ordering:** hero establishes what and for whom; overview crystallises the two core mental hooks; Quick Start lets a technical reader validate in 30 seconds; policy model earns the trust; "will not do" reinforces the trust story (which is a _feature_ here); Links closes with the neutral outbound CTAs (npm / repo / changelog) so package state is read from npm and GitHub rather than from static marketing copy.
+
+**Why "Links", not "Status":** an earlier draft closed with a `Status` section carrying `h2 "v1"` and the lead `"v1 released. Used in Mirasen projects."`. That framing creates maintenance debt — version/status copy goes stale, and package state is better represented by npm/GitHub than by static text on a marketing page. Replaced with a neutral `Links` section whose only job is to route the reader out to the authoritative sources. No status/version copy appears anywhere else on the page.
 
 ### D3 — Quick Start block: single `<pre><code>` inside a `.card`
 
@@ -186,13 +191,13 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 
 ### D6.1 — Changelog CTA and JSON-LD `subjectOf` are conditional on real content
 
-**Choice:** Both the `[Changelog]` CTA in the Status section and the `CHANGELOG` entry in JSON-LD `subjectOf` are only included if `../license-gate/CHANGELOG.md` contains real, useful release/history content. If the file is empty, a placeholder, or otherwise embarrassing, both are dropped.
+**Choice:** Both the `[Changelog]` CTA in the Links section and the `CHANGELOG` entry in JSON-LD `subjectOf` are only included if `../license-gate/CHANGELOG.md` contains real, useful release/history content. If the file is empty, a placeholder, or otherwise embarrassing, both are dropped.
 
 **Inspection outcome for this change:** the file `../license-gate/CHANGELOG.md` was inspected during proposal review. It contains one substantive `## 1.0.0` entry authored by the initial-implementation changeset that lists the concrete v1 surface (CLI commands, project-root policy, Arborist graph discovery, workspace narrowing semantics, license-detection rules, literal-first + SPDX-leaf semantics, violation reasons and detail codes, exit-code / `--out` behavior, exported programmatic API, engines pin, `workspace`-field intentional absence). That qualifies as real content.
 
 **Therefore, for this change:**
 
-- The Status `.section-actions` row includes `[Changelog]` as a tonal-preset external link to `https://github.com/mirasen-io/license-gate/blob/main/CHANGELOG.md`.
+- The Links `.section-actions` row includes `[Changelog]` as a tonal-preset external link to `https://github.com/mirasen-io/license-gate/blob/main/CHANGELOG.md`.
 - JSON-LD `subjectOf` includes both a README `CreativeWork` entry and a CHANGELOG `CreativeWork` entry, matching the `/chessboard` shape.
 
 **Why the conditional gate is worth keeping in the design record:** if a future maintainer resets or scrubs the CHANGELOG before this page is re-inspected, we do not want a broken or empty release-notes link on a marketing page. The gate is: inspect at implementation time, keep the CTA and `subjectOf` entry only if the file still contains substantive release content. Verification tasks re-run this inspection at implementation time and adjust the page/JSON-LD accordingly.
@@ -203,7 +208,9 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 
 - a fact about scope ("npm projects", "single package", "workspaces", "monorepos"),
 - a fact about behavior ("default-deny", "literal", "exits non-zero"), or
-- a bounded promise ("v1 released. Used in Mirasen projects.").
+- a neutral outbound instruction ("Install the package from npm, review the README… or inspect the repository before adding it to CI.").
+
+**No status/version copy.** The page carries no "v1", "v1 released", "released", "actively maintained", or similar status/version framing anywhere — package state is read from npm and GitHub, not asserted in static marketing text. The closing section is a neutral `Links` section, not a `Status` section.
 
 **Banned vocabulary** (do not appear on the page): "revolutionary", "complete compliance platform", "enterprise governance", "all-in-one", "world-class", "cutting-edge", any variant claiming legal or regulatory guarantees, "actively maintained" as a marketing claim (no ongoing commitment we can honor without a signal to point at).
 
@@ -241,9 +248,9 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 Add the License Gate landing page, page-local navigation, sitemap entry, and a secondary home-page engineering tools link.
 ```
 
-**Why patch:** the change is website/content only (new route, new nav config export, one new home-page section, one sitemap line, no public-package behavior change). No breaking change to any consumer; no minor-worthy new user-facing capability of the *package* (the package is private, and the version bump is purely release-tracking).
+**Why patch:** the change is website/content only (new route, new nav config export, one new home-page section, one sitemap line, no public-package behavior change). No breaking change to any consumer; no minor-worthy new user-facing capability of the _package_ (the package is private, and the version bump is purely release-tracking).
 
-**Not touched:** the site `package.json` `version` field, `CHANGELOG.md`, or any other release artifact. Changesets will roll all of that up in a subsequent version PR — this change only *drops the changeset entry*, matching how the repo has handled all other releases.
+**Not touched:** the site `package.json` `version` field, `CHANGELOG.md`, or any other release artifact. Changesets will roll all of that up in a subsequent version PR — this change only _drops the changeset entry_, matching how the repo has handled all other releases.
 
 **Alternatives considered:**
 

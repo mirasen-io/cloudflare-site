@@ -13,7 +13,7 @@ The site SHALL expose a `/license-gate` route that renders a single Svelte page 
 #### Scenario: Page section order
 
 - **WHEN** the page renders
-- **THEN** it SHALL contain, in order, the following top-level sections: (1) a `section.hero` block, (2) an Overview `section.site-section`, (3) a Quick Start `section.site-section`, (4) a How-it-works policy-model `section.site-section`, (5) a "What it will not do" `section.site-section`, (6) a Status `section.site-section`.
+- **THEN** it SHALL contain, in order, the following top-level sections: (1) a `section.hero` block, (2) an Overview `section.site-section`, (3) a Quick Start `section.site-section`, (4) a How-it-works policy-model `section.site-section`, (5) a "What it will not do" `section.site-section`, (6) a Links `section.site-section`.
 
 ### Requirement: Hero content and calls to action
 
@@ -82,23 +82,29 @@ A dedicated section SHALL list the tool's intentional scope boundaries, presente
 #### Scenario: Boundary card set
 
 - **WHEN** the "What it will not do" section renders
-- **THEN** it SHALL contain at minimum five `.card` entries carrying the following boundary statements: `No license file reading`, `No license normalization`, `No project-root walk-up`, `No silent excludes`, `npm-first in v1`
-- **AND** the `npm-first in v1` card SHALL frame v1 as intentionally scoped to npm-installed graphs (not as a limitation).
+- **THEN** it SHALL contain at minimum five `.card` entries carrying the following boundary statements: `No license file reading`, `No license normalization`, `No project-root walk-up`, `No silent excludes`, `npm-first scope`
+- **AND** the `npm-first scope` card SHALL frame the tool as intentionally scoped to npm-installed graphs (not as a limitation), using version-neutral wording (no `v1`).
 
-### Requirement: Status section wording is bounded
+### Requirement: Links section carries neutral outbound CTAs with no status/version framing
 
-The Status section SHALL communicate that License Gate is a released v1 tool used inside Mirasen, without asserting an ongoing maintenance commitment the site cannot back up with a public signal.
+The final section SHALL be a neutral `Links` section that routes the reader to the authoritative sources (npm, GitHub, and optionally the changelog). It SHALL NOT assert version or maintenance status, so that package state is read from npm/GitHub rather than from static marketing copy.
 
-#### Scenario: Status copy
+#### Scenario: Links section copy
 
-- **WHEN** the Status section renders
-- **THEN** the section lead SHALL read `"v1 released. Used in Mirasen projects."` (or wording semantically equivalent within design.md D7's bounded promises)
-- **AND** the copy SHALL NOT contain the phrases `"actively maintained"`, `"enterprise"`, `"compliance"`, `"complete"`, `"revolutionary"`, `"all-in-one"`, `"world-class"`, or `"cutting-edge"`, and SHALL NOT claim legal or regulatory guarantees.
+- **WHEN** the Links section renders
+- **THEN** the section header SHALL use kicker `"Links"` and an `h2` reading `"Use it from npm or inspect the source"`
+- **AND** the section lead SHALL read `"Install the package from npm, review the README for the full command reference, or inspect the repository before adding it to CI."`
+- **AND** the section SHALL NOT contain the strings `"v1"`, `"v1 released"`, `"released"`, `"Status"`, `"actively maintained"`, `"enterprise"`, `"compliance"`, `"complete"`, `"revolutionary"`, `"all-in-one"`, `"world-class"`, or `"cutting-edge"`, and SHALL NOT claim legal or regulatory guarantees.
 
-#### Scenario: Status action row
+#### Scenario: No status/version copy anywhere on the page
 
-- **WHEN** the Status section renders
-- **THEN** its `.section-actions` row SHALL contain at minimum two external links: one primary-preset link to the GitHub repository at `https://github.com/mirasen-io/license-gate`, and one tonal-preset link to the npm package at `https://www.npmjs.com/package/@mirasen/license-gate`
+- **WHEN** the full `/license-gate` page renders
+- **THEN** no user-facing copy SHALL assert a release version or maintenance status (e.g. `"v1 released"`, `"Used in Mirasen projects"`), and no scope-boundary card SHALL carry version framing — the `npm-first scope` card uses version-neutral wording. The page carries no `"v1"` string in any user-facing copy.
+
+#### Scenario: Links action row
+
+- **WHEN** the Links section renders
+- **THEN** its `.section-actions` row SHALL contain at minimum two external links: one primary-preset link to the GitHub repository at `https://github.com/mirasen-io/license-gate` labelled `"Repository"`, and one tonal-preset link to the npm package at `https://www.npmjs.com/package/@mirasen/license-gate` labelled `"Package"`
 - **AND** it SHALL additionally contain a tonal-preset external link to the GitHub-hosted `CHANGELOG.md` labelled `"Changelog"` **iff** the `../license-gate/CHANGELOG.md` inspection at implementation time (per design.md D6.1) determines that the file contains substantive release content
 - **AND** every present link SHALL open in a new browsing context with `rel` containing `noopener` and `noreferrer`.
 

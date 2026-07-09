@@ -9,7 +9,7 @@ The change is website/content only. The `@mirasen/license-gate` package is not m
 ## What Changes
 
 - Add a `/license-gate` route rendering a single landing page in the same visual language as `/chessboard` (`page-shell` / `hero` / `site-section` / `card-grid` / `spotlight` / `section-actions`), extended with **one compact Quick Start `<pre><code>` block** because the tool's value is primarily CLI behavior.
-- Page sections: (1) Hero, (2) Overview cards, (3) Quick Start, (4) How it works / policy model, (5) What it will not do, (6) Status / links.
+- Page sections: (1) Hero, (2) Overview cards, (3) Quick Start, (4) How it works / policy model, (5) What it will not do, (6) Links.
 - Add a page-local `licenseGateNav` in `src/lib/nav/links.ts` (brand + GitHub/npm pointing at `mirasen-io/license-gate` and `@mirasen/license-gate`, plus the existing internal peers). Wire it via `src/routes/license-gate/+layout.ts` following the `chessboardNav` pattern.
 - Add a **small, secondary** "Engineering tools" mention on the home page (`/`) — one card below the existing Chess Lore and Chessboard narrative — pointing at `/license-gate`. It is deliberately not styled as an equal third product pillar.
 - Add `svelte:head` metadata (title, description, canonical, OG) and a `SoftwareSourceCode` JSON-LD block scoped to Mirasen License Gate.

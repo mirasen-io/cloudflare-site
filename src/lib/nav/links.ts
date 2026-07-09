@@ -63,11 +63,15 @@ const npmLinkCommon = {
 	}
 } as const;
 
+const pageNavCommon: NavLink[] = [
+	{ href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
+	{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' }
+];
+
 export const rootNav: NavConfig = {
 	brand,
 	links: [
-		{ href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
-		{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' },
+		...pageNavCommon,
 		{
 			href: 'https://github.com/mirasen-io',
 			...githubLinkCommon
@@ -82,14 +86,28 @@ export const rootNav: NavConfig = {
 export const chessboardNav: NavConfig = {
 	brand,
 	links: [
-		{ href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
-		{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' },
+		...pageNavCommon,
 		{
 			href: 'https://github.com/mirasen-io/chessboard',
 			...githubLinkCommon
 		},
 		{
 			href: 'https://www.npmjs.com/package/@mirasen/chessboard',
+			...npmLinkCommon
+		}
+	]
+};
+
+export const licenseGateNav: NavConfig = {
+	brand,
+	links: [
+		...pageNavCommon,
+		{
+			href: 'https://github.com/mirasen-io/license-gate',
+			...githubLinkCommon
+		},
+		{
+			href: 'https://www.npmjs.com/package/@mirasen/license-gate',
 			...npmLinkCommon
 		}
 	]
