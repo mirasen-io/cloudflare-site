@@ -29,7 +29,7 @@ The user has directed that the landing page frame this tool as **internal Mirase
 
 ### D1 — Reuse the `/chessboard` section skeleton verbatim
 
-**Choice:** `main.page-shell` → `section.hero` → `section.site-section` × 4, using the existing `.card` / `.card-grid` / `.spotlight` / `.numbered-list` / `.theme-list` / `.section-actions` / `.badge` / `.inner-panel` classes.
+**Choice:** `main.page-shell` → `section.hero` + `section.site-section` × 5, using the existing `.card` / `.card-grid` / `.spotlight` / `.numbered-list` / `.theme-list` / `.section-actions` / `.badge` / `.inner-panel` classes.
 
 **Why:** The site already has a working, tested visual language for a product landing page. Reusing it (a) keeps `/license-gate` visually coherent with `/chessboard`, (b) requires zero new CSS, and (c) lets us focus review on content and metadata correctness. Introducing a new template would multiply the surface area to maintain and risk visual drift.
 
@@ -148,7 +148,9 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 - Kicker: **"Open source"**
 - Section title (`h2`): **"Engineering tools"**
 - Section lead: one sentence — **"Mirasen also publishes small infrastructure tools built for its own engineering workflow."**
-- A single `article.card.p-6` (not a `.card-grid`, not `.spotlight`) with title `"Mirasen License Gate"`, one-sentence body (`"A strict local license policy gate for npm projects. Built for default-deny CI checks."`), and a `.section-actions` row with one CTA: `"View License Gate"` linking internally to `/license-gate` via `resolve('/license-gate')`.
+- A single `article.card.p-6.max-w-2xl` (not a `.card-grid`, not `.spotlight`) with title `"Mirasen License Gate"`, one-sentence body (`"A strict local license policy gate for npm projects. Built for default-deny CI checks."`), and a `.section-actions` row with one CTA: `"View License Gate"` linking internally to `/license-gate` via `resolve('/license-gate')`.
+
+**Why the `max-w-2xl` cap:** the existing site CSS renders `article.card.p-6` full-width inside a `section.site-section`, which would make this single card visually equal to (or larger than) the three-up brand-layer grid above it — exactly the "equal fourth pillar" reading the user vetoed. Capping the card at `max-w-2xl` (≈ 42rem) makes it visibly narrower than the three-up grid and lets it read as a subordinate note. `max-w-2xl` is the same Tailwind utility used elsewhere on the site for "prose-width, not layout-width" content; introducing a bespoke class would be over-engineered for one card.
 
 **Why this labelling:** The kicker `"Open source"` names the _category_ of the appendix; the h2 `"Engineering tools"` is a plain factual noun-phrase, not a decorative marketing headline. Together they read as "here is a category note, here is one entry" — matching the intended secondary-appendix weight. An earlier draft used `"Small tools from Mirasen's own workflow"` as the h2 and `"Engineering tools"` as the kicker; that was more decorative and made the section compete visually with the product blocks above. Reverted.
 
@@ -207,6 +209,48 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 
 **Why:** The tool's whole positioning — and the user's stated tone — is that it is intentionally narrow. Every marketing verb we add undermines the "strict, boring, fails-closed" trust story.
 
+### D8 — Sitemap: edit the existing static `static/sitemap.xml`, do not introduce a `+server.ts` endpoint
+
+**Inspection outcome at proposal time:** the repo already ships a sitemap as a plain static file at `static/sitemap.xml`. It is a hand-authored XML urlset listing the current public canonical URLs (`https://mirasen.io`, `.../chess-lore`, `.../chessboard`, `.../chessboard/examples`, `.../chessboard/examples/minimal`, `.../chessboard/examples/promotion`, `.../chessboard/examples/chessjs`, `.../chessboard/examples/live-games-grid`). The static adapter copies it verbatim into the build output at `build/sitemap.xml`. There is no existing `src/routes/sitemap.xml/+server.ts`, no dynamic generator, and no dependency on a sitemap framework.
+
+**Choice:** Add one `<url>` entry for `https://mirasen.io/license-gate` to `static/sitemap.xml`, preserving the file's existing shape (no XML namespace changes, no `<lastmod>`, no `<changefreq>`, no `<priority>`, no whitespace churn on unrelated lines). Do **not** create `src/routes/sitemap.xml/+server.ts`; the earlier proposal-draft suggestion to create that endpoint was based on an unchecked assumption that no sitemap existed. Per the user's rule "if the repo already has a sitemap, update the existing one," the correct move is a one-`<url>`-block addition to the static XML.
+
+**Why:** (a) matches the repo's actual current pattern; (b) avoids introducing a new server-endpoint concept for a static site whose adapter is `@sveltejs/adapter-static`; (c) zero risk of the endpoint/static file diverging at build time; (d) no `prerender = true` clarity issue because there is no endpoint to annotate. The static file is copied verbatim by the adapter — clarity is already maximal.
+
+**Placement of the new entry:** append after the existing `chessboard/examples/live-games-grid` entry, at the tail of the `<urlset>`. This ordering is convention-only (the sitemap protocol does not order-sensitively rank URLs) but keeps the diff minimal and human-readable.
+
+**Non-goals:** no dynamic generation, no filesystem-crawl auto-population, no current-date `lastmod` stamping, no robots.txt change (existing `static/robots.txt` does not reference a `Sitemap:` directive, so there is nothing to keep consistent), no new dep, no per-URL `<priority>` / `<changefreq>` metadata.
+
+**Alternatives considered:**
+
+- (a) Introduce `src/routes/sitemap.xml/+server.ts` as a prerendered endpoint that emits the URL list from a shared array — rejected. Adds a runtime concept for a static file, requires SvelteKit to prerender an endpoint that already exists as static content (would collide unless the static file is deleted, which is a wider refactor than this change), and buys nothing over the current pattern.
+- (b) Generate the URL list from a filesystem crawl of `src/routes/` — rejected. Dynamic sitemap generation for a nine-URL marketing site is over-engineered; the maintenance cost of a hand-authored list at this scale is one line per new page.
+- (c) Add `<lastmod>` with the current build date — rejected. The user explicitly asked for no dynamic date generation; also, `<lastmod>` on hand-authored sitemaps drifts from truth quickly.
+
+### D9 — Changesets entry for the private site package
+
+**Context:** The site package is `@mirasen/main-website` (private, currently at `1.1.1`), versioned via Changesets. The existing `.changeset/*.md` entries in the repo follow a `~<number>-<package>-<short-slug>.md` naming convention (Dependabot-owned entries) but Changesets itself accepts any `.md` filename inside `.changeset/`. New human-authored entries in this repo have historically been added under short slugs; Changesets' own `changeset add` command uses random adjective-noun names.
+
+**Choice:** Create one new `.changeset/*.md` entry declaring a `patch` bump for `@mirasen/main-website`. Filename: `license-gate-page.md` (short, descriptive, not colliding with the `~<n>-` Dependabot naming). Frontmatter uses single quotes per repo convention (mirrors the shape of `~76-@mirasen-main-website-vite.md`):
+
+```md
+---
+'@mirasen/main-website': patch
+---
+
+Add the License Gate landing page, page-local navigation, sitemap entry, and a secondary home-page engineering tools link.
+```
+
+**Why patch:** the change is website/content only (new route, new nav config export, one new home-page section, one sitemap line, no public-package behavior change). No breaking change to any consumer; no minor-worthy new user-facing capability of the *package* (the package is private, and the version bump is purely release-tracking).
+
+**Not touched:** the site `package.json` `version` field, `CHANGELOG.md`, or any other release artifact. Changesets will roll all of that up in a subsequent version PR — this change only *drops the changeset entry*, matching how the repo has handled all other releases.
+
+**Alternatives considered:**
+
+- (a) No changeset — rejected; the existing release specs require a changeset for every user-facing site change.
+- (b) `minor` bump — rejected; the site is private and the shipped surface area from a user perspective is one new URL under an already-existing brand. `patch` matches how Dependabot-owned changesets in the repo are graded.
+- (c) Multiple changeset files (one per touched sub-area: page, nav, home, sitemap) — rejected; Changesets treats one repo-scope entry as one bump. Splitting across files inflates the changelog without a corresponding meaning gain.
+
 ## Risks / Trade-offs
 
 - **[Risk]** The Quick Start `<pre><code>` may render inconsistently across light/dark theme without explicit styling (D3). → **Mitigation:** verification task exercises both themes; utility classes applied inline; promote to `mirasen-styles.css` if pattern is used elsewhere later.
@@ -214,6 +258,7 @@ Wired via `src/routes/license-gate/+layout.ts` (`load = () => ({ nav: licenseGat
 - **[Risk]** External links to `mirasen-io/license-gate` GitHub / `@mirasen/license-gate` npm assume both remain the canonical resources. → **Trade-off:** acceptable. Same trust model as `/chessboard`. If they move, the fix is a small copy update.
 - **[Risk]** Home-page secondary mention still adds one more section to `/`, which is already section-heavy. → **Trade-off:** acceptable at one card. Non-goal to redesign the home page here.
 - **[Risk]** No page-local Playwright coverage. → **Trade-off:** acceptable; content-only route; existing e2e infrastructure catches app-shell regressions.
+- **[Risk]** `static/sitemap.xml` is hand-authored; adding pages in future requires remembering to update it (D8). → **Trade-off:** acceptable at current scale; converting to a generator is a separate change if the URL count grows meaningfully.
 
 ## Migration Plan
 

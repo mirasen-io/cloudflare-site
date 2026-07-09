@@ -144,7 +144,7 @@ The home page SHALL contain a single subordinate section referencing License Gat
 - **WHEN** `/` renders
 - **THEN** it SHALL contain a new `section.site-section` positioned after the existing `brand-heading` section
 - **AND** the new section SHALL use kicker `"Open source"`, `h2` `"Engineering tools"`, and section lead `"Mirasen also publishes small infrastructure tools built for its own engineering workflow."`
-- **AND** the section body SHALL be a single `article.card.p-6` (not a `.card-grid`, not `.spotlight`) with title `"Mirasen License Gate"` and one paragraph body reading `"A strict local license policy gate for npm projects. Built for default-deny CI checks."`
+- **AND** the section body SHALL be a single `article.card.p-6.max-w-2xl` (not a `.card-grid`, not `.spotlight`) with title `"Mirasen License Gate"` and one paragraph body reading `"A strict local license policy gate for npm projects. Built for default-deny CI checks."`
 - **AND** the section SHALL contain a `.section-actions` row with exactly one CTA: an internal link to `/license-gate` labelled `"View License Gate"` resolved via `resolve('/license-gate')`.
 
 #### Scenario: Secondary section does not compete with product pillars
@@ -174,3 +174,35 @@ The `/license-gate` page SHALL emit `<svelte:head>` metadata and one JSON-LD `So
 
 - **WHEN** the JSON-LD is parsed
 - **THEN** it SHALL NOT contain `LegalService`, `ComplianceRegulation`, `applicationCategory: "SecurityApplication"`, or any other value implying legal, regulatory, or compliance certification services.
+
+### Requirement: License Gate is discoverable through the sitemap
+
+The site SHALL expose a static sitemap that includes the canonical `/license-gate` URL alongside the existing public canonical pages, with no duplicate URL entries.
+
+#### Scenario: Sitemap is present in the static build output and includes the new page
+
+- **WHEN** the site is built with `npm run build`
+- **THEN** the static output SHALL include a file at `build/sitemap.xml` that is a well-formed XML `urlset` per the `http://www.sitemaps.org/schemas/sitemap/0.9` schema
+- **AND** the sitemap SHALL include a `<url>` entry whose `<loc>` is exactly `https://mirasen.io/license-gate`
+- **AND** the sitemap SHALL include `<url>` entries for every existing public canonical route: `https://mirasen.io`, `https://mirasen.io/chess-lore`, `https://mirasen.io/chessboard`, `https://mirasen.io/chessboard/examples`, `https://mirasen.io/chessboard/examples/minimal`, `https://mirasen.io/chessboard/examples/promotion`, `https://mirasen.io/chessboard/examples/chessjs`, `https://mirasen.io/chessboard/examples/live-games-grid`
+- **AND** the sitemap SHALL NOT contain duplicate `<loc>` values.
+
+#### Scenario: Sitemap changes are limited to adding the one new entry
+
+- **WHEN** the change diff is reviewed
+- **THEN** the sitemap change SHALL be limited to adding one `<url>` entry for `https://mirasen.io/license-gate`
+- **AND** SHALL NOT introduce dynamic date generation, `<lastmod>`, `<changefreq>`, or `<priority>` metadata on any entry
+- **AND** SHALL NOT introduce a filesystem-crawl or sitemap-framework dependency
+- **AND** SHALL NOT modify `static/robots.txt` (which does not currently declare a `Sitemap:` directive).
+
+### Requirement: Changesets entry for the site package
+
+The change SHALL include exactly one Changesets `.md` entry declaring a `patch` bump for the private `@mirasen/main-website` package, matching the release workflow the repo already uses.
+
+#### Scenario: A changeset entry exists and does not touch versioning artifacts directly
+
+- **WHEN** the change diff is reviewed
+- **THEN** the diff SHALL contain exactly one new file under `.changeset/*.md`
+- **AND** its YAML frontmatter SHALL declare `'@mirasen/main-website': patch`
+- **AND** its body SHALL summarise the change in a single sentence naming the License Gate landing page, page-local navigation, sitemap entry, and secondary home-page engineering-tools link
+- **AND** the diff SHALL NOT modify `package.json`'s `version` field, `CHANGELOG.md`, or any other release artifact directly — Changesets will roll those up in a subsequent version PR.
