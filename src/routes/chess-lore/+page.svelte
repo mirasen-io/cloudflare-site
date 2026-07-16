@@ -59,7 +59,7 @@
 			</div>
 		</div>
 
-		<aside class="card hero-side p-6">
+		<aside class="hero-side card p-6">
 			<h2 class="card-title">What Chess Lore focuses on</h2>
 			<ul class="hero-point-list">
 				<li class="inner-panel">
@@ -156,7 +156,7 @@
 			</p>
 		</header>
 
-		<div class="card spotlight p-6 md:p-10">
+		<div class="spotlight card p-6 md:p-10">
 			<div class="spotlight-grid">
 				<div class="spotlight-copy">
 					<p>
@@ -224,7 +224,7 @@
 			</p>
 		</header>
 
-		<div class="card spotlight p-6 md:p-10">
+		<div class="spotlight card p-6 md:p-10">
 			<div class="spotlight-grid">
 				<div class="spotlight-copy">
 					<p>
