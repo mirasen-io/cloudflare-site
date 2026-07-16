@@ -41,7 +41,7 @@
 			</div>
 		</div>
 
-		<aside class="card hero-side p-6">
+		<aside class="hero-side card p-6">
 			<h2 class="card-title">What examples cover</h2>
 			<ul class="hero-point-list">
 				<li class="inner-panel">

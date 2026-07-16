@@ -1,5 +1,23 @@
 # @mirasen/main-website
 
+## 1.2.0
+
+### Minor Changes
+
+- 8061137: Migrate Skeleton v4 → v5 (`@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` bumped to `^5.0.0-next.12`).
+
+  Rewrote the `mirasen` theme to the v5 token format: namespaced typography tokens (`--typo-base--*`, `--typo-heading--*`, `--typo-anchor--*`), split anchor-decoration properties, `--color-root-bg-*` for background, added `--color-brand-*` and `--corner-shape-*`, dropped the removed `--default-divide-width`. Color palette preserved 1:1.
+
+### Patch Changes
+
+- bea44f3: dependabot: directory '/', update @lucide/svelte
+- bea44f3: dependabot: directory '/', update prettier
+- bea44f3: dependabot: directory '/', update wrangler
+- da9feb3: dependabot: directory '/', update vitest-browser-svelte from 2.2.1 to 3.0.0
+- b44e706: dependabot: directory '/', update eslint
+- 6a7dd52: dependabot: directory '/', update typescript-eslint
+- 6888ade: dependabot: directory '/', update @sveltejs/kit
+
 ## 1.1.2
 
 ### Patch Changes
