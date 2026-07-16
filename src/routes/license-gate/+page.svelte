@@ -94,7 +94,7 @@ npx license-gate check`;
 			</div>
 		</div>
 
-		<aside class="card hero-side p-6">
+		<aside class="hero-side card p-6">
 			<h2 class="card-title">Built to fail closed</h2>
 			<ul class="hero-point-list">
 				<li class="inner-panel">
@@ -172,7 +172,7 @@ npx license-gate check`;
 			<h2 id="policy-heading" class="section-title">Policy model</h2>
 		</header>
 
-		<div class="card spotlight p-6 md:p-10">
+		<div class="spotlight card p-6 md:p-10">
 			<div class="spotlight-grid">
 				<div class="spotlight-copy">
 					<p>
@@ -194,15 +194,15 @@ npx license-gate check`;
 
 				<ul class="numbered-list">
 					<li>
-						<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true">1</span>
+						<span class="badge-icon shrink-0 preset-filled-primary-500" aria-hidden="true">1</span>
 						<p>Install <code>@mirasen/license-gate</code> as a dev dependency.</p>
 					</li>
 					<li>
-						<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true">2</span>
+						<span class="badge-icon shrink-0 preset-filled-primary-500" aria-hidden="true">2</span>
 						<p>Add <code>licenses/allowed-hard.txt</code> with one license per line.</p>
 					</li>
 					<li>
-						<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true">3</span>
+						<span class="badge-icon shrink-0 preset-filled-primary-500" aria-hidden="true">3</span>
 						<p>Run <code>license-gate check</code> after <code>npm ci</code>.</p>
 					</li>
 				</ul>

@@ -25,7 +25,7 @@
 		{@render children()}
 	</div>
 
-	<footer class="border-surface-200-800 border-t">
+	<footer class="border-t border-surface-200-800">
 		<div
 			class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm opacity-80 sm:flex-row sm:items-center sm:justify-between sm:px-6"
 		>

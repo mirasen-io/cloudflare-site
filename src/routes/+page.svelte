@@ -102,7 +102,7 @@
 			</div>
 		</div>
 
-		<aside class="card hero-side p-6">
+		<aside class="hero-side card p-6">
 			<h2 class="card-title">What Mirasen is building</h2>
 			<ul class="hero-point-list">
 				{#each heroBuildingPoints as point (point.title)}
@@ -126,7 +126,7 @@
 			</p>
 		</header>
 
-		<div class="card spotlight p-6 md:p-10">
+		<div class="spotlight card p-6 md:p-10">
 			<div class="spotlight-grid">
 				<div class="spotlight-copy">
 					<p>
@@ -145,7 +145,7 @@
 				<ul class="numbered-list">
 					{#each chessLorePoints as point, index (point)}
 						<li>
-							<span class="badge-icon preset-filled-primary-500 shrink-0" aria-hidden="true">
+							<span class="badge-icon shrink-0 preset-filled-primary-500" aria-hidden="true">
 								{index + 1}
 							</span>
 							<p>{point}</p>
@@ -235,7 +235,7 @@
 			</p>
 		</header>
 
-		<article class="card p-6 max-w-2xl">
+		<article class="max-w-2xl card p-6">
 			<h3 class="card-title">Mirasen License Gate</h3>
 			<p>A strict local license policy gate for npm projects. Built for default-deny CI checks.</p>
 			<div class="section-actions">
