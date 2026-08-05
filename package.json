@@ -54,7 +54,7 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^1.28.0",
-		"@mirasen/chessboard": "^1.3.3",
+		"@mirasen/chessboard": "^1.3.4",
 		"chess.js": "^1.4.0"
 	}
 }
