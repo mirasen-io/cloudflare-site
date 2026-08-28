@@ -1,5 +1,91 @@
 # @mirasen/main-website
 
+## 1.3.0
+
+### Minor Changes
+
+- b49731f: king's square highlight on check
+
+### Patch Changes
+
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 9158ce4: dependabot: directory '/', update @playwright/test
+- 9158ce4: dependabot: directory '/', update eslint
+- 9158ce4: dependabot: directory '/', update playwright
+- ca54aba: dependabot: directory '/', update svelte
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 6b3dd8f: dependabot: directory '/', update globals
+- ca8f348: dependabot: directory '/', update @types/node
+- 5bb1a6f: dependabot: directory '/', update svelte-check
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 1b96072: dependabot: directory '/', update @sveltejs/kit
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 9158ce4: dependabot: directory '/', update @playwright/test
+- 9158ce4: dependabot: directory '/', update playwright
+- adecf1f: dependabot: directory '/', update vite
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 3d2fa72: dependabot: directory '/', update @mirasen/chessboard
+- 6b3dd8f: dependabot: directory '/', update globals
+- 62b3680: dependabot: directory '/', update typescript-eslint
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- adecf1f: dependabot: directory '/', update vite
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- ca8f348: dependabot: directory '/', update @types/node
+- 9158ce4: dependabot: directory '/', update eslint
+- 5bb1a6f: dependabot: directory '/', update svelte-check
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 9641e21: dependabot: directory '/', update @sveltejs/vite-plugin-svelte
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 62b3680: dependabot: directory '/', update typescript-eslint
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 4c8c284: dependabot: directory '/', update eslint-plugin-svelte
+- 6b3dd8f: dependabot: directory '/', update globals
+- 5bb1a6f: dependabot: directory '/', update svelte-check
+- ca54aba: dependabot: directory '/', update svelte
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- d98863e: dependabot: directory '/', update @changesets/cli from 2.31.1 to 3.0.0
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 1b96072: dependabot: directory '/', update @sveltejs/kit
+- 969b1e3: dependabot: directory '/', update @vitest/browser-playwright
+- 969b1e3: dependabot: directory '/', update vitest
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- adecf1f: dependabot: directory '/', update @changesets/cli
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 336daf9: dependabot: directory '/', update @skeletonlabs/skeleton-svelte
+- 336daf9: dependabot: directory '/', update @skeletonlabs/skeleton
+- adecf1f: dependabot: directory '/', update vite
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- ca54aba: dependabot: directory '/', update svelte
+- 9158ce4: dependabot: directory '/', update eslint
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- ca8f348: dependabot: directory '/', update @types/node
+- 9158ce4: dependabot: directory '/', update eslint
+- 62b3680: dependabot: directory '/', update typescript-eslint
+- ca54aba: dependabot: directory '/', update svelte
+- 5bb1a6f: dependabot: directory '/', update prettier-plugin-tailwindcss
+- 5bb1a6f: dependabot: directory '/', update svelte-check
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- adecf1f: dependabot: directory '/', update @changesets/cli
+- adecf1f: dependabot: directory '/', update @tailwindcss/vite
+- adecf1f: dependabot: directory '/', update tailwindcss
+- adecf1f: dependabot: directory '/', update vite
+- ca54aba: dependabot: directory '/', update svelte
+- a323f85: dependabot: directory '/', update @lucide/svelte
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- 1b96072: dependabot: directory '/', update @sveltejs/kit
+- 44d73c4: chore: upgrade @skeletonlabs/skeleton-svelte to stable 5.0.0
+- 44d73c4: chore: upgrade @skeletonlabs/skeleton to stable 5.0.0
+- 1b96072: dependabot: directory '/', update @sveltejs/kit
+- 4c8c284: dependabot: directory '/', update eslint-plugin-svelte
+- 4c8c284: dependabot: directory '/', update eslint-plugin-svelte
+- ca54aba: dependabot: directory '/', update svelte
+- 62b3680: dependabot: directory '/', update typescript-eslint
+- 866e68d: dependabot: directory '/', update prettier
+- 5bb1a6f: dependabot: directory '/', update wrangler
+- a323f85: dependabot: directory '/', update @lucide/svelte
+
 ## 1.2.0
 
 ### Minor Changes
