@@ -6,21 +6,16 @@ name: Release
 # Why no kt-workflows/actions/npm-release@main?
 #   The wrapper is technically capable here (checkout: false, working-directory,
 #   published output) but is semantically tied to npm-package releases. This
-#   site is private and never publishes to npm, so we invoke changesets/action@v1
+#   site is private and never publishes to npm, so we invoke changesets/action@v2
 #   directly. See openspec/changes/add-github-actions-workflows/design.md
 #   Decision 4.1.
 #
 # How GitHub Releases happen without npm publish:
 #   .changeset/config.json sets privatePackages: { version: true, tag: true }.
 #   With that, `changeset publish` skips `npm publish` for the private package
-#   but still emits a `🦋  New tag: <name>@<version>` line on stdout.
-#   `changesets/action@v1` parses that line, sets `published=true`, and creates
-#   a Git tag and a GitHub Release for each tag entry.
-#
-# Fallback if Changesets ever drops the tag-emit for private packages:
-#   Detect `steps.changesets.outputs.published == 'false'` while the Version PR
-#   was merged, then run `gh release create "<tag>" --notes-file CHANGELOG.md`
-#   (or `softprops/action-gh-release`) before the deploy step.
+#   but still creates a tag-only release entry. Changesets CLI 3 writes the tag
+#   event to CHANGESETS_OUTPUT, which changesets/action@v2 reads to set
+#   `published=true`, push the Git tag, and create the GitHub Release.
 
 on:
   workflow_run:
@@ -83,13 +78,12 @@ jobs:
             npm run build
 
       - id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          version: npm run changeset:version
-          publish: npm run changeset:publish
-          createGithubReleases: true
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          version-script: npm run changeset:version
+          publish-script: npm run changeset:publish
+          create-github-releases: true
+          github-token: ${{ steps.app-token.outputs.token }}
 
       - if: ${{ steps.changesets.outputs.published == 'true' }}
         name: Cloudflare deploy
