@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { useBoard } from '$lib/board/use.svelte';
+	import type { SquareString } from '@mirasen/chessboard';
 	import {
 		toBoardMove,
 		toBoardMoveDestinations,
@@ -59,6 +60,25 @@
 		statusText = getStatus();
 	}
 
+	function refreshCheckHighlight(b: Board) {
+		if (!chess.isCheck()) {
+			b.extensions.check.square = null;
+			return;
+		}
+		const turn = chess.turn();
+		const boardArr = chess.board();
+		for (let rank = 0; rank < 8; rank++) {
+			for (let file = 0; file < 8; file++) {
+				const piece = boardArr[rank][file];
+				if (piece?.type === 'k' && piece.color === turn) {
+					b.extensions.check.square =
+						`${String.fromCharCode(97 + file)}${8 - rank}` as SquareString;
+					return;
+				}
+			}
+		}
+	}
+
 	function clearComputerTimeout() {
 		if (computerTimeout !== null) {
 			clearTimeout(computerTimeout);
@@ -79,6 +99,7 @@
 					return;
 				}
 				refreshStatus();
+				refreshCheckHighlight(b);
 
 				if (chess.isGameOver()) return;
 
@@ -99,6 +120,7 @@
 			applyAnim(animSetting, b);
 
 			refreshStatus();
+			refreshCheckHighlight(b);
 
 			return () => {
 				clearComputerTimeout();
@@ -131,6 +153,7 @@
 		const applied = chess.move(random);
 		board.current.move(toBoardMove(applied));
 		refreshStatus();
+		refreshCheckHighlight(board.current);
 	}
 
 	function applyDragPreset(value: DragPreset, b: Board) {
@@ -163,6 +186,7 @@
 		board.current.setPosition(chess.fen());
 		board.current.select(null);
 		refreshStatus();
+		refreshCheckHighlight(board.current);
 	}
 
 	function toggleAutoPromote() {
