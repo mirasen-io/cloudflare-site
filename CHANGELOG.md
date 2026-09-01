@@ -1,5 +1,14 @@
 # @mirasen/main-website
 
+## 1.3.1
+
+### Patch Changes
+
+- 70ab3e6: dependabot: directory '/', update @types/node
+- 70ab3e6: dependabot: directory '/', update wrangler
+- ee310b2: dependabot: directory '/', update @lucide/svelte
+- 4ddfb15: dependabot: dependency updates for PR #133
+
 ## 1.3.0
 
 ### Minor Changes
