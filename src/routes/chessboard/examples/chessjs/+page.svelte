@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { useBoard } from '$lib/board/use.svelte';
-	import type { SquareString } from '@mirasen/chessboard';
 	import {
 		toBoardMove,
 		toBoardMoveDestinations,
@@ -66,17 +65,7 @@
 			return;
 		}
 		const turn = chess.turn();
-		const boardArr = chess.board();
-		for (let rank = 0; rank < 8; rank++) {
-			for (let file = 0; file < 8; file++) {
-				const piece = boardArr[rank][file];
-				if (piece?.type === 'k' && piece.color === turn) {
-					b.extensions.check.square =
-						`${String.fromCharCode(97 + file)}${8 - rank}` as SquareString;
-					return;
-				}
-			}
-		}
+		b.extensions.check.square = turn;
 	}
 
 	function clearComputerTimeout() {
