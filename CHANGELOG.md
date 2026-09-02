@@ -1,5 +1,12 @@
 # @mirasen/main-website
 
+## 1.3.2
+
+### Patch Changes
+
+- 7193db0: update refreshCheckHighlight with new interface of the chessboard lib
+- 0b38b82: dependabot: dependency updates for PR #134
+
 ## 1.3.1
 
 ### Patch Changes
