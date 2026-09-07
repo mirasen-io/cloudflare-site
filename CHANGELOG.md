@@ -1,5 +1,14 @@
 # @mirasen/main-website
 
+## 1.3.3
+
+### Patch Changes
+
+- 4a7a235: dependabot: dependency updates for PR #137
+- 148ae9f: dependabot: dependency updates for PR #139
+- 6899743: dependabot: dependency updates for PR #140
+- e777861: dependabot: dependency updates for PR #141
+
 ## 1.3.2
 
 ### Patch Changes
