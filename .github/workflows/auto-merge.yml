@@ -4,7 +4,7 @@ on: pull_request
 env:
   # Mirrors ci.yml so the lockfile regen below runs on the same earliest Node
   # as CI uses to validate it. Override per-repo via vars.MATRIX_NODE_VERSION.
-  DEFAULT_MATRIX_NODE_VERSION: '["22", "24"]'
+  DEFAULT_MATRIX_NODE_VERSION: '["22", "24", "26"]'
 
 permissions:
   contents: write
