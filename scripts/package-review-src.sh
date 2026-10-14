@@ -19,7 +19,7 @@ ARTIFACTS_DIR="$ROOT_DIR/artifacts"
 STAGING_DIR="$ARTIFACTS_DIR/.review-src-staging"
 
 TIMESTAMP="$(date +"%Y%m%d-%H%M%S")"
-NAME_PREFIX="cloudflare-src-review"
+NAME_PREFIX="cloudflare-mirasen-src-review"
 FULL_MODE="false"
 
 for arg in "$@"; do
@@ -73,8 +73,10 @@ copy_if_exists "README.md"
 copy_if_exists ".npmignore"
 
 copy_if_exists ".github"
+copy_if_exists ".githooks"
 
 copy_if_exists "deploy-site"
+copy_if_exists "wrangler.jsonc"
 
 # Optional extras in full mode
 if [[ "$FULL_MODE" == "true" ]]; then
