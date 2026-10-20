@@ -34,7 +34,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/node": "^26.6.5",
 		"@vitest/browser-playwright": "^5.0.5",
-		"eslint": "^10.12.0",
+		"eslint": "^10.13.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.23.1",
 		"globals": "^17.13.0",
@@ -43,17 +43,17 @@
 		"prettier-plugin-svelte": "^4.1.1",
 		"prettier-plugin-tailwindcss": "^0.8.1",
 		"svelte": "^5.57.2",
-		"svelte-check": "^4.7.6",
+		"svelte-check": "^4.7.7",
 		"tailwindcss": "^4.3.3",
 		"typescript": "^6.0.2",
 		"typescript-eslint": "^8.71.2",
 		"vite": "^8.3.4",
 		"vitest": "^5.0.0",
 		"vitest-browser-svelte": "^3.1.0",
-		"wrangler": "^4.151.0"
+		"wrangler": "^4.151.1"
 	},
 	"dependencies": {
-		"@lucide/svelte": "^1.57.0",
+		"@lucide/svelte": "^1.58.0",
 		"@mirasen/chessboard": "^1.5.1",
 		"chess.js": "^1.4.0"
 	}
