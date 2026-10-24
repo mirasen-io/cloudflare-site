@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { trapPageErrors } from '../utils/page-errors';
+import { trapPageErrors } from '../utils/page-errors.js';
 
 test('live-games grid renders 12 cards, link navigates to chess.js, no runtime errors', async ({
 	page

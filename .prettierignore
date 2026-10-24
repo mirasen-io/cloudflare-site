@@ -22,3 +22,9 @@ bun.lockb
 # OpenSpec — only the in-flight change is formatted; archived changes and existing specs stay verbatim
 /openspec/changes/archive/
 /openspec/specs/
+
+# Generated Svelte skills
+/.github/skills/
+
+# Generated OpenSpec skills for Codex
+/.agents/skills/

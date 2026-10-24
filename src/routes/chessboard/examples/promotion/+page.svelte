@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { useBoard } from '$lib/board/use.svelte';
+	import { useBoard } from '#lib/board/use.svelte.js';
 	import type { PiecePositionRecordString } from '@mirasen/chessboard';
 
 	const examplesHref = resolve('/chessboard/examples');
@@ -142,7 +142,12 @@
 
 				<div class="example-board-edge">
 					<div class="board-wrap">
-						<div bind:this={boardEl} class="board"></div>
+						<div
+							{@attach (element) => {
+								boardEl = element;
+							}}
+							class="board"
+						></div>
 					</div>
 				</div>
 

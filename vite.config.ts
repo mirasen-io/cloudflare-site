@@ -1,7 +1,9 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import tailwindcss from '@tailwindcss/vite';
-import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
+import adapter from '@sveltejs/adapter-static';
+import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	server: {
@@ -9,7 +11,18 @@ export default defineConfig({
 			allow: ['../..']
 		}
 	},
-	plugins: [tailwindcss(), sveltekit()],
+	plugins: [
+		enhancedImages(),
+		tailwindcss(),
+		sveltekit({
+			compilerOptions: {
+				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
+				runes: ({ filename }) =>
+					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+			},
+			adapter: adapter()
+		})
+	],
 	test: {
 		expect: { requireAssertions: true },
 		projects: [

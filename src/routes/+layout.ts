@@ -1,4 +1,4 @@
-import { rootNav } from '$lib/nav/links';
+import { rootNav } from '#lib/nav/links.js';
 
 export const prerender = true;
 

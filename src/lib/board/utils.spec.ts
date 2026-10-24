@@ -1,6 +1,6 @@
 import type { Chessboard, MoveRequestInput } from '@mirasen/chessboard';
 import { describe, expect, it } from 'vitest';
-import { algebraic, fileOf, randomMove, rankOf } from './utils';
+import { algebraic, fileOf, randomMove, rankOf } from './utils.js';
 
 describe('algebraic', () => {
 	it('maps square index 0 to a1', () => {
