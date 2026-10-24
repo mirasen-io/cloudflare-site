@@ -51,8 +51,6 @@ creates the version PR and GitHub Release, then deploys through Wrangler when a
 release is produced. The site package is not published to npm. When configured,
 PR CI also uploads a Cloudflare preview and runs E2E checks against its URL.
 
-The migration plan and verification checkpoints are in [docs/plan.md](docs/plan.md).
-
 ## Local development against in-progress `@mirasen/chessboard`
 
 This project consumes `@mirasen/chessboard` from the npm registry (via the
