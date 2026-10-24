@@ -9,3 +9,6 @@
 @import './mirasen-styles.css';
 @import './mirasen-examples.css';
 @import './board-styles.css';
+
+/* Mirasen uses a dark interface regardless of the system color preference. */
+@custom-variant dark (&:where(.dark, .dark *));
