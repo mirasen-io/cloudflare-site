@@ -619,7 +619,7 @@ PR/CI/Cloudflare preview/release verification remains step 7.
       direct URLs, slash redirects, and assets.
 - [x] Add a changeset for `@mirasen/main-website` through the established release flow;
       preserve pending changesets and do not reset the version to the scaffold's `0.0.1`.
-- [ ] After merge, verify the normal version/tag/release/deploy flow and production smoke checks.
+- [x] After merge, verify the normal version/tag/release/deploy flow and production smoke checks.
       Publishing and merging are separate later actions after local migration review.
 
 Step 7 checkpoint (October 24, 2026; PR head `42c2929`):
