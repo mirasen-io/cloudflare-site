@@ -6,8 +6,11 @@ Baseline commit: `5abbdd406b3faf6d2a5dfc1c658ff174085beb8d`.
 Status: the user created the sibling minimal scaffold and committed it as
 `95c0b67fda6937868a26bad8035b08b6bf52cbbf` (`initial commit`). Scaffold review is
 complete. The user then committed package/editor updates as `3bdab0f` and step 2
-as `77c6c45`. Steps 1–3 are complete; step 3 infrastructure changes are uncommitted
-for user review. Porting application code has not started.
+as `77c6c45`, step 3 as `f6f6df3`, and OpenSpec setup as `5d79b1c`.
+Steps 1–4 are complete; the user committed step 4 as `eb2319e`.
+Step 5 automated checks passed, then visual work was stopped at the user's request
+to restore browser tooling/guidance from veche. Those setup changes are uncommitted
+for review; full visual and hosting verification remains pending.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -335,7 +338,7 @@ reviewed and committed the sibling changes as `77c6c45` before authorizing step 
       Preserve existing formatting exclusions; add new ones only when necessary.
 - [x] Do not copy secrets, local `.env`/`.dev.vars` files, generated artifacts, or caches.
 
-Step 3 checkpoint (October 24, 2026; uncommitted changes on top of `77c6c45`):
+Step 3 checkpoint (October 24, 2026; subsequently committed by the user as `f6f6df3`):
 
 - Copied 111 tracked infrastructure files: workflows/Dependabot, hooks, pending
   changesets and their configuration, release history, shell scripts, OpenSpec,
@@ -388,26 +391,105 @@ was written to `/private/tmp/mirasen-step3-worker`. No release, changeset versio
 Git hook, push, or deployment command was executed. No secret/local environment
 files, caches, or application sources were copied.
 
-The new repository has an infrastructure-only diff ready for user review. The
-original repository only has this plan update. No commit was created. Stop here
-before step 4; real unit/E2E tests and product UI verification remain pending.
+The user reviewed and committed the infrastructure port as `f6f6df3`, then installed
+OpenSpec `1.15.0`, configured Claude/Codex integrations, and committed generated
+files as `5d79b1c`. The existing specification history was retained. Step 4 starts
+from that clean commit; no agent commit was created.
 
 ### 4. Port the site and tests
 
-- [ ] Copy all assets and styles, `src/app.html`, `src/app.d.ts`, and `src/lib/index.ts`.
-- [ ] Port AppBar, navigation configs, root/nested layouts, and all nine pages listed above.
-- [ ] Port board helpers, `LiveCard.svelte`, and tests, changing only required imports/APIs.
-- [ ] Port `static/robots.txt` and `static/sitemap.xml`; preserve the nine existing URLs.
-- [ ] Preserve root `prerender = true`, SSR, and strict adapter-static validation.
+- [x] Copy all assets and styles, `src/app.html`, `src/app.d.ts`, and `src/lib/index.ts`.
+- [x] Port AppBar, navigation configs, root/nested layouts, and all nine pages listed above.
+- [x] Port board helpers, `LiveCard.svelte`, and tests, changing only required imports/APIs.
+- [x] Port `static/robots.txt` and `static/sitemap.xml`; preserve the nine existing URLs.
+- [x] Preserve root `prerender = true`, SSR, and strict adapter-static validation.
       Do not replace static pages with an SPA fallback to bypass build failures.
-- [ ] Verify that every route is emitted to `build/`; if crawling misses a page, fix
+- [x] Verify that every route is emitted to `build/`; if crawling misses a page, fix
       the cause or add an explicit entry. Do not port veche demo routes.
 - [x] Port `playwright.config.ts` (completed in step 3): local build/preview on port
       4173, `PLAYWRIGHT_BASE_URL` for Cloudflare preview, and the current `testMatch`.
-- [ ] Port `e2e/` and run the existing product tests against the migrated pages.
-- [ ] Run svelte-autofixer on changed Svelte components until all issues and suggestions are resolved.
+- [x] Port `e2e/` and run the existing product tests against the migrated pages.
+- [x] Run svelte-autofixer on changed Svelte components until all issues and suggestions are resolved.
+
+Step 4 checkpoint (October 24, 2026; uncommitted changes on top of `5d79b1c`):
+
+- Ported all 39 tracked files under `src/`, `static/`, and `e2e/`, preserving assets,
+  Mirasen styles/theme, app shell, navigation, all nine routes, the board lifecycle
+  helper, and existing product tests.
+- Replaced `$lib` imports with `#lib`, adding `.js` extensions for TypeScript modules,
+  including `use.svelte.js`. Added explicit extensions to relative TypeScript imports
+  in unit/E2E tests. Route IDs and `resolve('/...')` calls remain unchanged.
+- Preserved `data-theme="mirasen"`, the original favicon, nested navigation data,
+  `html.app-started`, root prerendering, SSR, and strict adapter-static behavior.
+- Applied Svelte MCP suggestions in four board components: DOM references use simple
+  assignment attachments, and five active-class directives in the chess.js page
+  use class arrays. The `useBoard` helper, setup/cleanup callbacks, timers, game
+  behavior, and page copy remain unchanged.
+- Added `/.agents/skills/` to Prettier exclusions for the newly generated OpenSpec
+  Codex skills. Initial lint found formatting differences in those five generated
+  skill files; they were preserved verbatim rather than reformatted.
+- CSS, asset, and static file contents match the original byte for byte. No
+  dependency, package-script, lockfile, or OpenSpec skill changes were made.
+
+| Check                                 | Result                                                                           |
+| ------------------------------------- | -------------------------------------------------------------------------------- |
+| Svelte MCP autofixer                  | All 12 components plus `use.svelte.ts`: no remaining issues or suggestions       |
+| `npm run check`                       | Passed: 0 errors, 0 warnings                                                     |
+| `npm run lint`                        | Passed                                                                           |
+| `npm run build`                       | Passed with strict adapter-static                                                |
+| Prerendered output                    | Exactly nine HTML pages matching the existing route inventory; no demo page      |
+| `npm run test:unit -- --run`          | Passed: 1 file, 11 tests; no no-tests bypass                                     |
+| `./node_modules/.bin/playwright test` | Passed: all 4 original product smoke tests; used installed browsers              |
+| Source review                         | No `$lib` imports remain; asset/style/static parity and whitespace checks passed |
+
+The four E2E tests verify mounting and controls for Minimal, Promotion, chess.js,
+plus the 12-board grid and its client navigation to chess.js. Full desktop/mobile
+visual comparison, navigation/cleanup checks beyond the existing tests, and Wrangler
+hosting checks remain in step 5. No browser installation or deployment was performed.
+
+Local command logs and route output inventory are saved in the original repository's
+ignored `artifacts/migration-step4/` directory. The sibling diff is limited to
+application/assets/tests and the generated-skills formatting exclusion; the original
+repository only received the plan update. The user reviewed and committed the
+sibling port as `eb2319e` before authorizing step 5.
 
 ### 5. Verify the port in the new directory
+
+Pre-visual browser-tooling checkpoint (October 24, 2026):
+
+- Before visual work started, a clean `npm ci --no-audit --no-fund`, lint, check,
+  build, 11 unit tests, and 4 E2E tests passed at `eb2319e`. The lockfile was unchanged
+  by the clean install. Logs are in ignored `artifacts/migration-step5/`.
+- The user stopped the visual phase and requested the existing veche browser tooling
+  and the full design-to-Svelte verification guidance be reviewed first.
+- Added project-local `@playwright/cli` `^0.1.22`, resolving to `0.1.22`, matching
+  veche. Verified the local executable's version/help, including `find`, targeted
+  `snapshot`, depth limiting, and raw output. No browser was opened or installed.
+- Copied both veche `playwright-cli` skill trees unchanged into `.agents/skills/`
+  and `.claude/skills/` (22 files total); both copies match each other and the source.
+- Added `.playwright-cli/` to `.gitignore` and `CLAUDE.md` containing `@AGENTS.md`.
+  Updated the new project's AGENTS instructions for local CLI selection, autonomous
+  dev-server lifecycle, targeted inspection, and economical CLI output.
+- Reviewed the complete `design-to-svelte` skill on veche branch
+  `feat/design-to-svelte-skill` at `82a715b`, including its earlier local-tooling
+  guidance. Restored relevant rules absent from the shortened main-branch summary:
+  fresh restart before final visual checks; wide/narrow and meaningful intermediate
+  widths; different interaction states; rendered reference comparison at matching
+  widths/states; scrolling/overflow/navigation access; no substitution of DOM snapshots
+  for visual inspection; targeted fixes and rechecks; accurate claims about fidelity.
+- Adapted these rules into Mirasen's `AGENTS.md`. Existing Mirasen tests remain part
+  of validation; veche's test prohibition and project-specific design paths were
+  not adopted. Reference-only artifact handling from the design skill does not
+  change the current migration's authority: the existing Mirasen site is the baseline.
+- Tooling setup passed formatting, lint, check, and build. A final instructions-only
+  refinement passed formatting/lint. Stable Playwright/test `1.64.1`, Kit `3.1.0`,
+  and Vitest `5.0.5` resolutions remain unchanged. Application code was not changed.
+- No commit was created. Visual comparison, optional local-link verification, and
+  Wrangler hosting checks have not started. Stop at this setup checkpoint for review.
+
+Tooling validation logs are under ignored `artifacts/migration-browser-tooling/`.
+Use the new project's local CLI and freshly started dev servers for the next visual
+phase; reserve the already-built static output for Wrangler hosting verification.
 
 ```sh
 npm run format
@@ -493,7 +575,7 @@ process as well; a Git revert alone does not change the deployed site.
 - Registry mode, local linking, clean installation across the Node matrix, and Cloudflare preview.
 
 Initial scaffold review left the sibling project unchanged. Step 1 completed
-original-site baseline verification. The user committed step 2 scaffold cleanup as
-`77c6c45`. Step 3 ported infrastructure/configuration and updated this plan, with
-all changes left uncommitted for user review. Application code and product tests
-have not been ported yet.
+original-site baseline verification. The user committed steps 2 and 3, then the
+Claude/Codex OpenSpec integration. Step 4 ported application code/assets/tests and
+updated this plan; its changes remain uncommitted for user review. Full step 5
+visual/hosting verification and replacement of the original repository remain pending.
