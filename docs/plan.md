@@ -5,9 +5,9 @@ Baseline commit: `5abbdd406b3faf6d2a5dfc1c658ff174085beb8d`.
 
 Status: the user created the sibling minimal scaffold and committed it as
 `95c0b67fda6937868a26bad8035b08b6bf52cbbf` (`initial commit`). Scaffold review is
-complete. The user then committed package/editor updates as `3bdab0f`. Steps 1
-(original-site baseline) and 2 (scaffold cleanup/prerendering) are complete;
-porting application code has not started. Step 2 changes are uncommitted for user review.
+complete. The user then committed package/editor updates as `3bdab0f` and step 2
+as `77c6c45`. Steps 1–3 are complete; step 3 infrastructure changes are uncommitted
+for user review. Porting application code has not started.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -295,7 +295,7 @@ during step 2.
       examples produced parser diagnostics despite lint exiting successfully; the
       exclusion removes this noise without editing generated skills.
 
-Step 2 checkpoint (October 24, 2026; uncommitted changes on top of `3bdab0f`):
+Step 2 checkpoint (October 24, 2026; subsequently committed by the user as `77c6c45`):
 
 | Check                                          | Result                                                                     |
 | ---------------------------------------------- | -------------------------------------------------------------------------- |
@@ -316,24 +316,81 @@ configuration or scripts. The preview server was stopped after the smoke check.
 
 The sibling diff consists of `.prettierignore`, the root layout/page, the new
 `+layout.ts`, and deletion of eight generated demo/favicon files. The current
-repository only receives this plan update. No commit was created; stop here for
-user review and commit before proceeding to step 3.
+repository only received the plan update. No agent commit was created; the user
+reviewed and committed the sibling changes as `77c6c45` before authorizing step 3.
 
 ### 3. Port configuration and infrastructure
 
 - [x] Restore package name/version/private (completed by the user in `3bdab0f`).
-- [ ] Restore Changesets, `postinstall`, product dependencies, Wrangler, and existing
+- [x] Restore Changesets, `postinstall`, product dependencies, Wrangler, and existing
       Playwright configuration. Preserve the scaffold imports and aligned Playwright packages.
-- [ ] Port `server.fs.allow: ['../..']` from the current Vite config for the local chessboard link.
-- [ ] Configure `sveltekit({...})`, adapter-static, and runes; avoid two active configurations.
-- [ ] Update tsconfig/ESLint/Prettier while preserving `tailwindStylesheet` and project rules.
-- [ ] Copy `scripts/` before installing with the restored `postinstall` hook.
-- [ ] Preserve `wrangler.jsonc`: Worker name, `./build`, slash handling, compatibility date,
+- [x] Port `server.fs.allow: ['../..']` from the current Vite config for the local chessboard link.
+- [x] Configure `sveltekit({...})`, adapter-static, and runes; avoid two active configurations.
+- [x] Update tsconfig/ESLint/Prettier while preserving `tailwindStylesheet` and project rules.
+- [x] Copy `scripts/` before installing with the restored `postinstall` hook.
+- [x] Preserve `wrangler.jsonc`: Worker name, `./build`, slash handling, compatibility date,
       observability, and flags. Keep the existing hosting setup during this migration.
-- [ ] Port `.npmrc`, `.gitignore`, `.prettierignore`, `.github/`, `.githooks/`,
+- [x] Port `.npmrc`, `.gitignore`, `.prettierignore`, `.github/`, `.githooks/`,
       `.changeset/`, `CHANGELOG.md`, OpenSpec, Sonar configs, and editor/agent settings.
       Preserve existing formatting exclusions; add new ones only when necessary.
-- [ ] Do not copy secrets, local `.env`/`.dev.vars` files, generated artifacts, or caches.
+- [x] Do not copy secrets, local `.env`/`.dev.vars` files, generated artifacts, or caches.
+
+Step 3 checkpoint (October 24, 2026; uncommitted changes on top of `77c6c45`):
+
+- Copied 111 tracked infrastructure files: workflows/Dependabot, hooks, pending
+  changesets and their configuration, release history, shell scripts, OpenSpec,
+  Sonar configuration, npm settings, Wrangler, and editor/OpenSpec integration files.
+  All copied regular files match the original byte for byte, including permissions.
+  The `sonar-project.properties` symlink points to `.sonarcloud.properties`, as in
+  the source repository. An initial copy dereferenced this link; it was restored
+  after the user identified the file-type difference. All 111 entries were then
+  rechecked for file type, link target, regular-file contents, and permissions.
+- Merged `.vscode/settings.json`: retained the scaffold's CSS association and the
+  user's formatting/XML settings, and restored explicit import organization.
+- Merged `.claude/settings.json`: retained the generated Svelte plugin/marketplace
+  and restored the original permissions object. Generated Svelte agents/skills and
+  the scaffold AGENTS instructions remain intact.
+- Restored the original `.gitignore` and `.prettierignore` exclusions, retaining
+  the generated Svelte skills exclusion from step 2.
+- Restored Changesets/postinstall scripts and the original direct product dependency
+  ranges. Kept Kit 3, adapter-static 4, enhanced-img, the user's updated tooling,
+  and `#lib` imports. Did not restore `@eslint/compat`, since the new ESLint config
+  already imports `includeIgnoreFile` from `eslint/config`.
+- Preserved the new TypeScript/ESLint/Prettier setup and added `e2e` to TypeScript
+  coverage. Restored Vite filesystem access for sibling package development.
+- Restored the existing local/Cloudflare-preview Playwright configuration. Product
+  test files remain for step 4.
+- Installed dependencies and resolved newly added packages to the original direct
+  versions: Lucide `1.60.0`, chessboard `1.5.1`, chess.js `1.4.0`, Skeleton packages
+  `5.0.1`, Changesets `3.0.3`, and Wrangler `4.151.3`. Framework/test stack versions
+  remained unchanged from the user-prepared scaffold.
+- The postinstall helper ran successfully with no global packages to link.
+  Chessboard is a registry installation, not a symlink; its lockfile entry uses
+  the registry tarball URL. Global npm links were not changed.
+
+| Check                                          | Result                                                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `npm ci --no-audit --no-fund`                  | Passed, including postinstall/prepare; lockfile hash unchanged                            |
+| `npm run check`                                | Passed: 0 errors, 0 warnings                                                              |
+| `npm run lint`                                 | Passed                                                                                    |
+| `npm run build`                                | Passed; static output written to `build`                                                  |
+| `npm run test:unit -- --run --passWithNoTests` | Passed configuration check; product tests are not ported yet                              |
+| Wrangler deploy `--dry-run`                    | Passed with Wrangler `4.151.3`; read 21 static assets, exited without uploading           |
+| Playwright config                              | Local mode uses port 4173 and build/preview; external base URL disables the local server  |
+| Package/lockfile                               | Direct dependency ranges match; core framework/test versions preserved                    |
+| Copied file parity                             | All 111 entries match: file types, symlink targets, regular-file contents and permissions |
+| Shell syntax                                   | All copied scripts and pre-push hook passed syntax checks                                 |
+| Diff scope                                     | No `src/` changes relative to `77c6c45`; whitespace check passed                          |
+
+Local command logs and machine-readable results are saved in the original
+repository's ignored `artifacts/migration-step3/` directory. Wrangler dry-run output
+was written to `/private/tmp/mirasen-step3-worker`. No release, changeset versioning,
+Git hook, push, or deployment command was executed. No secret/local environment
+files, caches, or application sources were copied.
+
+The new repository has an infrastructure-only diff ready for user review. The
+original repository only has this plan update. No commit was created. Stop here
+before step 4; real unit/E2E tests and product UI verification remain pending.
 
 ### 4. Port the site and tests
 
@@ -345,8 +402,9 @@ user review and commit before proceeding to step 3.
       Do not replace static pages with an SPA fallback to bypass build failures.
 - [ ] Verify that every route is emitted to `build/`; if crawling misses a page, fix
       the cause or add an explicit entry. Do not port veche demo routes.
-- [ ] Port `playwright.config.ts` and `e2e/`: local build/preview on port 4173,
-      `PLAYWRIGHT_BASE_URL` for Cloudflare preview, and the current `testMatch`.
+- [x] Port `playwright.config.ts` (completed in step 3): local build/preview on port
+      4173, `PLAYWRIGHT_BASE_URL` for Cloudflare preview, and the current `testMatch`.
+- [ ] Port `e2e/` and run the existing product tests against the migrated pages.
 - [ ] Run svelte-autofixer on changed Svelte components until all issues and suggestions are resolved.
 
 ### 5. Verify the port in the new directory
@@ -427,15 +485,15 @@ process as well; a Git revert alone does not change the deployed site.
 
 - Static builds and tests after the infrastructure/application port; the empty
   scaffold static build already passes at the step 2 checkpoint.
-- Clean `npm ci` reproducibility: the review checked metadata consistency and used
-  the existing installation; it did not reinstall dependencies.
+- Clean `npm ci` after the application port and across the CI Node matrix; the
+  infrastructure-only scaffold already passed a clean install in step 3.
 - Compatibility of Skeleton/Zag/Svelte/Kit 3 during SSR and hydration. The installed
   Skeleton peer dependency (`svelte: ^5.40.0`) accepts our Svelte version, but that
   alone does not verify menu behavior.
 - Registry mode, local linking, clean installation across the Node matrix, and Cloudflare preview.
 
 Initial scaffold review left the sibling project unchanged. Step 1 completed
-original-site baseline verification. Step 2 then changed only the sibling scaffold
-cleanup/prerender files listed above and this plan, leaving its commits unchanged.
-All step 2 changes remain uncommitted for the user's review. Infrastructure porting
-and application porting have not started.
+original-site baseline verification. The user committed step 2 scaffold cleanup as
+`77c6c45`. Step 3 ported infrastructure/configuration and updated this plan, with
+all changes left uncommitted for user review. Application code and product tests
+have not been ported yet.
