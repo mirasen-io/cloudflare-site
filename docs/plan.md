@@ -9,8 +9,8 @@ complete. The user then committed package/editor updates as `3bdab0f` and step 2
 as `77c6c45`, step 3 as `f6f6df3`, and OpenSpec setup as `5d79b1c`.
 Steps 1–4 are complete; the user committed step 4 as `eb2319e`.
 The user committed browser tooling/guidance as `ba58ecc`. Step 5 registry-mode,
-visual, interaction and local hosting checks passed. The optional real local-link
-check is unavailable until the sibling chessboard package is built. No replacement
+visual, interaction and local hosting checks passed. The optional local-link runtime
+check is WON'T DO by user decision and is not outstanding work. No replacement
 of the original repository or deployment has started.
 Completed checks and remaining work are recorded below.
 
@@ -508,10 +508,9 @@ local Playwright CLI directly.
 
 - [x] Run checks with the registry chessboard package in a clean environment without
       a global link. Verify the registry URL and that `npm ci` leaves the lockfile unchanged.
-- [ ] Actual optional local-link runtime check: unavailable because the sibling
-      `../chessboard` has no `dist` and no global link is registered. Registry mode
-      and the helper's no-link branch passed. The sibling package and global links
-      were not modified; this is an explicit remaining limitation.
+- [x] **WON'T DO:** Actual optional local-link runtime check, excluded by user decision.
+      Registry mode and the helper's no-link branch passed. The runtime check was
+      not performed and is not required to complete this migration.
 - [x] Confirm that the existing 11 unit tests and 4 e2e tests pass and have not been
       replaced by demo tests.
 - [x] Compare all nine pages at 1440×900 and 390×844: theme, copy, links, favicon,
@@ -540,7 +539,7 @@ Final step 5 checkpoint (October 24, 2026; verified `ba58ecc`):
   timers, then remounting exactly 12 boards on browser Back.
 - Wrangler 4.152.0 served every page and checked asset correctly; unknown/demo URLs
   returned 404, and non-root slash URLs redirected with 307. No remote upload occurred.
-- The optional actual local-link mode remains unverified for the prerequisite above;
+- The optional local-link runtime check is WON'T DO by user decision.
   Node 22/26 and Cloudflare PR preview remain CI/later-stage checks.
 - Evidence and detailed limits: `artifacts/migration-step5/report.md`, screenshots,
   pixel comparisons, interaction reports, HTTP results and final check logs.
@@ -599,11 +598,12 @@ process as well; a Git revert alone does not change the deployed site.
 - Compatibility of Skeleton/Zag/Svelte/Kit 3 during SSR and hydration. The installed
   Skeleton peer dependency (`svelte: ^5.40.0`) accepts our Svelte version, but that
   alone does not verify menu behavior.
-- Registry mode, local linking, clean installation across the Node matrix, and Cloudflare preview.
+- Clean installation across the Node matrix and Cloudflare preview. The optional
+  local-link runtime check is WON'T DO; registry-mode verification passed in step 5.
 
 Initial scaffold review left the sibling project unchanged. Step 1 completed
 original-site baseline verification. The user committed steps 2 and 3, then the
 Claude/Codex OpenSpec integration. Step 4 ported application code/assets/tests and
-updated this plan; its changes remain uncommitted for user review. Step 5 registry-mode visual/hosting verification has passed, with the optional
-local-link prerequisite explicitly unresolved. Replacement of the original repository
+updated this plan; its changes remain uncommitted for user review. Step 5 registry-mode visual/hosting verification has passed. The optional local-link
+runtime check is WON'T DO by user decision and is not outstanding work. Replacement of the original repository
 and remote CI/preview/release verification remain pending.
