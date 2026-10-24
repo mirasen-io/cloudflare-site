@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { trapPageErrors } from '../utils/page-errors';
+import { trapPageErrors } from '../utils/page-errors.js';
 
 test('chess.js example renders, controls visible, reset preserves status, no runtime errors', async ({
 	page

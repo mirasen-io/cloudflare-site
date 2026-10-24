@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { trapPageErrors } from '../utils/page-errors';
+import { trapPageErrors } from '../utils/page-errors.js';
 
 test('minimal example renders, controls work, no runtime errors', async ({ page }) => {
 	const assertNoPageErrors = trapPageErrors(page);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { useBoard } from '$lib/board/use.svelte';
-	import { randomMove } from '$lib/board/utils';
+	import { useBoard } from '#lib/board/use.svelte.js';
+	import { randomMove } from '#lib/board/utils.js';
 
 	const examplesHref = resolve('/chessboard/examples');
 
@@ -101,7 +101,12 @@
 
 				<div class="example-board-edge">
 					<div class="board-wrap">
-						<div bind:this={boardEl} class="board"></div>
+						<div
+							{@attach (element) => {
+								boardEl = element;
+							}}
+							class="board"
+						></div>
 					</div>
 				</div>
 

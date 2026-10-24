@@ -1,7 +1,7 @@
 import type { RouteId } from '$app/types';
-import logoGithub from '$lib/assets/GitHub_Invertocat_White.svg';
-import logoShort from '$lib/assets/logo-short.svg';
-import logoNpm from '$lib/assets/n.svg';
+import logoGithub from '#lib/assets/GitHub_Invertocat_White.svg';
+import logoShort from '#lib/assets/logo-short.svg';
+import logoNpm from '#lib/assets/n.svg';
 
 export type NavVisual = {
 	type: 'image';

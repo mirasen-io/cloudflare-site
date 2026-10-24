@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import favicon from '$lib/assets/favicon.ico';
-	import AppBar from '$lib/components/AppBar.svelte';
-	import { rootNav, type NavConfig } from '$lib/nav/links';
+	import favicon from '#lib/assets/favicon.ico';
+	import AppBar from '#lib/components/AppBar.svelte';
+	import { rootNav, type NavConfig } from '#lib/nav/links.js';
 	import { onMount } from 'svelte';
 	import './layout.css';
 

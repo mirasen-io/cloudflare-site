@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { useBoard } from '$lib/board/use.svelte';
+	import { useBoard } from '#lib/board/use.svelte.js';
 	import { toBoardMove } from '@mirasen/chessboard/adapters/chessjs';
 	import { Chess } from 'chess.js';
 
@@ -134,7 +134,12 @@
 	</div>
 
 	<div class="live-card__board-wrap">
-		<div bind:this={boardEl} class="live-card__board"></div>
+		<div
+			{@attach (element) => {
+				boardEl = element;
+			}}
+			class="live-card__board"
+		></div>
 		<a
 			class="live-card__overlay"
 			data-testid="live-board-link"

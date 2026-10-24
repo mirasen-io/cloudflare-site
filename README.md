@@ -1,6 +1,10 @@
 # @mirasen/main-website
 
-The mirasen.io website — SvelteKit + Cloudflare Pages, deployed via Wrangler.
+The mirasen.io website, built with SvelteKit 3 and Svelte 5, prerendered with
+`@sveltejs/adapter-static` and deployed as Cloudflare Workers static assets through
+Wrangler.
+
+Use Node.js 22.17 or newer and npm.
 
 ## Development
 
@@ -15,8 +19,39 @@ npm run dev
 npm run build
 npm run lint
 npm run check
-npm run test:unit
+npm run test:unit -- --run
+npm run test:e2e
 ```
+
+`npm run test:e2e` installs the required Playwright browsers and starts a build/preview
+server unless `PLAYWRIGHT_BASE_URL` points to an existing deployment. When browsers
+are already installed, run `./node_modules/.bin/playwright test` directly.
+
+To serve an existing build locally:
+
+```sh
+npm run preview
+# Cloudflare Workers static assets behavior
+./node_modules/.bin/wrangler dev --local
+```
+
+## Browser inspection
+
+Use the project-local CLI and the browser-verification instructions in [AGENTS.md](AGENTS.md):
+
+```sh
+./node_modules/.bin/playwright-cli --help
+```
+
+## Site releases
+
+The private `@mirasen/main-website` package is versioned and tagged with Changesets.
+Preserve pending `.changeset/` entries when making changes. The release workflow
+creates the version PR and GitHub Release, then deploys through Wrangler when a
+release is produced. The site package is not published to npm. When configured,
+PR CI also uploads a Cloudflare preview and runs E2E checks against its URL.
+
+The migration plan and verification checkpoints are in [docs/plan.md](docs/plan.md).
 
 ## Local development against in-progress `@mirasen/chessboard`
 
@@ -39,8 +74,10 @@ cd ../chessboard      # wherever you have it checked out
 npm link              # registers @mirasen/chessboard as a global link
 ```
 
-This is required exactly once per machine. It does not modify either
-`package.json`.
+Build the chessboard package before using the link so its exported `dist` entry
+points exist, and rebuild it when required by that package's development workflow.
+The link registration is required once per Node/npm installation. It does not
+modify either `package.json`.
 
 ### Day-to-day flow
 

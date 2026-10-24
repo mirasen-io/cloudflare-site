@@ -10,8 +10,9 @@ as `77c6c45`, step 3 as `f6f6df3`, and OpenSpec setup as `5d79b1c`.
 Steps 1–4 are complete; the user committed step 4 as `eb2319e`.
 The user committed browser tooling/guidance as `ba58ecc`. Step 5 registry-mode,
 visual, interaction and local hosting checks passed. The optional local-link runtime
-check is WON'T DO by user decision and is not outstanding work. No replacement
-of the original repository or deployment has started.
+check is WON'T DO by user decision and is not outstanding work. Step 6 is now
+complete: the verified tree is in this original checkout, with all replacement
+changes uncommitted for review. No deployment has started.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -546,23 +547,66 @@ Final step 5 checkpoint (October 24, 2026; verified `ba58ecc`):
 - The named browser session, both dev servers and Wrangler were stopped. New project
   working tree is clean; only this plan is changed in the original repository.
 
-Stop here for review. Step 6 has not started; the original repository remains intact.
+The user committed the step 5 plan/results as `bf73c07` and then authorized step 6.
 
 ### 6. Copy the result back into this repository
 
-- [ ] Confirm the original branch is still `migrate/sk-3`, no work is unsaved, and
+- [x] Confirm the original branch is still `migrate/sk-3`, no work is unsaved, and
       every original repository-specific file has been accounted for in the new tree.
-- [ ] Prepare and review the replacement/deletion list. Preserve the original `.git`,
+- [x] Prepare and review the replacement/deletion list. Preserve the original `.git`,
       local settings, and user files; do not use an unchecked `rsync --delete`.
-- [ ] Replace tracked contents with the verified project tree, including this plan.
+- [x] Replace tracked contents with the verified project tree, including this plan.
       Exclude `.git`, `node_modules`, `.svelte-kit`, `build`, `.wrangler`, test-results,
       browser reports, caches, and `.DS_Store`.
-- [ ] Remove the old `svelte.config.js` and genuinely obsolete files; inspect the diff
+- [x] Remove the old `svelte.config.js` and genuinely obsolete files; inspect the diff
       for lost changes, workflows, changesets, specifications, or executable bits.
-- [ ] Run a clean `npm ci` and repeat lint/check/build/unit/e2e in the main directory:
+- [x] Run a clean `npm ci` and repeat lint/check/build/unit/e2e in the main directory:
       project location and local links may have affected earlier results.
-- [ ] Update the README: Kit 3, Workers static assets, actual commands, and the existing
+- [x] Update the README: Kit 3, Workers static assets, actual commands, and the existing
       local link/release flow.
+
+Step 6 checkpoint (October 24, 2026; uncommitted changes in the original checkout):
+
+- Original checkout started clean on `migrate/sk-3` at `bf73c07`; the verified sibling
+  checkout was clean at `ba58ecc`. Reviewed the full replacement manifest before
+  copying: 44 added files, 35 replacements, 127 identical existing files, and only
+  two deletions (`svelte.config.js` and `.prettierrc`). No collisions with untracked
+  or ignored local files were found.
+- Copied only tracked files from the sibling project, preserving regular-file modes
+  and symlink targets. Kept the original `.git`, local files and evidence directory.
+  Preserved the current `docs/plan.md`, which is not present in the sibling scaffold.
+- Preserved `sonar-project.properties -> .sonarcloud.properties`, executable shell
+  scripts/hooks, all pending changesets, workflows, release history and OpenSpec
+  specifications. The updated Claude/Codex integrations and browser guidance are now
+  available in the original checkout.
+- Removed the unsupported Kit 2 `svelte.config.js` and the old `.prettierrc`;
+  configuration now lives in `vite.config.ts` and `prettier.config.js`.
+- Replaced the scaffold README with the original site's README, updating it for
+  Kit 3, Workers static assets, actual verification commands, local Playwright CLI,
+  and Changesets releases. Retained the chessboard development/release workflow and
+  clarified that the linked package needs its exported `dist` entry points built.
+  This documentation does not reintroduce the WON'T DO runtime link check.
+- Confirmed parity with all sibling tracked files except the intentionally adapted
+  README. The plan is retained as an additional original-repository file. No changes
+  were made to the sibling checkout.
+
+| Check in the original checkout        | Result                                                         |
+| ------------------------------------- | -------------------------------------------------------------- |
+| `npm ci --no-audit --no-fund`         | Passed; copied lockfile unchanged; no global packages to link  |
+| `npm run format`                      | Passed                                                         |
+| `npm run lint`                        | Passed                                                         |
+| `npm run check`                       | Passed: 0 errors, 0 warnings                                   |
+| `npm run build`                       | Passed with strict adapter-static; all nine HTML pages emitted |
+| `npm run test:unit -- --run`          | Passed: 1 file, 11 tests                                       |
+| `./node_modules/.bin/playwright test` | Passed: all 4 product E2E tests from the new location          |
+| Tree/type/mode parity                 | Matches sibling tree except the adapted README                 |
+| Git preservation                      | Branch and HEAD unchanged; no staged changes or agent commits  |
+| Documentation and diff                | Local README links resolve; whitespace check passed            |
+
+Manifest, check logs and results are under ignored `artifacts/migration-step6/`.
+No browser packages were installed, no Git hooks or release/version commands were
+invoked, and nothing was pushed or deployed. Stop here for user review and commit.
+PR/CI/Cloudflare preview/release verification remains step 7.
 
 ### 7. Verify the PR and release
 
@@ -573,7 +617,7 @@ Stop here for review. Step 6 has not started; the original repository remains in
 - [ ] Add a changeset for `@mirasen/main-website` through the established release flow;
       preserve pending changesets and do not reset the version to the scaffold's `0.0.1`.
 - [ ] After merge, verify the normal version/tag/release/deploy flow and production smoke checks.
-      Publishing and merging belong to the later implementation stage, not this research task.
+      Publishing and merging are separate later actions after local migration review.
 
 ## Completion criteria and rollback
 
@@ -591,19 +635,16 @@ process as well; a Git revert alone does not change the deployed site.
 
 ## Still to verify by execution
 
-- Static builds and tests after the infrastructure/application port; the empty
-  scaffold static build already passes at the step 2 checkpoint.
-- Clean `npm ci` after the application port and across the CI Node matrix; the
-  infrastructure-only scaffold already passed a clean install in step 3.
-- Compatibility of Skeleton/Zag/Svelte/Kit 3 during SSR and hydration. The installed
-  Skeleton peer dependency (`svelte: ^5.40.0`) accepts our Svelte version, but that
-  alone does not verify menu behavior.
-- Clean installation across the Node matrix and Cloudflare preview. The optional
-  local-link runtime check is WON'T DO; registry-mode verification passed in step 5.
+- PR CI on the configured Node matrix (including Node 22 at version 22.17 or later
+  and Node 26); local checks used Node 24.21.0.
+- Cloudflare PR preview and its E2E/direct-URL/asset checks.
+- The normal Changesets version/tag/release/deploy flow and production smoke checks
+  after the migration is reviewed and merged.
+- The optional local-link runtime check is WON'T DO by user decision; it is not
+  outstanding work. Registry-mode clean installation, SSR/hydration, UI behavior,
+  static output and product tests passed in both the sibling and original checkout.
 
-Initial scaffold review left the sibling project unchanged. Step 1 completed
-original-site baseline verification. The user committed steps 2 and 3, then the
-Claude/Codex OpenSpec integration. Step 4 ported application code/assets/tests and
-updated this plan; its changes remain uncommitted for user review. Step 5 registry-mode visual/hosting verification has passed. The optional local-link
-runtime check is WON'T DO by user decision and is not outstanding work. Replacement of the original repository
-and remote CI/preview/release verification remain pending.
+Steps 1–6 are complete locally. The verified Kit 3 project is now in the original
+repository on `migrate/sk-3`, with all step 6 changes uncommitted for the user's
+review. The sibling project remains unchanged. Remote PR/CI/preview/release checks
+remain pending; no commit, push, merge or deployment was performed by the agent.

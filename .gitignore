@@ -39,3 +39,6 @@ Thumbs.db
 
 # Local input artifacts
 /deploy-site.zip
+
+# Playwright CLI local sessions and output
+.playwright-cli/

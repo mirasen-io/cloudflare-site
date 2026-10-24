@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import type { NavConfig, NavLink } from '$lib/nav/links';
+	import type { NavConfig, NavLink } from '#lib/nav/links.js';
 	import { AppBar, Menu } from '@skeletonlabs/skeleton-svelte';
 	import { Menu as MenuIcon } from '@lucide/svelte';
 

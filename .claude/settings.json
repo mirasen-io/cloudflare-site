@@ -1,5 +1,16 @@
 {
-  "permissions": {
-    "allow": []
-  }
+	"extraKnownMarketplaces": {
+		"svelte": {
+			"source": {
+				"source": "github",
+				"repo": "sveltejs/ai-tools"
+			}
+		}
+	},
+	"enabledPlugins": {
+		"svelte@svelte": true
+	},
+	"permissions": {
+		"allow": []
+	}
 }

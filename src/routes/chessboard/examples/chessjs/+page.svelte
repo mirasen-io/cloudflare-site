@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { useBoard } from '$lib/board/use.svelte';
+	import { useBoard } from '#lib/board/use.svelte.js';
 	import {
 		toBoardMove,
 		toBoardMoveDestinations,
@@ -284,8 +284,7 @@
 						<span class="example-segment-label">Drag</span>
 						<button
 							type="button"
-							class="example-segment-btn"
-							class:is-active={dragPreset === 'desktop'}
+							class={['example-segment-btn', { 'is-active': dragPreset === 'desktop' }]}
 							aria-pressed={dragPreset === 'desktop'}
 							onclick={() => selectDragPreset('desktop')}
 						>
@@ -293,8 +292,7 @@
 						</button>
 						<button
 							type="button"
-							class="example-segment-btn"
-							class:is-active={dragPreset === 'mobile'}
+							class={['example-segment-btn', { 'is-active': dragPreset === 'mobile' }]}
 							aria-pressed={dragPreset === 'mobile'}
 							onclick={() => selectDragPreset('mobile')}
 						>
@@ -306,8 +304,7 @@
 						<span class="example-segment-label">Anim</span>
 						<button
 							type="button"
-							class="example-segment-btn"
-							class:is-active={animSetting === 'on'}
+							class={['example-segment-btn', { 'is-active': animSetting === 'on' }]}
 							aria-pressed={animSetting === 'on'}
 							onclick={() => selectAnim('on')}
 						>
@@ -315,8 +312,7 @@
 						</button>
 						<button
 							type="button"
-							class="example-segment-btn"
-							class:is-active={animSetting === 'off'}
+							class={['example-segment-btn', { 'is-active': animSetting === 'off' }]}
 							aria-pressed={animSetting === 'off'}
 							onclick={() => selectAnim('off')}
 						>
@@ -329,8 +325,7 @@
 						{#each ['keyboard', 'ctrl', 'shift', 'alt', 'meta'] as const as value (value)}
 							<button
 								type="button"
-								class="example-segment-btn"
-								class:is-active={drawModifier === value}
+								class={['example-segment-btn', { 'is-active': drawModifier === value }]}
 								aria-pressed={drawModifier === value}
 								onclick={() => selectDrawModifier(value)}
 							>
@@ -344,7 +339,12 @@
 
 				<div class="example-board-edge">
 					<div class="board-wrap">
-						<div bind:this={boardEl} class="board"></div>
+						<div
+							{@attach (element) => {
+								boardEl = element;
+							}}
+							class="board"
+						></div>
 					</div>
 				</div>
 
