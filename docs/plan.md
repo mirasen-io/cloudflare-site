@@ -13,7 +13,9 @@ visual, interaction and local hosting checks passed. The optional local-link run
 check is WON'T DO by user decision and is not outstanding work. Step 6 is now
 complete and committed by the user as `0d1c1d5`. The user also committed the
 always-dark theme fix as `07d8ed5` and native Skeleton menu links as `e9edd07`.
-No deployment has started.
+PR #185 is open and ready for review. CI and Cloudflare preview verification
+passed for `42c2929`; the migration changeset is prepared locally. Production
+release/deployment verification remains pending.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -611,14 +613,39 @@ PR/CI/Cloudflare preview/release verification remains step 7.
 
 ### 7. Verify the PR and release
 
-- [ ] Prepare the migration commit/PR after completing the local port; preserve repository history.
-- [ ] Confirm CI passes on the actual Node matrix, including Node 22 at version 22.17 or later.
-- [ ] Verify the Cloudflare PR preview, existing e2e tests against its deployment URL,
+- [x] Prepare the migration commit/PR after completing the local port; preserve repository history.
+- [x] Confirm CI passes on the actual Node matrix, including Node 22 at version 22.17 or later.
+- [x] Verify the Cloudflare PR preview, existing e2e tests against its deployment URL,
       direct URLs, slash redirects, and assets.
 - [ ] Add a changeset for `@mirasen/main-website` through the established release flow;
       preserve pending changesets and do not reset the version to the scaffold's `0.0.1`.
 - [ ] After merge, verify the normal version/tag/release/deploy flow and production smoke checks.
       Publishing and merging are separate later actions after local migration review.
+
+Step 7 checkpoint (October 24, 2026; PR head `42c2929`):
+
+- Opened [PR #185](https://github.com/mirasen-io/cloudflare-site/pull/185) and marked
+  it ready for review at the user's request. No agent commit, push or merge occurred.
+- [CI run 40101620913](https://github.com/mirasen-io/cloudflare-site/actions/runs/40101620913)
+  passed: check, tests on Node 22/24/26, Cloudflare and both required aggregate jobs.
+  The Node 22 job used v22.23.3 and passed all 11 unit tests and 4 E2E tests.
+  CodeQL also passed.
+- Cloudflare uploaded version `5cbd3b21-1703-4790-887a-ab47d9fd319f`. All 4 existing
+  E2E tests passed against the immutable preview URL in CI.
+  [Preview alias](https://pr-185-cloudflare-site.k-tarmyshov.workers.dev).
+- Independently checked the immutable preview: all 9 direct routes and 28 linked
+  assets returned 200; all 8 non-root slash URLs redirected to slashless paths;
+  unknown and removed demo URLs returned 404.
+- Inspected the preview at 390x844 and 1440x900, including the open mobile menu
+  with a light system preference: dark color scheme, native menu anchors, no
+  horizontal overflow and no page errors in the checked state. HTTP results and
+  screenshots are retained under ignored `artifacts/migration-step7/`.
+- Prepared `.changeset/sveltekit-3-migration.md` locally with a minor bump for
+  `@mirasen/main-website`. `changeset status` accepts it and proposes 1.4.0 while
+  preserving all pending patch changesets. It still needs the user's commit/push;
+  the current PR head does not contain it, so the changeset bot warning is expected.
+- Formatting and whitespace checks passed. Production release/deployment and
+  post-merge smoke checks remain pending; no production deployment was performed.
 
 ## Completion criteria and rollback
 
@@ -636,9 +663,8 @@ process as well; a Git revert alone does not change the deployed site.
 
 ## Still to verify by execution
 
-- PR CI on the configured Node matrix (including Node 22 at version 22.17 or later
-  and Node 26); local checks used Node 24.21.0.
-- Cloudflare PR preview and its E2E/direct-URL/asset checks.
+- Commit and push the prepared migration changeset, then verify checks on the new
+  PR head. The current `42c2929` head passed CI and preview checks.
 - The normal Changesets version/tag/release/deploy flow and production smoke checks
   after the migration is reviewed and merged.
 - The optional local-link runtime check is WON'T DO by user decision; it is not
@@ -652,5 +678,7 @@ passed format/lint/check/build, and the menu change passed all 11 unit tests,
 all 4 existing E2E tests, Svelte autofixer and targeted desktop/mobile browser
 checks for keyboard navigation, focus restoration and native link activation.
 The working tree was clean when this status was reviewed. The sibling project
-remains unchanged. Step 7 PR/CI/preview/release checks remain pending; no commit,
-push, merge or deployment was performed by the agent.
+remains unchanged. Step 7 PR/CI/preview checks passed for `42c2929`. The migration changeset and
+updated plan remain local for user review and commit. Post-merge release and
+production checks remain pending. No agent commit, push, merge or production
+deployment occurred; the PR workflow uploaded only a preview version.
