@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import type { HTMLAnchorAttributes } from 'svelte/elements';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import type { NavConfig, NavLink } from '#lib/nav/links.js';
@@ -7,20 +7,6 @@
 	import { Menu as MenuIcon } from '@lucide/svelte';
 
 	let { brand, links }: NavConfig = $props();
-
-	// Zag's menu intercepts Enter/Space on menuitem and prevents default, so the
-	// native <a href> inside Menu.Item never navigates via keyboard. Mouse click,
-	// middle-click, ⌘-click, right-click, and screen-reader semantics still flow
-	// through the <a> — only keyboard activation routes through here.
-	function handleMenuSelect(details: { value: string }) {
-		const link = links.find((candidate) => candidate.href === details.value);
-		if (!link) return;
-		if (link.external) {
-			window.open(link.href, '_blank', 'noopener,noreferrer');
-		} else {
-			goto(resolve(link.href));
-		}
-	}
 
 	function isInternalActive(link: NavLink, internalHref: string, path: string): boolean {
 		if (link.external) return false;
@@ -97,7 +83,7 @@
 
 			<!-- Mobile: hamburger-triggered dropdown below md -->
 			<div class="md:hidden">
-				<Menu onSelect={handleMenuSelect}>
+				<Menu>
 					<Menu.Trigger
 						aria-label="Open navigation menu"
 						class="inline-flex items-center justify-center"
@@ -108,46 +94,57 @@
 						<Menu.Content>
 							{#each links as link (link.href)}
 								<Menu.Item value={link.href}>
-									{#if link.external}
-										<a
-											href={link.href}
-											target="_blank"
-											rel="external noopener noreferrer"
-											aria-label={accessibleName(link, !!link.label)}
-											class="inline-flex w-full items-center gap-2"
-										>
-											{#if link.visual}
-												<img
-													src={link.visual.src}
-													alt={link.visual.alt ?? ''}
-													class={link.visual.class}
-												/>
-											{/if}
-											{#if link.label}
-												{link.label}
-											{/if}
-										</a>
-									{:else}
-										{@const internalHref = resolve(link.href)}
-										{@const active = isInternalActive(link, internalHref, page.url.pathname)}
-										<a
-											href={internalHref}
-											aria-label={accessibleName(link, !!link.label)}
-											aria-current={active ? 'page' : undefined}
-											class={['inline-flex w-full items-center gap-2', active && 'font-bold']}
-										>
-											{#if link.visual}
-												<img
-													src={link.visual.src}
-													alt={link.visual.alt ?? ''}
-													class={link.visual.class}
-												/>
-											{/if}
-											{#if link.label}
-												{link.label}
-											{/if}
-										</a>
-									{/if}
+									{#snippet element(attributes)}
+										{#if link.external}
+											<a
+												{...attributes as HTMLAnchorAttributes}
+												href={link.href}
+												target="_blank"
+												rel="external noopener noreferrer"
+												aria-label={accessibleName(link, !!link.label)}
+												class={[
+													attributes.class,
+													'inline-flex w-full items-center justify-start gap-2'
+												]}
+											>
+												{#if link.visual}
+													<img
+														src={link.visual.src}
+														alt={link.visual.alt ?? ''}
+														class={link.visual.class}
+													/>
+												{/if}
+												{#if link.label}
+													{link.label}
+												{/if}
+											</a>
+										{:else}
+											{@const internalHref = resolve(link.href)}
+											{@const active = isInternalActive(link, internalHref, page.url.pathname)}
+											<a
+												{...attributes as HTMLAnchorAttributes}
+												href={internalHref}
+												aria-label={accessibleName(link, !!link.label)}
+												aria-current={active ? 'page' : undefined}
+												class={[
+													attributes.class,
+													'inline-flex w-full items-center justify-start gap-2',
+													active && 'font-bold'
+												]}
+											>
+												{#if link.visual}
+													<img
+														src={link.visual.src}
+														alt={link.visual.alt ?? ''}
+														class={link.visual.class}
+													/>
+												{/if}
+												{#if link.label}
+													{link.label}
+												{/if}
+											</a>
+										{/if}
+									{/snippet}
 								</Menu.Item>
 							{/each}
 						</Menu.Content>
