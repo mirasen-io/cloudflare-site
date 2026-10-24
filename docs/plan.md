@@ -5,8 +5,9 @@ Baseline commit: `5abbdd406b3faf6d2a5dfc1c658ff174085beb8d`.
 
 Status: the user created the sibling minimal scaffold and committed it as
 `95c0b67fda6937868a26bad8035b08b6bf52cbbf` (`initial commit`). Scaffold review is
-complete. The user then committed package/editor updates as `3bdab0f`. Step 1
-(original-site baseline) is complete; porting application code has not started.
+complete. The user then committed package/editor updates as `3bdab0f`. Steps 1
+(original-site baseline) and 2 (scaffold cleanup/prerendering) are complete;
+porting application code has not started. Step 2 changes are uncommitted for user review.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -210,8 +211,8 @@ is distinct from Escape focus restoration. Neither required an application chang
 Live board positions are dynamic; compare layout and appearance rather than expecting
 identical pixels in animated board regions. The mobile home capture was visually inspected.
 
-Stop here for user review. The next step is scaffold cleanup and enabling static
-prerendering, before infrastructure or application code is ported.
+Step 1 was completed and reviewed before the user authorized step 2. Infrastructure
+and application porting remain separate later steps.
 
 ### 2. Create the minimal scaffold
 
@@ -248,8 +249,8 @@ Initial scaffold review at `95c0b67` (before the subsequent user updates):
 | `npm run test:unit -- --run`    | Passed: 2 demo files, 2 tests, including the browser component test                       |
 | E2E                             | Not run: its webServer build is blocked by the same static adapter error                  |
 
-The build failure is expected from the missing root `prerender = true`; configure
-prerendering before the next build. Remove the generated Playwright demo when
+The initial build failure came from the missing root `prerender = true`; this is
+resolved by the step 2 changes recorded below. Remove the generated Playwright demo when
 porting the existing tests. Do not disable adapter strictness or add an SPA fallback.
 The Vitest run also reports `transform_index_html_unsupported` for
 `vitest:browser:transform-tester-html`; tests pass, but recheck this warning after
@@ -274,17 +275,49 @@ User updates reviewed at `3bdab0f`:
   Preserve these when merging editor settings later.
 - These changes are committed and the sibling working tree is clean. The earlier
   Vitest 4 review is historical; its test results do not validate the updated Vitest 5 setup.
-- The missing root prerender setting and generated demo contents remain unchanged.
+- At this commit, the missing root prerender setting and generated demo contents
+  were unchanged; step 2 subsequently addresses both.
 
 Before the product port, restore product dependencies, Changesets, Wrangler, local
 linking, the Mirasen theme, and the existing Playwright preview behavior. Add `e2e/` to TypeScript coverage when those tests are
-copied. The scaffold still contains `DemoLinks`, a generic favicon, and the welcome
-page; these are temporary scaffold contents.
+copied. The generated demo routes, favicon, tests, and welcome page were removed
+during step 2.
 
-- [ ] Remove generated demo tests/components before porting our own. Do not leave
-      a new public demo page or floating DemoLinks widget.
-- [ ] Preserve the Vitest unit/component project configuration; the existing server
-      suite must work without component tests, without adding a dummy test just to pass.
+- [x] Remove generated demo tests/components before porting our own. No public demo
+      page or floating DemoLinks widget remains.
+- [x] Preserve the Vitest unit/component project configuration without dummy tests.
+      Both projects load with `--passWithNoTests`; the original server suite will be
+      ported and executed in step 4.
+- [x] Add `src/routes/+layout.ts` with `export const prerender = true`.
+- [x] Remove the scaffold favicon and welcome content; keep empty page/layout
+      placeholders with the existing Tailwind stylesheet.
+- [x] Exclude generated `.github/skills/` from Prettier. Its embedded documentation
+      examples produced parser diagnostics despite lint exiting successfully; the
+      exclusion removes this noise without editing generated skills.
+
+Step 2 checkpoint (October 24, 2026; uncommitted changes on top of `3bdab0f`):
+
+| Check                                          | Result                                                                     |
+| ---------------------------------------------- | -------------------------------------------------------------------------- |
+| Svelte autofixer                               | Updated layout/page: no issues or suggestions                              |
+| `npm run check`                                | Passed: 0 errors, 0 warnings                                               |
+| `npm run lint`                                 | Passed, exit 0; clean after the generated-skills exclusion                 |
+| `npm run build`                                | Passed; adapter-static wrote `build/index.html`                            |
+| `npm run test:unit -- --run --passWithNoTests` | Passed configuration check; no test files remain at this intermediate step |
+| Built preview                                  | `/` returns 200; `/demo/playwright` returns 404                            |
+| Removed output                                 | No demo page output or demo/welcome/favicon markup in the root HTML        |
+| Diff whitespace                                | `git diff --check` passed                                                  |
+
+No application code, product tests, dependencies, package scripts, or lockfile were
+ported or changed in this step. Unit and E2E test commands are intentionally
+unchanged; until product tests are ported, ordinary runs may report no tests.
+`--passWithNoTests` was used only for this intermediate verification, not added to
+configuration or scripts. The preview server was stopped after the smoke check.
+
+The sibling diff consists of `.prettierignore`, the root layout/page, the new
+`+layout.ts`, and deletion of eight generated demo/favicon files. The current
+repository only receives this plan update. No commit was created; stop here for
+user review and commit before proceeding to step 3.
 
 ### 3. Port configuration and infrastructure
 
@@ -392,7 +425,8 @@ process as well; a Git revert alone does not change the deployed site.
 
 ## Still to verify by execution
 
-- A successful static build after enabling prerendering and replacing the generated demo.
+- Static builds and tests after the infrastructure/application port; the empty
+  scaffold static build already passes at the step 2 checkpoint.
 - Clean `npm ci` reproducibility: the review checked metadata consistency and used
   the existing installation; it did not reinstall dependencies.
 - Compatibility of Skeleton/Zag/Svelte/Kit 3 during SSR and hydration. The installed
@@ -400,8 +434,8 @@ process as well; a Git revert alone does not change the deployed site.
   alone does not verify menu behavior.
 - Registry mode, local linking, clean installation across the Node matrix, and Cloudflare preview.
 
-Scaffold review did not change application sources, dependencies, configs, or the
-initial commit. Only this plan was updated. The verification commands above generated
-ignored build/test output in the sibling project; its tracked working tree remains clean.
-Original-site baseline verification is now complete as recorded in step 1.
-Verification of the updated sibling scaffold and the actual application port remains pending.
+Initial scaffold review left the sibling project unchanged. Step 1 completed
+original-site baseline verification. Step 2 then changed only the sibling scaffold
+cleanup/prerender files listed above and this plan, leaving its commits unchanged.
+All step 2 changes remain uncommitted for the user's review. Infrastructure porting
+and application porting have not started.
