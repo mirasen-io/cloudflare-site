@@ -56,5 +56,10 @@
 		"@lucide/svelte": "^1.60.0",
 		"@mirasen/chessboard": "^1.5.1",
 		"chess.js": "^1.4.0"
+	},
+	"allowScripts": {
+		"esbuild": true,
+		"workerd": true,
+		"fsevents": true
 	}
 }
