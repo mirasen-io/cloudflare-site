@@ -1,5 +1,35 @@
 # @mirasen/main-website
 
+## 1.4.0
+
+### Minor Changes
+
+- e7065b2: Migrate the site to SvelteKit 3 and Vite 8 while preserving static Cloudflare Workers hosting, existing pages, and chessboard examples. Keep the interface consistently dark and use native links in the mobile navigation menu.
+
+### Patch Changes
+
+- 406794e: dependabot: dependency updates for PR #160
+- 8121f96: dependabot: dependency updates for PR #162
+- 7824c1b: dependabot: dependency updates for PR #163
+- c6e0802: dependabot: dependency updates for PR #164
+- aca37c0: dependabot: dependency updates for PR #168
+- d540895: dependabot: dependency updates for PR #169
+- 2daa780: dependabot: dependency updates for PR #170
+- 3efb4f1: dependabot: dependency updates for PR #171
+- d5f622b: dependabot: dependency updates for PR #172
+- b950304: dependabot: dependency updates for PR #173
+- cd910c0: dependabot: dependency updates for PR #174
+- 66f4bdb: dependabot: dependency updates for PR #175
+- 8908f10: dependabot: dependency updates for PR #176
+- 1065464: dependabot: dependency updates for PR #177
+- bd719b2: dependabot: dependency updates for PR #178
+- 4d53b0c: dependabot: dependency updates for PR #179
+- 722bcbc: dependabot: dependency updates for PR #180
+- 7a9d35f: dependabot: dependency updates for PR #181
+- 620ff34: dependabot: dependency updates for PR #182
+- 21bfee2: dependabot: dependency updates for PR #183
+- 7fb532b: dependabot: dependency updates for PR #184
+
 ## 1.3.3
 
 ### Patch Changes
