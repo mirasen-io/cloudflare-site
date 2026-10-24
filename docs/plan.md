@@ -8,9 +8,10 @@ Status: the user created the sibling minimal scaffold and committed it as
 complete. The user then committed package/editor updates as `3bdab0f` and step 2
 as `77c6c45`, step 3 as `f6f6df3`, and OpenSpec setup as `5d79b1c`.
 Steps 1–4 are complete; the user committed step 4 as `eb2319e`.
-Step 5 automated checks passed, then visual work was stopped at the user's request
-to restore browser tooling/guidance from veche. Those setup changes are uncommitted
-for review; full visual and hosting verification remains pending.
+The user committed browser tooling/guidance as `ba58ecc`. Step 5 registry-mode,
+visual, interaction and local hosting checks passed. The optional real local-link
+check is unavailable until the sibling chessboard package is built. No replacement
+of the original repository or deployment has started.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -411,7 +412,7 @@ from that clean commit; no agent commit was created.
 - [x] Port `e2e/` and run the existing product tests against the migrated pages.
 - [x] Run svelte-autofixer on changed Svelte components until all issues and suggestions are resolved.
 
-Step 4 checkpoint (October 24, 2026; uncommitted changes on top of `5d79b1c`):
+Step 4 checkpoint (October 24, 2026; subsequently committed by the user as `eb2319e`):
 
 - Ported all 39 tracked files under `src/`, `static/`, and `e2e/`, preserving assets,
   Mirasen styles/theme, app shell, navigation, all nine routes, the board lifecycle
@@ -484,8 +485,8 @@ Pre-visual browser-tooling checkpoint (October 24, 2026):
 - Tooling setup passed formatting, lint, check, and build. A final instructions-only
   refinement passed formatting/lint. Stable Playwright/test `1.64.1`, Kit `3.1.0`,
   and Vitest `5.0.5` resolutions remain unchanged. Application code was not changed.
-- No commit was created. Visual comparison, optional local-link verification, and
-  Wrangler hosting checks have not started. Stop at this setup checkpoint for review.
+- No agent commit was created. The user committed this setup as `ba58ecc` before
+  authorizing the final visual and hosting checks below.
 
 Tooling validation logs are under ignored `artifacts/migration-browser-tooling/`.
 Use the new project's local CLI and freshly started dev servers for the next visual
@@ -505,22 +506,48 @@ Currently, `test:e2e` runs `playwright install` followed by tests; without
 explicitly for browser installation; an already prepared environment may run the
 local Playwright CLI directly.
 
-- [ ] Run checks with the registry chessboard package in a clean environment without
+- [x] Run checks with the registry chessboard package in a clean environment without
       a global link. Verify the registry URL and that `npm ci` leaves the lockfile unchanged.
-- [ ] Separately verify the optional local link and access to the sibling package;
-      do not change the user's global npm links to test registry mode.
-- [ ] Confirm that the existing 11 unit tests and 4 e2e tests pass and have not been
+- [ ] Actual optional local-link runtime check: unavailable because the sibling
+      `../chessboard` has no `dist` and no global link is registered. Registry mode
+      and the helper's no-link branch passed. The sibling package and global links
+      were not modified; this is an explicit remaining limitation.
+- [x] Confirm that the existing 11 unit tests and 4 e2e tests pass and have not been
       replaced by demo tests.
-- [ ] Compare all nine pages at 1440×900 and 390×844: theme, copy, links, favicon,
+- [x] Compare all nine pages at 1440×900 and 390×844: theme, copy, links, favicon,
       footer, no overflow, and no new demo elements.
-- [ ] Check desktop/mobile AppBar behavior: active links, mouse/Enter/Space, Escape,
+- [x] Check desktop/mobile AppBar behavior: active links, mouse/Enter/Space, Escape,
       focus restoration, and external links. Verify navigation updates between sections.
-- [ ] Check example controls: orientation, reset, promotion, chess.js status, and the
+- [x] Check example controls: orientation, reset, promotion, chess.js status, and the
       12-board live grid; navigate away and back without errors or lingering timers.
-- [ ] Run local Wrangler from devDependencies: all nine URLs and assets work, unknown
+- [x] Run local Wrangler from devDependencies: all nine URLs and assets work, unknown
       URLs return 404, and trailing slash URLs redirect correctly to slashless URLs.
       Check direct access to nested pages as well as client navigation.
-- [ ] Record actual commands, versions, and results, including differences from the baseline.
+- [x] Record actual commands, versions, and results, including differences from the baseline.
+
+Final step 5 checkpoint (October 24, 2026; verified `ba58ecc`):
+
+- Clean install preserved the lockfile; lint/check/build, 11 unit tests and 4 E2E
+  tests passed. The same 4 E2E tests passed against local Wrangler static hosting.
+- Compared all nine routes at desktop/mobile sizes; no meaningful visual differences,
+  page errors, overflow, geometry changes or main-content link changes were found.
+  Reviewed comparison sheets and enlarged captures. Of 18 image pairs, 15 were
+  exactly equal; remaining differences were negligible button-edge rasterization.
+  Animated grid board/status regions were masked only for pixel comparison.
+- Home/chess.js/live-grid pairs at 767, 768 and 1024px were also exactly equal.
+  Menus, navigation, promotion controls and SPA board/timer cleanup passed targeted
+  browser checks. This includes canceling a pending computer reply and all 12 grid
+  timers, then remounting exactly 12 boards on browser Back.
+- Wrangler 4.152.0 served every page and checked asset correctly; unknown/demo URLs
+  returned 404, and non-root slash URLs redirected with 307. No remote upload occurred.
+- The optional actual local-link mode remains unverified for the prerequisite above;
+  Node 22/26 and Cloudflare PR preview remain CI/later-stage checks.
+- Evidence and detailed limits: `artifacts/migration-step5/report.md`, screenshots,
+  pixel comparisons, interaction reports, HTTP results and final check logs.
+- The named browser session, both dev servers and Wrangler were stopped. New project
+  working tree is clean; only this plan is changed in the original repository.
+
+Stop here for review. Step 6 has not started; the original repository remains intact.
 
 ### 6. Copy the result back into this repository
 
@@ -577,5 +604,6 @@ process as well; a Git revert alone does not change the deployed site.
 Initial scaffold review left the sibling project unchanged. Step 1 completed
 original-site baseline verification. The user committed steps 2 and 3, then the
 Claude/Codex OpenSpec integration. Step 4 ported application code/assets/tests and
-updated this plan; its changes remain uncommitted for user review. Full step 5
-visual/hosting verification and replacement of the original repository remain pending.
+updated this plan; its changes remain uncommitted for user review. Step 5 registry-mode visual/hosting verification has passed, with the optional
+local-link prerequisite explicitly unresolved. Replacement of the original repository
+and remote CI/preview/release verification remain pending.
