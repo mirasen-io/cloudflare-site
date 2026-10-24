@@ -11,8 +11,9 @@ Steps 1–4 are complete; the user committed step 4 as `eb2319e`.
 The user committed browser tooling/guidance as `ba58ecc`. Step 5 registry-mode,
 visual, interaction and local hosting checks passed. The optional local-link runtime
 check is WON'T DO by user decision and is not outstanding work. Step 6 is now
-complete: the verified tree is in this original checkout, with all replacement
-changes uncommitted for review. No deployment has started.
+complete and committed by the user as `0d1c1d5`. The user also committed the
+always-dark theme fix as `07d8ed5` and native Skeleton menu links as `e9edd07`.
+No deployment has started.
 Completed checks and remaining work are recorded below.
 
 ## Plan references
@@ -644,7 +645,12 @@ process as well; a Git revert alone does not change the deployed site.
   outstanding work. Registry-mode clean installation, SSR/hydration, UI behavior,
   static output and product tests passed in both the sibling and original checkout.
 
-Steps 1–6 are complete locally. The verified Kit 3 project is now in the original
-repository on `migrate/sk-3`, with all step 6 changes uncommitted for the user's
-review. The sibling project remains unchanged. Remote PR/CI/preview/release checks
-remain pending; no commit, push, merge or deployment was performed by the agent.
+Steps 1–6 are complete locally. The user committed step 6 as `0d1c1d5` in the
+original repository on `migrate/sk-3`, followed by the always-dark theme fix
+(`07d8ed5`) and native Skeleton menu links (`e9edd07`). These follow-up changes
+passed format/lint/check/build, and the menu change passed all 11 unit tests,
+all 4 existing E2E tests, Svelte autofixer and targeted desktop/mobile browser
+checks for keyboard navigation, focus restoration and native link activation.
+The working tree was clean when this status was reviewed. The sibling project
+remains unchanged. Step 7 PR/CI/preview/release checks remain pending; no commit,
+push, merge or deployment was performed by the agent.
