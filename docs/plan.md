@@ -1,6 +1,6 @@
 # mirasen libraries site transition plan
 
-Status: website migration implemented and validated in PR #194; production cutover and external updates remain pending.
+Status: website migration implemented and validated in PR #194; chessboard library alignment PRs #150 and #123 are open; production cutover, License Gate updates, and other external work remain pending.
 Updated: 2026-11-02.
 
 ## Goal and decisions
@@ -117,14 +117,23 @@ Google's understanding of the brand and its products must reflect **real open-so
 
 Each repository should have a **separate, focused change** following its own `AGENTS.md` and validation workflow.
 
-| Repository                                                           | Verified changes needed                                                                                                                                                                                                |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`chessboard`](https://github.com/mirasen-io/chessboard)             | `package.json` `homepage: https://mirasen.io/chessboard`; four demo links in `README.md` (currently `.html` URLs); GitHub repository **About → Website** currently `https://mirasen.io/chessboard`.                    |
-| [`react-chessboard`](https://github.com/mirasen-io/react-chessboard) | `package.json` `homepage: https://mirasen.io/chessboard`; four demo links in `README.md` (currently extensionless URLs); GitHub repository **About → Website** currently `https://mirasen.io/chessboard`.              |
-| [`license-gate`](https://github.com/mirasen-io/license-gate)         | `package.json` `homepage: https://mirasen.io/license-gate`; GitHub repository About → Website was empty when checked — set to the verified new license-gate URL if useful. Check README for other outdated live links. |
+| Repository                                                           | Initial audit findings (before the follow-up PRs)                                                                                         |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [`chessboard`](https://github.com/mirasen-io/chessboard)             | `package.json` homepage and four README demos used `mirasen.io`; README and GitHub About description used uppercase `Mirasen`.            |
+| [`react-chessboard`](https://github.com/mirasen-io/react-chessboard) | `package.json` homepage and four README demos used `mirasen.io`; README used uppercase `Mirasen`.                                         |
+| [`license-gate`](https://github.com/mirasen-io/license-gate)         | `package.json` homepage used `mirasen.io`; GitHub repository About → Website was empty when checked. README live links still need review. |
 
-- [ ] Update each library `homepage` and all user-facing demo links to the working Worker origin, keeping correct paths.
-- [ ] Update GitHub repository About/Website settings and relevant descriptions, without renaming the three package repositories.
+### Chessboard library follow-up — 2026-11-02
+
+- [x] `chessboard`: updated package homepage, package author casing, four README demo URLs, and active README branding; added a patch changeset. [PR #150](https://github.com/mirasen-io/chessboard/pull/150) is open against `main`.
+- [x] `react-chessboard`: updated package homepage, four README demo URLs, and active README branding; added a patch changeset. [PR #123](https://github.com/mirasen-io/react-chessboard/pull/123) is open against `main`.
+- [x] Verified both GitHub About → Website fields already point to `https://chessboard.k-tarmyshov.workers.dev/chessboard` and all four canonical demo URLs return HTTP 200.
+- [ ] Update the core repository's GitHub About description to lowercase `mirasen`; the GitHub CLI metadata update was rejected with HTTP 403 (`Resource not accessible by integration`).
+- [ ] Update License Gate package metadata and review its active README links.
+
+Validation for the two PRs: formatting, lint, and TypeScript checks pass in both repositories. The TypeScript portion of `npm run build` passes, but its `publint` pack discovery fails in this runtime because `npm pack` creates a tarball without returning its filename on stdout. `publint run --pack false` passes for React and reports one existing nested SvelteKit `imports` warning for core.
+
+- [ ] Update other GitHub repository About/Website settings and relevant descriptions, without renaming the package repositories.
 - [ ] Remember: changing source `package.json` does not retroactively edit npm metadata of already-published versions. New `homepage` metadata reaches npm when the library is next published; avoid gratuitous releases solely for metrics.
 - [ ] Search other active repositories in `mirasen-io` for live links; target only confirmed instances, not historical snapshots.
 
