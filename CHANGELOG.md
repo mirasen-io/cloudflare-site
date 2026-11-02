@@ -1,5 +1,11 @@
 # @mirasen/main-website
 
+## 1.4.3
+
+### Patch Changes
+
+- eaf839e: Reposition the site as a catalog for the three published mirasen libraries and move canonical metadata to the Worker origin.
+
 ## 1.4.2
 
 ### Patch Changes
