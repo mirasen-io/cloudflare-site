@@ -1,6 +1,6 @@
 # mirasen libraries site transition plan
 
-Status: website migration implemented and validated in PR #194; library profile PR #1 and package alignment PRs #150, #123, and #46 are open. Manual GitHub Settings updates are complete (organization confirmed by owner; core About verified via GitHub API). Final workers.dev hostname decision, PR merges, releases, and production verification remain pending.
+Status: website migration implemented and validated in PR #194; library profile PR #1 and package alignment PRs #150, #123, and #46 are open. Manual GitHub Settings updates are complete (organization confirmed by owner; core About verified via GitHub API). The final `mirasen` workers.dev hostname has been chosen; the Cloudflare rename, coordinated PR link/config updates, PR merges, releases, and production verification remain pending.
 Updated: 2026-11-02.
 
 ## Goal and decisions
@@ -152,9 +152,13 @@ Validation for the two PRs: formatting, lint, and TypeScript checks pass in both
 - [x] In `mirasen-io/chessboard` **About** settings, changed the description to `mirasen chessboard — open-source TypeScript chessboard library.` Verified through the GitHub repository API on 2026-11-02; its homepage is also correct for the currently selected Worker host.
 - [x] Confirmed the `.github` and `cloudflare-site` About descriptions are blank; their website links are already correct where set. Keep GitHub and npm organization identifiers unchanged.
 
-### Hostname decision before merging — raised 2026-11-02
+### Final Worker hostname — decision recorded 2026-11-02
 
-- [ ] Decide whether to keep `https://chessboard.k-tarmyshov.workers.dev` or rename the Worker to use `https://mirasen.k-tarmyshov.workers.dev`. The latter matches the three-library catalog better, but no rename or URL edits are approved yet. Cloudflare uses the Worker name as the first label of its `workers.dev` hostname. If renaming, coordinate the Cloudflare dashboard Worker name with `wrangler.jsonc`, all affected open site/library/profile PRs, GitHub Settings, sitemap, canonical/OG/JSON-LD, and previews before merging; revalidate afterward. Do not assume the old Worker hostname redirects automatically.
+- [x] Choose `https://mirasen.k-tarmyshov.workers.dev` as the canonical destination for the three-library catalog instead of `https://chessboard.k-tarmyshov.workers.dev`. The owner explicitly approved the `mirasen` hostname. This is a decision only; the rename and repo updates are **not** yet verified or complete.
+- [ ] Owner: rename the **existing** Cloudflare Worker `chessboard` to `mirasen` in the dashboard (do not create a second Worker or change the account subdomain). Verify the new `workers.dev` URL responds and the existing `mirasen.io` binding is not accidentally removed.
+- [ ] Update `wrangler.jsonc` (`name: mirasen`) and every active target-origin reference in the open site, core, React, License Gate, and organization-profile PR branches; update metadata, sitemap, robots, demos, README links and GitHub About/Website values as applicable. Keep old-domain references only where legitimately historical. Re-run CI, Cloudflare preview, and link checks before merging.
+- [ ] Owner: after the coordinated PR updates, change GitHub organization Website and relevant repository About → Website fields from `chessboard.k-tarmyshov.workers.dev` to `mirasen.k-tarmyshov.workers.dev` (preserving appropriate paths). These are the follow-up manual settings changes; the already corrected descriptions and organization name do not need repeating.
+- [ ] Confirm production release/deploy targets the **existing renamed** `mirasen` Worker and not a newly created `chessboard` Worker; do not assume the old workers.dev hostname redirects.
 
 ## 5. Website changelog and optional repository renaming
 
