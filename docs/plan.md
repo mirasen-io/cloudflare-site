@@ -1,6 +1,6 @@
 # mirasen libraries site transition plan
 
-Status: website migration implemented and validated in PR #194; chessboard library alignment PRs #150 and #123 are open; production cutover, License Gate updates, and other external work remain pending.
+Status: website migration implemented and validated in PR #194; library profile PR #1 and chessboard alignment PRs #150 and #123 are open; organization settings, production cutover, License Gate updates, and other external work remain pending.
 Updated: 2026-11-02.
 
 ## Goal and decisions
@@ -128,7 +128,7 @@ Each repository should have a **separate, focused change** following its own `AG
 - [x] `chessboard`: updated package homepage, package author casing, four README demo URLs, and active README branding; added a patch changeset. [PR #150](https://github.com/mirasen-io/chessboard/pull/150) is open against `main`.
 - [x] `react-chessboard`: updated package homepage, four README demo URLs, and active README branding; added a patch changeset. [PR #123](https://github.com/mirasen-io/react-chessboard/pull/123) is open against `main`.
 - [x] Verified both GitHub About → Website fields already point to `https://chessboard.k-tarmyshov.workers.dev/chessboard` and all four canonical demo URLs return HTTP 200.
-- [ ] Update the core repository's GitHub About description to lowercase `mirasen`; the GitHub CLI metadata update was rejected with HTTP 403 (`Resource not accessible by integration`).
+- [ ] Update the core repository's GitHub About description from `Mirasen Chessboard — open-source TypeScript chessboard platform.` to `mirasen chessboard — open-source TypeScript chessboard library.` The GitHub CLI update was rejected with HTTP 403; exact manual action is listed in §4.
 - [ ] Update License Gate package metadata and review its active README links.
 
 Validation for the two PRs: formatting, lint, and TypeScript checks pass in both repositories. The TypeScript portion of `npm run build` passes, but its `publint` pack discovery fails in this runtime because `npm pack` creates a tarball without returning its filename on stdout. The generated package tarballs both pass direct `publint` checks; workspace-level `publint run --pack false` also passes, with one existing nested SvelteKit `imports` warning for core.
@@ -139,9 +139,12 @@ Validation for the two PRs: formatting, lint, and TypeScript checks pass in both
 
 ## 4. GitHub organization profile and settings
 
-- [ ] [`mirasen-io/.github/profile/README.md`](https://github.com/mirasen-io/.github/blob/main/profile/README.md) currently says "structured chess learning" and "Products", lists Chess Lore, and links to `mirasen.io`. Replace with a concise **Libraries** profile featuring core chessboard, React integration and License Gate, GitHub/npm, and the new demo site.
-- [ ] Review [GitHub organization public profile](https://github.com/mirasen-io) settings: the publicly displayed description currently talks about structured chess learning/Chess Lore, and the public website link points to `mirasen.io`. Change both to library-focused information and the Worker URL. These organization settings are **not** stored in the profile README.
-- [ ] Review other repo About/Website settings for deprecated links, including `cloudflare-site`, and keep the GitHub/npm organization identities unchanged.
+- [x] Replaced the outdated organization profile README with a lowercase `mirasen` libraries catalog linking to the core chessboard, React integration, License Gate, GitHub/npm, and the Worker site. [PR #1](https://github.com/mirasen-io/.github/pull/1) is open against `main`.
+- [x] Reviewed the [GitHub organization public profile](https://github.com/mirasen-io) settings. The current display name is `Mirasen`; the description is `Structured chess learning tools and systems. Home to Chess Lore and Chessboard.`; the website is `https://mirasen.io`.
+- [ ] In organization **Settings → Profile**, set **Name** to `mirasen`, **Description** to `Open-source chessboard libraries and npm license tooling from mirasen.`, and **Website** to `https://chessboard.k-tarmyshov.workers.dev`. The GitHub API update returned HTTP 403 (`Resource not accessible by integration`).
+- [x] Reviewed relevant repository About fields: `cloudflare-site` links to the Worker root; `chessboard` and `react-chessboard` link to `/chessboard`; `license-gate` links to `/license-gate`. The React and License Gate descriptions have no outdated product or brand copy.
+- [ ] In `mirasen-io/chessboard` **About** settings, change the description to `mirasen chessboard — open-source TypeScript chessboard library.` Its homepage is already correct; the description update returned HTTP 403 (`Resource not accessible by integration`).
+- [x] Confirmed the `.github` and `cloudflare-site` About descriptions are blank; their website links are already correct where set. Keep GitHub and npm organization identifiers unchanged.
 
 ## 5. Website changelog and optional repository renaming
 
