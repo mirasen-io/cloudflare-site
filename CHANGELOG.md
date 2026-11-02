@@ -1,5 +1,11 @@
 # @mirasen/main-website
 
+## 1.4.2
+
+### Patch Changes
+
+- 1779037: dependabot: dependency updates for PR #191
+
 ## 1.4.1
 
 ### Patch Changes
