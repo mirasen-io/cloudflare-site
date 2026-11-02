@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mirasen.io</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chess-lore</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard/examples</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/minimal</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/minimal</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/promotion</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/promotion</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/chessjs</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/chessjs</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/live-games-grid</loc>
   </url>
   <url>
-    <loc>https://mirasen.io/chessboard/examples/live-games-grid</loc>
-  </url>
-  <url>
-    <loc>https://mirasen.io/license-gate</loc>
+    <loc>https://mirasen.k-tarmyshov.workers.dev/license-gate</loc>
   </url>
 </urlset>

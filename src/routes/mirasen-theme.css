@@ -85,7 +85,7 @@
 	--color-brand-dark: var(--color-primary-500);
 	--color-brand-contrast-dark: var(--color-primary-contrast-500);
 
-	/* Primary: old Mirasen accent scale, centered around #9cb8ff */
+	/* Primary: old mirasen accent scale, centered around #9cb8ff */
 	--color-primary-50: oklch(98% 0.008 268deg);
 	--color-primary-100: oklch(95.5% 0.018 268deg);
 	--color-primary-200: oklch(91.5% 0.035 269deg);
@@ -247,7 +247,7 @@
 	--color-error-contrast-900: var(--color-error-contrast-light);
 	--color-error-contrast-950: var(--color-error-contrast-light);
 
-	/* Surface: old Mirasen deep navy, not neutral gray */
+	/* Surface: old mirasen deep navy, not neutral gray */
 	--color-surface-50: oklch(96.12% 0.018 269.09deg);
 	--color-surface-100: oklch(90% 0.024 269deg);
 	--color-surface-200: oklch(81.22% 0.041 269.9deg);

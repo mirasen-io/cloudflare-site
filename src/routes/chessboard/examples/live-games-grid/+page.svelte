@@ -5,10 +5,10 @@
 	const examplesHref = resolve('/chessboard/examples');
 	const chessjsHref = resolve('/chessboard/examples/chessjs');
 
-	const pageTitle = 'Live games grid — Mirasen Chessboard examples';
+	const pageTitle = 'Live games grid — mirasen Chessboard examples';
 	const pageDescription =
-		'Twelve independent Mirasen Chessboard boards running chess.js games on randomized timers.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/live-games-grid';
+		'Twelve independent mirasen Chessboard boards running chess.js games on randomized timers.';
+	const pageUrl = 'https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/live-games-grid';
 
 	const metaPresets: readonly Meta[] = [
 		{

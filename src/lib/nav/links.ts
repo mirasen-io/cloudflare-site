@@ -37,7 +37,7 @@ export type NavConfig = {
 
 const brand: InternalNavLink = {
 	href: '/',
-	label: 'Mirasen',
+	label: 'mirasen',
 	visual: { type: 'image', src: logoShort, alt: '', class: 'size-12' }
 };
 
@@ -64,8 +64,8 @@ const npmLinkCommon = {
 } as const;
 
 const pageNavCommon: NavLink[] = [
-	{ href: '/chess-lore', label: 'Chess Lore', activeMatch: 'prefix' },
-	{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' }
+	{ href: '/chessboard', label: 'Chessboard', activeMatch: 'prefix' },
+	{ href: '/license-gate', label: 'License Gate', activeMatch: 'prefix' }
 ];
 
 export const rootNav: NavConfig = {

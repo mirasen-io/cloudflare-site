@@ -8,10 +8,10 @@
 	const githubHref = 'https://github.com/mirasen-io/chessboard';
 	const npmHref = 'https://www.npmjs.com/package/@mirasen/chessboard';
 
-	const pageTitle = 'Minimal interactive example — Mirasen Chessboard examples';
+	const pageTitle = 'Minimal interactive example — mirasen Chessboard examples';
 	const pageDescription =
-		'A minimal interactive Mirasen Chessboard example with free movement, orientation toggle, position reset, and a random-move control.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/minimal';
+		'A minimal interactive mirasen Chessboard example with free movement, orientation toggle, position reset, and a random-move control.';
+	const pageUrl = 'https://mirasen.k-tarmyshov.workers.dev/chessboard/examples/minimal';
 
 	let boardEl: HTMLDivElement;
 	let orientation: 'white' | 'black' = $state('white');

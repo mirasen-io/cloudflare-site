@@ -214,7 +214,7 @@
 	margin-bottom: 0;
 }
 
-/* Chess Lore spotlight */
+/* Feature layouts */
 
 :where([data-theme='mirasen'] .spotlight-grid) {
 	display: grid;
@@ -231,12 +231,6 @@
 
 :where([data-theme='mirasen'] .spotlight-copy p) {
 	margin: 0;
-}
-
-:where([data-theme='mirasen'] .theme-list) {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
 }
 
 :where([data-theme='mirasen'] .numbered-list) {

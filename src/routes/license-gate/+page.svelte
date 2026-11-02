@@ -4,18 +4,19 @@
 	const readmeHref = 'https://github.com/mirasen-io/license-gate/blob/main/README.md';
 	const changelogHref = 'https://github.com/mirasen-io/license-gate/blob/main/CHANGELOG.md';
 
-	const pageTitle = 'Mirasen License Gate — Strict license policy gate for npm projects';
+	const pageTitle = 'mirasen License Gate — Strict license policy gate for npm projects';
 	const pageDescription =
-		'Mirasen License Gate is a strict, local, default-deny license policy gate for npm projects — single package, workspaces, and monorepos. Licenses are compared verbatim; unknown or unapproved strings fail the build.';
+		'mirasen License Gate is a strict, local, default-deny license policy gate for npm projects — single package, workspaces, and monorepos. Licenses are compared verbatim; unknown or unapproved strings fail the build.';
 	const ogDescription =
 		'A strict, local, default-deny license policy gate for npm projects — single package, workspaces, and monorepos.';
-	const pageUrl = 'https://mirasen.io/license-gate';
-	const orgUrl = 'https://mirasen.io';
+	const pageUrl = 'https://mirasen.k-tarmyshov.workers.dev/license-gate';
+	const orgUrl = 'https://mirasen.k-tarmyshov.workers.dev';
+	const orgId = `${orgUrl}/#organization`;
 
 	const jsonLd = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'SoftwareSourceCode',
-		name: 'Mirasen License Gate',
+		name: 'mirasen License Gate',
 		alternateName: '@mirasen/license-gate',
 		description:
 			'A strict, local, default-deny license policy gate for npm projects, workspaces, and monorepos. Reads the installed dependency graph via @npmcli/arborist and checks every package license verbatim against a local allowlist.',
@@ -40,8 +41,10 @@
 		],
 		publisher: {
 			'@type': 'Organization',
-			name: 'Mirasen',
-			url: orgUrl
+			'@id': orgId,
+			name: 'mirasen',
+			url: orgUrl,
+			sameAs: ['https://github.com/mirasen-io', 'https://www.npmjs.com/org/mirasen']
 		}
 	});
 
@@ -68,8 +71,8 @@ npx license-gate check`;
 <main class="page-shell">
 	<section class="hero">
 		<div class="hero-copy">
-			<p class="eyebrow">Open-source engineering tool by Mirasen</p>
-			<h1 class="hero-title">Mirasen License Gate</h1>
+			<p class="eyebrow">Open-source engineering tool by mirasen</p>
+			<h1 class="hero-title">mirasen License Gate</h1>
 			<p class="lead">
 				A strict, local, default-deny license policy gate for npm projects — single package,
 				workspaces, and monorepos.
