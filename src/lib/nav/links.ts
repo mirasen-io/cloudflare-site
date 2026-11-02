@@ -37,7 +37,7 @@ export type NavConfig = {
 
 const brand: InternalNavLink = {
 	href: '/',
-	label: 'Mirasen',
+	label: 'mirasen',
 	visual: { type: 'image', src: logoShort, alt: '', class: 'size-12' }
 };
 

@@ -6,7 +6,7 @@
 	const npmHref = 'https://www.npmjs.com/package/@mirasen/chessboard';
 	const reactGithubHref = 'https://github.com/mirasen-io/react-chessboard';
 	const reactNpmHref = 'https://www.npmjs.com/package/@mirasen/react-chessboard';
-	const pageTitle = 'Mirasen Chessboard — Core library and React integration';
+	const pageTitle = 'mirasen Chessboard — Core library and React integration';
 	const pageDescription =
 		'Explore the framework-agnostic @mirasen/chessboard library and its separate React integration, @mirasen/react-chessboard.';
 	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard';
@@ -19,7 +19,7 @@
 			{
 				'@type': 'Organization',
 				'@id': orgId,
-				name: 'Mirasen',
+				name: 'mirasen',
 				url: 'https://chessboard.k-tarmyshov.workers.dev',
 				sameAs: ['https://github.com/mirasen-io', 'https://www.npmjs.com/org/mirasen']
 			},
@@ -86,7 +86,7 @@
 <main class="page-shell">
 	<section class="hero">
 		<div class="hero-copy">
-			<p class="eyebrow">Open-source chess libraries by Mirasen</p>
+			<p class="eyebrow">Open-source chess libraries by mirasen</p>
 			<h1 class="hero-title">Chessboard for TypeScript and React</h1>
 			<p class="lead">
 				A framework-agnostic core library and a separate React integration for interactive chess

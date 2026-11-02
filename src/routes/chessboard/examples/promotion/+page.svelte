@@ -8,9 +8,9 @@
 	const githubHref = 'https://github.com/mirasen-io/chessboard';
 	const npmHref = 'https://www.npmjs.com/package/@mirasen/chessboard';
 
-	const pageTitle = 'Promotion flow — Mirasen Chessboard examples';
+	const pageTitle = 'Promotion flow — mirasen Chessboard examples';
 	const pageDescription =
-		'A promotion handling example for Mirasen Chessboard with deferred promotion selection, optional auto-promotion, and built-in annotations.';
+		'A promotion handling example for mirasen Chessboard with deferred promotion selection, optional auto-promotion, and built-in annotations.';
 	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/promotion';
 
 	const START_POSITION: PiecePositionRecordString = {

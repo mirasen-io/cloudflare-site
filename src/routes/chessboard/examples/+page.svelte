@@ -10,9 +10,9 @@
 	const githubHref = 'https://github.com/mirasen-io/chessboard';
 	const npmHref = 'https://www.npmjs.com/package/@mirasen/chessboard';
 
-	const pageTitle = 'Mirasen Chessboard Examples';
+	const pageTitle = 'mirasen Chessboard Examples';
 	const pageDescription =
-		'Interactive examples for Mirasen Chessboard, the open-source chessboard platform by Mirasen.';
+		'Interactive examples for mirasen Chessboard, the open-source chessboard platform by mirasen.';
 	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples';
 </script>
 
@@ -29,10 +29,10 @@
 <main class="page-shell">
 	<section class="hero">
 		<div class="hero-copy">
-			<p class="eyebrow">Mirasen Chessboard examples</p>
+			<p class="eyebrow">mirasen Chessboard examples</p>
 			<h1 class="hero-title">Interactive board examples</h1>
 			<p class="lead">
-				Explore focused examples for Mirasen Chessboard interaction, rendering, annotations,
+				Explore focused examples for mirasen Chessboard interaction, rendering, annotations,
 				promotion, and chess.js integration.
 			</p>
 			<div class="hero-actions">
@@ -128,7 +128,7 @@
 			<p class="kicker">Library links</p>
 			<h2 id="library-heading" class="section-title">Use the package in your own project</h2>
 			<p class="section-lead">
-				Mirasen Chessboard is published as an open-source package and developed in public on GitHub.
+				mirasen Chessboard is published as an open-source package and developed in public on GitHub.
 			</p>
 		</header>
 

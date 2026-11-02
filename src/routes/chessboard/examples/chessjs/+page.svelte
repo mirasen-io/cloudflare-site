@@ -18,9 +18,9 @@
 	const githubHref = 'https://github.com/mirasen-io/chessboard';
 	const npmHref = 'https://www.npmjs.com/package/@mirasen/chessboard';
 
-	const pageTitle = 'chess.js game example — Mirasen Chessboard examples';
+	const pageTitle = 'chess.js game example — mirasen Chessboard examples';
 	const pageDescription =
-		'A rules-backed Mirasen Chessboard example using the built-in chess.js adapter for legal destinations, promotion, castling, en passant, random computer replies, annotations, animation, and mobile drag controls.';
+		'A rules-backed mirasen Chessboard example using the built-in chess.js adapter for legal destinations, promotion, castling, en passant, random computer replies, annotations, animation, and mobile drag controls.';
 	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/chessjs';
 
 	const PLAYER_COLOR = 'w' as const;
@@ -237,7 +237,7 @@
 					<p class="kicker">chess.js game example</p>
 					<h1 id="example-heading" class="section-title">Play against a random-move computer</h1>
 					<p class="section-lead">
-						This example connects Mirasen Chessboard to chess.js through the built-in adapter.
+						This example connects mirasen Chessboard to chess.js through the built-in adapter.
 						chess.js owns the rules and game state; the board owns interaction, legal targets,
 						annotations, promotion UI, animation, and mobile drag behavior.
 					</p>

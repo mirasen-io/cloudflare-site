@@ -5,9 +5,9 @@
 	const examplesHref = resolve('/chessboard/examples');
 	const licenseGateHref = resolve('/license-gate');
 	const siteUrl = 'https://chessboard.k-tarmyshov.workers.dev';
-	const pageTitle = 'Mirasen — Open-source libraries';
+	const pageTitle = 'mirasen — Open-source libraries';
 	const pageDescription =
-		'Mirasen publishes open-source libraries for chess interfaces and npm license policy checks.';
+		'mirasen publishes open-source libraries for chess interfaces and npm license policy checks.';
 	const pageUrl = siteUrl;
 
 	const libraries = [
@@ -44,9 +44,9 @@
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
 		'@id': `${siteUrl}/#organization`,
-		name: 'Mirasen',
+		name: 'mirasen',
 		url: pageUrl,
-		description: 'Mirasen publishes open-source libraries for chess interfaces and npm tooling.',
+		description: 'mirasen publishes open-source libraries for chess interfaces and npm tooling.',
 		sameAs: ['https://github.com/mirasen-io', 'https://www.npmjs.com/org/mirasen']
 	});
 
@@ -54,7 +54,7 @@
 		'@context': 'https://schema.org',
 		'@type': 'WebSite',
 		'@id': `${siteUrl}/#website`,
-		name: 'Mirasen Libraries',
+		name: 'mirasen Libraries',
 		url: pageUrl,
 		publisher: { '@id': `${siteUrl}/#organization` }
 	});
@@ -81,7 +81,7 @@
 <main class="page-shell">
 	<section class="hero">
 		<div class="hero-copy">
-			<p class="eyebrow">Open-source libraries by Mirasen</p>
+			<p class="eyebrow">Open-source libraries by mirasen</p>
 			<h1 class="hero-title">Libraries for chess and npm tooling</h1>
 			<p class="lead">
 				Small, focused TypeScript packages for building chess interfaces and checking npm license
