@@ -1,11 +1,11 @@
 # mirasen libraries site transition plan
 
-Status: website migration implemented and validated in PR #194; library profile PR #1 and package alignment PRs #150, #123, and #46 are open. Manual GitHub Settings updates are complete (organization confirmed by owner; core About verified via GitHub API). The final `mirasen` workers.dev hostname has been chosen; the Cloudflare rename, coordinated PR link/config updates, PR merges, releases, and production verification remain pending.
+Status: the library-site migration is implemented on the five existing PR branches. The owner renamed the existing Worker to `mirasen` and manually saved the organization and four repository Website fields; all seven settings values have now been independently verified with GitHub GET APIs. The site config and active links now use `https://mirasen.k-tarmyshov.workers.dev`. All five PRs remain open. Local validation is recorded below; final-head PR CI/preview results, merges, releases, production smoke tests, and SEO/indexing follow-up remain open until completed.
 Updated: 2026-11-02.
 
 ## Goal and decisions
 
-Convert the current chess-learning product landing site into a small, durable **mirasen open-source libraries** site. Keep the existing Cloudflare Workers Static Assets hosting and GitHub Actions deployment, now using the Worker named `chessboard`.
+Convert the current chess-learning product landing site into a small, durable **mirasen open-source libraries** site. Keep the existing Cloudflare Workers Static Assets hosting and GitHub Actions deployment, using the existing Cloudflare Worker named `mirasen`.
 
 The site should present only these three published packages:
 
@@ -18,11 +18,12 @@ Do **not** advertise Chess Lore as an active product, structured chess learning,
 ## Already completed — do not repeat
 
 - `mirasen.io` Registrar auto-renewal is off; registration ends **2027-03-11**.
-- The **existing** Cloudflare Worker was renamed from `cloudflare-site` to `chessboard` in the dashboard, preserving its deployment history and the `mirasen.io` route.
-- [PR #193](https://github.com/mirasen-io/cloudflare-site/pull/193) set `wrangler.jsonc` `name` to `chessboard` on `main`. PR previews and E2E passed.
-- The [v1.4.2 release deployment](https://github.com/mirasen-io/cloudflare-site/actions/runs/41410706342) succeeded and printed `https://chessboard.k-tarmyshov.workers.dev`.
+- Historical deployment: the existing Worker was first renamed from `cloudflare-site` to `chessboard`; PR #193 set `wrangler.jsonc` to that name. The [v1.4.2 deployment](https://github.com/mirasen-io/cloudflare-site/actions/runs/41410706342) printed `https://chessboard.k-tarmyshov.workers.dev`. These records describe the earlier state.
+- The owner has since renamed that **same existing Worker** from `chessboard` to `mirasen`, preserving its deployment history and existing `mirasen.io` route. The owner confirmed the new URL works. This branch now sets `wrangler.jsonc` `name` to `mirasen` while retaining the static assets directory, HTML handling, compatibility date/flags, and Workers deployment architecture.
+- A read-only HTTP check on 2026-11-02 returned 200 for the new origin, all seven library/example paths, `robots.txt`, and `sitemap.xml`. `/chess-lore` also returned 200 on the currently published service, so retirement is not yet confirmed on production and must be checked after the approved cutover.
+- The owner manually saved GitHub organization profile fields and the four repository Website fields. Current values were independently verified with GET APIs; see section 4.
 
-**Target origin:** `https://chessboard.k-tarmyshov.workers.dev`. Keep existing working paths when replacing the origin, subject to URL verification. The old `mirasen.io` URL can remain active until expiry; do not remove its routing prematurely.
+**Final canonical origin:** `https://mirasen.k-tarmyshov.workers.dev`. Keep existing working routes at this origin. `https://chessboard.k-tarmyshov.workers.dev` is a superseded deployment hostname, not a current target. Keep the existing `mirasen.io` binding until the owner separately approves any DNS/route changes; the domain registration currently ends **2027-03-11**.
 
 ## 0. Mandatory discovery and impact audit — completed before implementation
 
@@ -34,7 +35,7 @@ The discovery audit below was completed before implementation. The initial inven
 - [x] Audit crawl/index entry points and legacy addresses: `robots.txt`, `sitemap.xml` or sitemap generation **if present**, metadata in prerendered output, Cloudflare bindings/redirects, and URLs previously indexed for `mirasen.io`. Check whether `/chess-lore` should return 404/410 or redirect to an appropriate surviving page; do not blindly redirect product traffic to an unrelated library page.
 - [x] Audit the distinct role of each library: core `@mirasen/chessboard`, React wrapper `@mirasen/react-chessboard`, and `@mirasen/license-gate`. Use accurate descriptions on the website and record outdated external organization copy as a follow-up.
 - [x] Produce a concrete audit inventory (file/location → current text or metadata → change/keep/delete → validation) and resolve any additional findings **before** implementing migration. Extend this plan with newly verified paths; preserve historical releases, archived specs, and audit logs as historical records.
-- [x] Decide on the final information architecture and SEO strategy (homepage as library catalog, routes for three libraries, existing chessboard demos, retired Chess Lore URL), including a consistent canonical hostname `https://chessboard.k-tarmyshov.workers.dev`.
+- [x] Decide on the final information architecture and SEO strategy (homepage as library catalog, routes for three libraries, existing chessboard demos, retired Chess Lore URL), including a consistent canonical hostname `https://mirasen.k-tarmyshov.workers.dev`.
 
 ### Pre-implementation audit findings verified in repository (2026-11-02)
 
@@ -49,24 +50,24 @@ The discovery audit below was completed before implementation. The initial inven
 
 ### Discovery audit completed for this website-repository change (2026-11-02)
 
-The active publishing surface was inspected before implementation: `src/routes/**`, shared navigation and layout, active CSS, `static/**`, `README.md`, `wrangler.jsonc`, Vite/adapter setup, `.changeset/config.json`, and CI/release workflows. The sitemap is a hand-maintained static file (no generator); `robots.txt` allowed crawling but did not advertise the sitemap. The Worker config already targets `chessboard` and `./build` with `html_handling: drop-trailing-slash`; release CI uses the existing repository slug as a guard, which remains valid and is intentionally unchanged. Historical `openspec/changes/archive/**`, release records, and this plan retain old references as history and are not active website output.
+The active publishing surface was inspected before implementation: `src/routes/**`, shared navigation and layout, active CSS, `static/**`, `README.md`, `wrangler.jsonc`, Vite/adapter setup, `.changeset/config.json`, and CI/release workflows. The sitemap is a hand-maintained static file (no generator); `robots.txt` allowed crawling but did not advertise the sitemap. At the initial inspection the Worker config targeted `chessboard` and `./build` with `html_handling: drop-trailing-slash`; the active PR now changes only the Worker name to `mirasen`; release CI uses the existing repository slug as a guard, which remains valid and is intentionally unchanged. Historical `openspec/changes/archive/**`, release records, and this plan retain old references as history and are not active website output.
 
-| File/location                                                | Pre-change finding                                       | Implemented action                                                                        | Verified outcome                                                                |
-| ------------------------------------------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `src/routes/+page.svelte`                                    | Product story, old host and Organization/WebSite JSON-LD | Three-library catalog, Worker metadata, stable entity IDs, lowercase brand                | Built root HTML has aligned canonical/OG and two parseable JSON-LD scripts      |
-| `src/routes/chess-lore/+page.svelte`, `src/lib/nav/links.ts` | Product route, JSON-LD and shared nav entry              | Deleted route/nav entry; selected 404                                                     | Preview returns 404; desktop/mobile nav expose the surviving library pages      |
-| `src/routes/chessboard/+page.svelte`                         | Core and React entities mixed with product positioning   | Separate core and React roles and links; keep demos                                       | Built graph parses and preserves distinct repository/npm identities             |
-| `src/routes/license-gate/+page.svelte`                       | Useful technical page with old metadata                  | Preserve technical content and move metadata to Worker origin                             | Built JSON-LD parses and canonical/OG match                                     |
-| `src/routes/chessboard/examples/**/+page.svelte`             | Working examples with old canonical/OG host              | Preserve routes and update metadata and brand casing                                      | Preview E2E passes; generated canonical/OG uses target origin                   |
-| Layout, navigation and active styles                         | Old slogan, retired nav item and obsolete style          | Library footer/nav; remove stale CSS                                                      | Visual check at 1440×900 and 390×844; mobile menu works without overflow        |
-| `static/sitemap.xml`, `static/robots.txt`                    | Old host and retired URL; no sitemap declaration         | Update surviving URLs, omit retired route and declare sitemap                             | XML has eight unique target-origin URLs; preview serves both files              |
-| `README.md`, Changesets config and website changelog         | Old site description and generated changelog             | Update README, disable changelog output, remove website changelog and add patch changeset | Changesets resolves 1.4.3; temporary version check did not regenerate changelog |
-| `wrangler.jsonc`, `vite.config.ts`, CI/release workflows     | Existing Worker/static assets and deployment path        | Keep hosting and workflow setup unchanged                                                 | CI and Cloudflare preview pass; no production deployment ran                    |
+| File/location                                                | Pre-change finding                                       | Implemented action                                                                        | Verified outcome                                                                                                     |
+| ------------------------------------------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `src/routes/+page.svelte`                                    | Product story, old host and Organization/WebSite JSON-LD | Three-library catalog, Worker metadata, stable entity IDs, lowercase brand                | Built root HTML has aligned canonical/OG and two parseable JSON-LD scripts                                           |
+| `src/routes/chess-lore/+page.svelte`, `src/lib/nav/links.ts` | Product route, JSON-LD and shared nav entry              | Deleted route/nav entry; selected 404                                                     | Preview returns 404; desktop/mobile nav expose the surviving library pages                                           |
+| `src/routes/chessboard/+page.svelte`                         | Core and React entities mixed with product positioning   | Separate core and React roles and links; keep demos                                       | Built graph parses and preserves distinct repository/npm identities                                                  |
+| `src/routes/license-gate/+page.svelte`                       | Useful technical page with old metadata                  | Preserve technical content and move metadata to Worker origin                             | Built JSON-LD parses and canonical/OG match                                                                          |
+| `src/routes/chessboard/examples/**/+page.svelte`             | Working examples with old canonical/OG host              | Preserve routes and update metadata and brand casing                                      | Preview E2E passes; generated canonical/OG uses target origin                                                        |
+| Layout, navigation and active styles                         | Old slogan, retired nav item and obsolete style          | Library footer/nav; remove stale CSS                                                      | Visual check at 1440×900 and 390×844; mobile menu works without overflow                                             |
+| `static/sitemap.xml`, `static/robots.txt`                    | Old host and retired URL; no sitemap declaration         | Update surviving URLs, omit retired route and declare sitemap                             | XML has eight unique target-origin URLs; preview serves both files                                                   |
+| `README.md`, Changesets config and website changelog         | Old site description and generated changelog             | Update README, disable changelog output, remove website changelog and add patch changeset | Changesets resolves 1.4.3; temporary version check did not regenerate changelog                                      |
+| `wrangler.jsonc`, `vite.config.ts`, CI/release workflows     | Existing Worker/static assets and deployment path        | Keep hosting and workflow setup unchanged                                                 | Earlier CI and Cloudflare preview passed before the final-host update; the final-head preview is still to be checked |
 
-External read-only audit was also completed to honor the discovery requirement while keeping this task scoped to `cloudflare-site`:
+External read-only audit at the start of this migration found stale organization/profile and library links. The follow-up PRs documented below have corrected the active repository files. The initial findings remain a historical record; current independently verified settings and branch results are listed in sections 3 and 4. Published npm metadata remains unchanged until a future approved package release. The three packages' roles remain distinct as documented above.
 
-- GitHub About/Website currently points to the Worker origin for `mirasen-io/cloudflare-site`, `chessboard`, `react-chessboard`, and `license-gate`. The organization profile README still describes Chess Lore and links to `mirasen.io`; organization description/blog settings also still describe the former product and old hostname. These are external follow-ups only and are not changed here.
-- Current library source metadata and/or README demo links remain on the old hostname: core `package.json` homepage and four `.html` demo links; React `package.json` homepage and four extensionless demo links; License Gate `package.json` homepage. The published npm metadata will not change until a package is next published. The three packages' current descriptions confirm the distinct roles documented above. These repositories are not changed here.
+The focused audit also found pre-migration content in the unarchived OpenSpec files `openspec/specs/license-gate-page/spec.md`, `openspec/specs/chessboard-examples-minimal/spec.md`, and `openspec/specs/chessboard-examples-live-grid/spec.md`. They retain old `mirasen.io` canonical examples, uppercase `Mirasen`, and former Chess Lore navigation requirements. These specifications are not included in the website build and describe the earlier site state; they are preserved as historical records rather than mechanically rewritten. No active publishing source, package README/metadata, or organization profile file retains those references.
+
 - The live Worker origin and example index returned HTTP 200 during discovery. The currently deployed `/chess-lore` still serves the old page (also HTTP 200); that is the existing deployment, not evidence for the post-migration route. The new static build must omit the page and the PR preview must be checked before any later production cutover.
 - Sitemap generation is not present, and there is no website redirect configuration to preserve. Removing the Svelte route therefore selects the framework's retired-route/404 behavior; no unrelated redirect is added.
 
@@ -85,7 +86,7 @@ Repository: [`mirasen-io/cloudflare-site`](https://github.com/mirasen-io/cloudfl
 
 ## 2. Update hardcoded domain and metadata references
 
-Verified source paths in the website (each currently contains `https://mirasen.io`):
+Initial source paths recorded before the migration (each contained `https://mirasen.io`):
 
 - [x] `src/routes/+page.svelte` — canonical/OG URLs, JSON-LD organization/website URLs; rewrite SEO descriptions around libraries, not Chess Lore.
 - [x] `src/routes/chessboard/+page.svelte` — `pageUrl`, `examplesUrl`, `orgUrl`, JSON-LD publisher and descriptions.
@@ -96,7 +97,7 @@ Verified source paths in the website (each currently contains `https://mirasen.i
 - [x] `src/routes/chessboard/examples/promotion/+page.svelte` — canonical/OG.
 - [x] `src/routes/chessboard/examples/live-games-grid/+page.svelte` — canonical/OG.
 - [x] Remove obsolete metadata for the deleted `/chess-lore` page.
-- [x] Search remaining live source/config/docs for `mirasen.io`, `Chess Lore`, `Become Dangerous`, and old `cloudflare-site.*.workers.dev` references. Do **not** mechanically rewrite archived specifications, release history, or other historical records that accurately describe the past.
+- [x] Search remaining live source/config/docs for `mirasen.io`, `Chess Lore`, `Become Dangerous`, the superseded workers.dev hostname, and old Worker names used as active deployment identifiers. Do **not** mechanically rewrite archived specifications, release history, or other historical records that accurately describe the past.
 
 Preserve the working route structure under `/chessboard`, `/chessboard/examples`, and `/license-gate` to avoid needless broken links. Check both `.html` and extensionless demo links (both forms exist in current package READMEs), since Workers Static Assets uses `html_handling: drop-trailing-slash`.
 
@@ -125,60 +126,59 @@ Each repository should have a **separate, focused change** following its own `AG
 
 ### Chessboard library follow-up — 2026-11-02
 
-- [x] `chessboard`: updated package homepage, package author casing, four README demo URLs, and active README branding; added a patch changeset. [PR #150](https://github.com/mirasen-io/chessboard/pull/150) is open against `main`.
-- [x] `react-chessboard`: updated package homepage, four README demo URLs, and active README branding; added a patch changeset. [PR #123](https://github.com/mirasen-io/react-chessboard/pull/123) is open against `main`.
-- [x] Verified both GitHub About → Website fields already point to `https://chessboard.k-tarmyshov.workers.dev/chessboard` and all four canonical demo URLs return HTTP 200.
-- [x] Updated the core repository's GitHub About description to `mirasen chessboard — open-source TypeScript chessboard library.` on 2026-11-02; verified the current description and correct Worker homepage through the GitHub repository API. The earlier GitHub CLI update had been rejected with HTTP 403, so the owner made this change manually.
-- [x] Update License Gate package homepage and branding, and audit its active README; see the follow-up below.
+- [x] `chessboard`: updated package homepage to `https://mirasen.k-tarmyshov.workers.dev/chessboard`, all four active README demo URLs, and lowercase maintained brand copy; preserved the existing patch changeset. [PR #150](https://github.com/mirasen-io/chessboard/pull/150) remains open against `main`.
+- [x] `react-chessboard`: updated package homepage to the `/chessboard` route, all four active README demo URLs, and lowercase maintained brand copy; preserved the existing patch changeset and the distinct React integration identity. [PR #123](https://github.com/mirasen-io/react-chessboard/pull/123) remains open against `main`.
+- [x] `license-gate`: updated the package homepage to `https://mirasen.k-tarmyshov.workers.dev/license-gate`; active README has no website/demo URL to replace and its copyright brand is lowercase. Preserved the patch changeset and historical changelogs. [PR #46](https://github.com/mirasen-io/license-gate/pull/46) remains open against `main`.
+- [x] Independently verified core and React About → Website as `https://mirasen.k-tarmyshov.workers.dev/chessboard`; License Gate as `https://mirasen.k-tarmyshov.workers.dev/license-gate`. The core About description remains `mirasen chessboard — open-source TypeScript chessboard library.`
 
-Validation for the two PRs: formatting, lint, and TypeScript checks pass in both repositories. The TypeScript portion of `npm run build` passes, but its `publint` pack discovery fails in this runtime because `npm pack` creates a tarball without returning its filename on stdout. The generated package tarballs both pass direct `publint` checks; workspace-level `publint run --pack false` also passes, with one existing nested SvelteKit `imports` warning for core.
+Validation: after the hostname updates, formatting, lint, TypeScript checks, package builds/publint, Changesets status, and unit suites passed for all three packages. Core tests: 1,618; React: 21; License Gate: 173. Website validation results are in section 6. Package homepages take effect on npm only with a future approved package release; no release was created.
 
 ### License Gate follow-up — 2026-11-02
 
 - [x] Updated `@mirasen/license-gate` package homepage to the Worker `/license-gate` route and lowercased the package author and README copyright. The README has no stale website or former-product copy; historical changelog content was preserved. Added a patch changeset. [PR #46](https://github.com/mirasen-io/license-gate/pull/46) is open against `main`.
-- [x] Verified the License Gate GitHub About description and Website already describe the library and link to `https://chessboard.k-tarmyshov.workers.dev/license-gate`; no manual License Gate About change is needed.
-- [x] Prettier/lint, TypeScript check, and Changesets status pass. Build compilation and postbuild pass; full `npm run build` stops at publint's npm-pack discovery in this runtime. The generated package tarball passes direct publint validation.
+- [x] Verified the License Gate GitHub About description remains accurate and its Website is `https://mirasen.k-tarmyshov.workers.dev/license-gate`; no manual description change was needed.
+- [x] `npm run lint`, `npm run check`, `npm test`, `npm run build`, and `npx changeset status` pass; all 173 License Gate tests pass and publint validates the package.
 
-- [x] Reviewed and updated relevant GitHub organization and library repository About/Website metadata; the remaining three organization fields were updated manually by the owner on 2026-11-02, and the core description was independently verified. Do not rename package repositories.
+- [x] Reviewed organization and library About/Website metadata; the owner manually updated the organization fields and the four repository Website fields. Their current API values are independently verified in section 4. Do not rename package repositories.
 - Note: changing source `package.json` does not retroactively edit npm metadata of already-published versions. New `homepage` metadata reaches npm when the library is next published; avoid gratuitous releases solely for metrics.
-- [ ] Search other active repositories in `mirasen-io` for live links; target only confirmed instances, not historical snapshots.
+- [x] Searched the public `mirasen-io` repository list and GitHub code-search results for stale host/product links. No additional public repositories beyond these five active PR targets were found. The default `main` branch of `chessboard` still contains the previous `mirasen.io` package/demo links until PR #150 merges; this task updates only the existing PR branch. No unrelated repository changes were made.
 
 ## 4. GitHub organization profile and settings
 
-- [x] Replaced the outdated organization profile README with a lowercase `mirasen` libraries catalog linking to the core chessboard, React integration, License Gate, GitHub/npm, and the Worker site. [PR #1](https://github.com/mirasen-io/.github/pull/1) is open against `main`.
-- [x] Reviewed the [GitHub organization public profile](https://github.com/mirasen-io) settings. At the initial audit, the display name was `Mirasen`, the description was `Structured chess learning tools and systems. Home to Chess Lore and Chessboard.`, and the website was `https://mirasen.io`. The owner subsequently updated these three fields manually on 2026-11-02; the connector cannot independently read organization settings.
-- [x] In organization **Settings → Profile**, set **Name** to `mirasen`, **Description** to `Open-source chessboard libraries and npm license tooling from mirasen.`, and **Website** to `https://chessboard.k-tarmyshov.workers.dev`. Completed manually and confirmed by the owner on 2026-11-02; direct independent verification remains unavailable to the GitHub integration (HTTP 403 for updates). Revisit the Website value only if the final Worker hostname changes.
-- [x] Reviewed relevant repository About fields: `cloudflare-site` links to the Worker root; `chessboard` and `react-chessboard` link to `/chessboard`; `license-gate` links to `/license-gate`. The React and License Gate descriptions have no outdated product or brand copy.
-- [x] In `mirasen-io/chessboard` **About** settings, changed the description to `mirasen chessboard — open-source TypeScript chessboard library.` Verified through the GitHub repository API on 2026-11-02; its homepage is also correct for the currently selected Worker host.
-- [x] Confirmed the `.github` and `cloudflare-site` About descriptions are blank; their website links are already correct where set. Keep GitHub and npm organization identifiers unchanged.
+- [x] Updated `profile/README.md` to a lowercase `mirasen` catalog of the three libraries, with final Worker, GitHub, and npm links and no former product positioning. [PR #1](https://github.com/mirasen-io/.github/pull/1) remains open against `main`.
+- [x] The owner manually saved organization **Settings → Profile**. Independent GET `/orgs/mirasen-io` verification on 2026-11-02 returned **Name** `mirasen`, **Description** `Open-source chessboard libraries and npm license tooling from mirasen.`, and **Website/blog** `https://mirasen.k-tarmyshov.workers.dev`; all three match the requested values. The earlier values (`Mirasen`, product description, and `https://mirasen.io`) are preserved here as initial-audit history only.
+- [x] Independently verified repository Website values with GET `/repos/mirasen-io/{repo}` on 2026-11-02: `cloudflare-site` → `https://mirasen.k-tarmyshov.workers.dev`; `chessboard` and `react-chessboard` → `https://mirasen.k-tarmyshov.workers.dev/chessboard`; `license-gate` → `https://mirasen.k-tarmyshov.workers.dev/license-gate`. All four match. The owner manually saved these fields; no Settings were modified in this task.
+- [x] Verified the core repository About description is `mirasen chessboard — open-source TypeScript chessboard library.`; React and License Gate descriptions remain accurate and product-free. `.github` and `cloudflare-site` About descriptions are blank. Keep repository/org identifiers unchanged.
 
-### Final Worker hostname — decision recorded 2026-11-02
+### Final Worker hostname and coordinated PRs — 2026-11-02
 
-- [x] Choose `https://mirasen.k-tarmyshov.workers.dev` as the canonical destination for the three-library catalog instead of `https://chessboard.k-tarmyshov.workers.dev`. The owner explicitly approved the `mirasen` hostname. This is a decision only; the rename and repo updates are **not** yet verified or complete.
-- [ ] Owner: rename the **existing** Cloudflare Worker `chessboard` to `mirasen` in the dashboard (do not create a second Worker or change the account subdomain). Verify the new `workers.dev` URL responds and the existing `mirasen.io` binding is not accidentally removed.
-- [ ] Update `wrangler.jsonc` (`name: mirasen`) and every active target-origin reference in the open site, core, React, License Gate, and organization-profile PR branches; update metadata, sitemap, robots, demos, README links and GitHub About/Website values as applicable. Keep old-domain references only where legitimately historical. Re-run CI, Cloudflare preview, and link checks before merging.
-- [ ] Owner: after the coordinated PR updates, change GitHub organization Website and relevant repository About → Website fields from `chessboard.k-tarmyshov.workers.dev` to `mirasen.k-tarmyshov.workers.dev` (preserving appropriate paths). These are the follow-up manual settings changes; the already corrected descriptions and organization name do not need repeating.
-- [ ] Confirm production release/deploy targets the **existing renamed** `mirasen` Worker and not a newly created `chessboard` Worker; do not assume the old workers.dev hostname redirects.
+- [x] Set the final canonical origin to `https://mirasen.k-tarmyshov.workers.dev`. The former `chessboard.k-tarmyshov.workers.dev` target is superseded; retain it only in historical deployment/audit records.
+- [x] Owner-confirmed: renamed the **existing** Cloudflare Worker from `chessboard` to `mirasen`; no second Worker was requested. `wrangler.jsonc` on PR #194 now names `mirasen` and preserves the existing static assets configuration, compatibility settings, and deployment architecture. The GitHub repository remains `cloudflare-site` and all repository identifier guards remain intact.
+- [x] Read-only HTTP check of the final origin returned HTTP 200 for `/`, `/chessboard`, `/chessboard/examples`, each of the four examples, `/license-gate`, `robots.txt`, and `sitemap.xml`. The currently published `/chess-lore` also returned HTTP 200; retirement must be verified on the PR preview and after the approved production cutover.
+- [x] Updated active website metadata, JSON-LD URLs/entity references, sitemap, robots, README, library package homepages and demos, and organization profile links across the existing PR heads.
+- [x] Updated all five existing PR branches, without creating replacements: cloudflare-site #194 (`migrate/library-only`), chessboard #150, react-chessboard #123, license-gate #46, and `.github` #1. Current head SHAs and CI/preview outcomes are recorded after those checks complete.
+- [x] Independently verified organization and repository settings through GitHub GET APIs; exact values are in section 4. No organization or repository Settings were changed in this task.
+- [ ] Merge the five reviewed PRs only after the owner approves them. Package releases, website version/tag/release, and production deployment remain pending and are not part of this task.
+- [ ] After the approved production deployment, verify the existing `mirasen` Worker deployment, the `mirasen.io` binding, all public routes, and retired `/chess-lore` behavior. Do not assume the former workers.dev hostname redirects.
 
-## 5. Website changelog and optional repository renaming
+## 5. Website changelog and repository identity
 
 - [x] Remove `CHANGELOG.md` **from the website repository only**, as requested. Keep library changelogs.
 - [x] In website `.changeset/config.json`, change `"changelog": "@changesets/cli/changelog"` to **`"changelog": false`** so future version bumps do not recreate it (official Changesets config supports this). Keep `privatePackages.version: true`, `privatePackages.tag: true`, GitHub Releases and existing release/deploy behavior.
 - [x] Verify Changesets status/version handling and confirm the configured version step does not regenerate `CHANGELOG.md` (verified in a temporary copy).
 - [ ] Verify Git tags, GitHub Release creation, and Wrangler deployment in the later release workflow; this remains pending until an approved production cutover.
-- [ ] **Optional, not needed for the Worker migration:** decide whether to rename the GitHub repository `cloudflare-site` to something more descriptive like `chessboard-site` (do not use `chessboard`, already taken by the core library).
-- [ ] If renamed, update the hard-coded repository guards in `.github/workflows/ci.yml` and `.github/workflows/release.yml`, verify any workflow/docs links, integrations, GitHub App access, secrets, and GitHub Actions after the rename. The Cloudflare Worker is **already** named `chessboard`; no additional Cloudflare project rename is needed.
+- [x] Keep the GitHub repository name `cloudflare-site`; this migration does not rename it. Preserve its existing CI/release identifier guards (`mirasen-io/cloudflare-site`).
 
 ## 6. Validation and cutover
 
 - [x] Confirm the discovery/impact audit above is complete, all new findings are documented, and the intended structure for retired product routes is explicitly resolved.
 - [x] Inspect **generated** HTML for JSON-LD validity and alignment with title, canonical, and OG metadata; verify no references to Chess Lore or old hostname remain on active pages.
-- [ ] Test the production homepage, core/React GitHub/npm links, License Gate page, all four interactive chessboard examples, and mobile navigation at `https://chessboard.k-tarmyshov.workers.dev`.
-- [ ] Verify canonical, OG, and JSON-LD URLs resolve to that domain and no active page advertises Chess Lore or the old slogan.
-- [x] Run repository-required checks (`npm run format`, `npm run lint`, `npm run check`, `npm run build`, appropriate unit/E2E tests) and verify PR Cloudflare preview.
-- [ ] Merge/release via existing Changesets → GitHub Release → Wrangler workflow; confirm the production deployment and Worker name in logs.
-- [ ] After updating live links, review Cloudflare `mirasen.io` bindings/redirects and other consumers (including the website's canonical links) before expiration. Do not destroy the live site, DNS or Worker for the sake of this migration.
-- [ ] Confirm that the final destination works independently of `mirasen.io` before **2027-03-11**.
+- [ ] After the owner-approved production deployment, test the homepage, package GitHub/npm links, License Gate page, all four interactive chessboard examples, and desktop/mobile navigation at `https://mirasen.k-tarmyshov.workers.dev`. Confirm `/chess-lore` is retired in the deployed output.
+- [ ] After cutover, verify production canonical, OG, and JSON-LD URLs resolve to the final origin and no active page advertises Chess Lore or the former slogan. Run Rich Results Test/Schema Markup Validator where applicable and check Search Console/indexed URLs and stale snippets.
+- [x] Website checks passed: `npm run format`, `npm run lint`, `npm run check`, `npm run build`, `npm run test:unit -- --run` (11 passed), E2E (4 passed), and `npx changeset status`. Generated HTML has matching canonical/OG URLs and parseable JSON-LD; the sitemap has eight unique final-origin URLs and robots.txt points to it. A local Wrangler Static Assets run reports Worker `mirasen`, serves all retained routes, and returns 404 for `/chess-lore`. Desktop (1440×900) and mobile (390×844) navigation were checked; links are available and no horizontal overflow occurs. CI and the Cloudflare PR preview still need the final pushed head.
+- [ ] Pending owner action: merge the five open PRs, then use the existing Changesets → GitHub Release → Wrangler workflow for the website and publish package releases when desired. Confirm production deploy targets the existing `mirasen` Worker in logs; no merge, release, or production deploy was run here.
+- [ ] After cutover, the owner should verify the existing Cloudflare `mirasen.io` binding/route and other consumers before the domain registration expires; do not remove the live site, DNS, or Worker for this migration.
+- [ ] Confirm the final destination remains reachable independently of `mirasen.io` before **2027-03-11**.
 
 ## Out of scope
 

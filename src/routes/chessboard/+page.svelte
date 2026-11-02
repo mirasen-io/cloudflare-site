@@ -9,9 +9,9 @@
 	const pageTitle = 'mirasen Chessboard — Core library and React integration';
 	const pageDescription =
 		'Explore the framework-agnostic @mirasen/chessboard library and its separate React integration, @mirasen/react-chessboard.';
-	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard';
+	const pageUrl = 'https://mirasen.k-tarmyshov.workers.dev/chessboard';
 	const examplesUrl = `${pageUrl}/examples`;
-	const orgId = 'https://chessboard.k-tarmyshov.workers.dev/#organization';
+	const orgId = 'https://mirasen.k-tarmyshov.workers.dev/#organization';
 
 	const jsonLd = JSON.stringify({
 		'@context': 'https://schema.org',
@@ -20,7 +20,7 @@
 				'@type': 'Organization',
 				'@id': orgId,
 				name: 'mirasen',
-				url: 'https://chessboard.k-tarmyshov.workers.dev',
+				url: 'https://mirasen.k-tarmyshov.workers.dev',
 				sameAs: ['https://github.com/mirasen-io', 'https://www.npmjs.com/org/mirasen']
 			},
 			{

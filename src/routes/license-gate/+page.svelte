@@ -9,8 +9,8 @@
 		'mirasen License Gate is a strict, local, default-deny license policy gate for npm projects — single package, workspaces, and monorepos. Licenses are compared verbatim; unknown or unapproved strings fail the build.';
 	const ogDescription =
 		'A strict, local, default-deny license policy gate for npm projects — single package, workspaces, and monorepos.';
-	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/license-gate';
-	const orgUrl = 'https://chessboard.k-tarmyshov.workers.dev';
+	const pageUrl = 'https://mirasen.k-tarmyshov.workers.dev/license-gate';
+	const orgUrl = 'https://mirasen.k-tarmyshov.workers.dev';
 	const orgId = `${orgUrl}/#organization`;
 
 	const jsonLd = JSON.stringify({

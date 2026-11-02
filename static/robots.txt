@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://chessboard.k-tarmyshov.workers.dev/sitemap.xml
+Sitemap: https://mirasen.k-tarmyshov.workers.dev/sitemap.xml

@@ -4,7 +4,7 @@
 	const chessboardHref = resolve('/chessboard');
 	const examplesHref = resolve('/chessboard/examples');
 	const licenseGateHref = resolve('/license-gate');
-	const siteUrl = 'https://chessboard.k-tarmyshov.workers.dev';
+	const siteUrl = 'https://mirasen.k-tarmyshov.workers.dev';
 	const pageTitle = 'mirasen — Open-source libraries';
 	const pageDescription =
 		'mirasen publishes open-source libraries for chess interfaces and npm license policy checks.';
