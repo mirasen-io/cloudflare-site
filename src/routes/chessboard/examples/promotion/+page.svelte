@@ -11,7 +11,7 @@
 	const pageTitle = 'Promotion flow — Mirasen Chessboard examples';
 	const pageDescription =
 		'A promotion handling example for Mirasen Chessboard with deferred promotion selection, optional auto-promotion, and built-in annotations.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/promotion';
+	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/promotion';
 
 	const START_POSITION: PiecePositionRecordString = {
 		e2: 'wP',

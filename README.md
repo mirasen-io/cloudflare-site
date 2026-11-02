@@ -1,6 +1,6 @@
 # @mirasen/main-website
 
-The mirasen.io website, built with SvelteKit 3 and Svelte 5, prerendered with
+The Mirasen libraries and demos website, built with SvelteKit 3 and Svelte 5, prerendered with
 `@sveltejs/adapter-static` and deployed as Cloudflare Workers static assets through
 Wrangler.
 

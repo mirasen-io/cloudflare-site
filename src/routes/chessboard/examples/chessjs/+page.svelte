@@ -21,7 +21,7 @@
 	const pageTitle = 'chess.js game example — Mirasen Chessboard examples';
 	const pageDescription =
 		'A rules-backed Mirasen Chessboard example using the built-in chess.js adapter for legal destinations, promotion, castling, en passant, random computer replies, annotations, animation, and mobile drag controls.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/chessjs';
+	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/chessjs';
 
 	const PLAYER_COLOR = 'w' as const;
 	const COMPUTER_DELAY_MS = 1000;

@@ -13,7 +13,7 @@
 	const pageTitle = 'Mirasen Chessboard Examples';
 	const pageDescription =
 		'Interactive examples for Mirasen Chessboard, the open-source chessboard platform by Mirasen.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples';
+	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples';
 </script>
 
 <svelte:head>

@@ -11,7 +11,7 @@
 	const pageTitle = 'Minimal interactive example — Mirasen Chessboard examples';
 	const pageDescription =
 		'A minimal interactive Mirasen Chessboard example with free movement, orientation toggle, position reset, and a random-move control.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/minimal';
+	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/minimal';
 
 	let boardEl: HTMLDivElement;
 	let orientation: 'white' | 'black' = $state('white');

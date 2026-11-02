@@ -8,7 +8,7 @@
 	const pageTitle = 'Live games grid — Mirasen Chessboard examples';
 	const pageDescription =
 		'Twelve independent Mirasen Chessboard boards running chess.js games on randomized timers.';
-	const pageUrl = 'https://mirasen.io/chessboard/examples/live-games-grid';
+	const pageUrl = 'https://chessboard.k-tarmyshov.workers.dev/chessboard/examples/live-games-grid';
 
 	const metaPresets: readonly Meta[] = [
 		{
