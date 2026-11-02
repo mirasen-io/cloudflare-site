@@ -1,6 +1,6 @@
 # mirasen libraries site transition plan
 
-Status: website migration implemented and validated in PR #194; library profile PR #1 and chessboard alignment PRs #150 and #123 are open; organization settings, production cutover, License Gate updates, and other external work remain pending.
+Status: website migration implemented and validated in PR #194; library profile PR #1 and package alignment PRs #150, #123, and #46 are open; manual organization/core About updates and production publication remain pending.
 Updated: 2026-11-02.
 
 ## Goal and decisions
@@ -129,9 +129,15 @@ Each repository should have a **separate, focused change** following its own `AG
 - [x] `react-chessboard`: updated package homepage, four README demo URLs, and active README branding; added a patch changeset. [PR #123](https://github.com/mirasen-io/react-chessboard/pull/123) is open against `main`.
 - [x] Verified both GitHub About → Website fields already point to `https://chessboard.k-tarmyshov.workers.dev/chessboard` and all four canonical demo URLs return HTTP 200.
 - [ ] Update the core repository's GitHub About description from `Mirasen Chessboard — open-source TypeScript chessboard platform.` to `mirasen chessboard — open-source TypeScript chessboard library.` The GitHub CLI update was rejected with HTTP 403; exact manual action is listed in §4.
-- [ ] Update License Gate package metadata and review its active README links.
+- [x] Update License Gate package homepage and branding, and audit its active README; see the follow-up below.
 
 Validation for the two PRs: formatting, lint, and TypeScript checks pass in both repositories. The TypeScript portion of `npm run build` passes, but its `publint` pack discovery fails in this runtime because `npm pack` creates a tarball without returning its filename on stdout. The generated package tarballs both pass direct `publint` checks; workspace-level `publint run --pack false` also passes, with one existing nested SvelteKit `imports` warning for core.
+
+### License Gate follow-up — 2026-11-02
+
+- [x] Updated `@mirasen/license-gate` package homepage to the Worker `/license-gate` route and lowercased the package author and README copyright. The README has no stale website or former-product copy; historical changelog content was preserved. Added a patch changeset. [PR #46](https://github.com/mirasen-io/license-gate/pull/46) is open against `main`.
+- [x] Verified the License Gate GitHub About description and Website already describe the library and link to `https://chessboard.k-tarmyshov.workers.dev/license-gate`; no manual License Gate About change is needed.
+- [x] Prettier/lint, TypeScript check, and Changesets status pass. Build compilation and postbuild pass; full `npm run build` stops at publint's npm-pack discovery in this runtime. The generated package tarball passes direct publint validation.
 
 - [ ] Update other GitHub repository About/Website settings and relevant descriptions, without renaming the package repositories.
 - [ ] Remember: changing source `package.json` does not retroactively edit npm metadata of already-published versions. New `homepage` metadata reaches npm when the library is next published; avoid gratuitous releases solely for metrics.
