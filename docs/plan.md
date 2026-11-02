@@ -24,6 +24,29 @@ Do **not** advertise Chess Lore as an active product, structured chess learning,
 
 **Target origin:** `https://chessboard.k-tarmyshov.workers.dev`. Keep existing working paths when replacing the origin, subject to URL verification. The old `mirasen.io` URL can remain active until expiry; do not remove its routing prematurely.
 
+## 0. Mandatory discovery and impact audit — BEFORE implementation
+
+**Do this first.** The file inventory below is a verified starting point, **not** a claim that all obsolete product references or SEO surfaces have already been found. Investigate the entire active website and its public-facing integrations before changing pages or publishing new library metadata.
+
+- [ ] Establish the actual current publishing surface: routes, layouts, navigation, shared components, public/static assets, generated SvelteKit output, Cloudflare configuration and scripts, README/docs, CI/release configuration, and links exposed by the three npm packages and the GitHub organization.
+- [ ] Search all **active** site source/config, the `.github` organization profile, and the three library repositories for variations of `mirasen.io`, `cloudflare-site`, `chess-lore` / `Chess Lore`, `Become Dangerous`, `structured chess learning`, marketing promises about an upcoming trainer/product, and related copy. Record file path, current behavior, and required action for each occurrence; distinguish user-facing copy from legitimate history and identifiers.
+- [ ] Inventory *every* absolute URL and external presentation surface: HTML title/description, canonical links, Open Graph / Twitter metadata if present, structured data, navigation/footer, GitHub repository About/Homepage and organization settings, npm package homepages and README demo URLs. Do not assume a GitHub code-search query is exhaustive; inspect actual live source and compiled page output.
+- [ ] Audit crawl/index entry points and legacy addresses: `robots.txt`, `sitemap.xml` or sitemap generation **if present**, metadata in prerendered output, Cloudflare bindings/redirects, and URLs previously indexed for `mirasen.io`. Check whether `/chess-lore` should return 404/410 or redirect to an appropriate surviving page; do not blindly redirect product traffic to an unrelated library page.
+- [ ] Audit the distinct role of each library: core `@mirasen/chessboard`, React wrapper `@mirasen/react-chessboard`, and `@mirasen/license-gate`. Ensure the redesign and organization descriptions accurately represent published packages rather than product hypotheses or planned features.
+- [ ] Produce a concrete audit inventory (file/location → current text or metadata → change/keep/delete → validation) and resolve any additional findings **before** implementing migration. Extend this plan with newly verified paths; preserve historical releases, archived specs, and audit logs as historical records.
+- [ ] Decide on the final information architecture and SEO strategy (homepage as library catalog, routes for three libraries, existing chessboard demos, retired Chess Lore URL), including a consistent canonical hostname `https://chessboard.k-tarmyshov.workers.dev`.
+
+### Preliminary audit findings verified in repository (2026-11-02)
+
+- `src/routes/+page.svelte`: product-focused hero, "Become Dangerous", Chess Lore marketing; inline `Organization` and `WebSite` JSON-LD plus canonical and Open Graph.
+- `src/routes/chessboard/+page.svelte`: Chess Lore/product-ecosystem positioning; inline **two** `SoftwareSourceCode` nodes (core and React), publisher `Organization` references, live-example URLs, canonical and Open Graph.
+- `src/routes/license-gate/+page.svelte`: `SoftwareSourceCode` JSON-LD with publisher `Organization`; canonical and Open Graph.
+- `src/routes/chess-lore/+page.svelte`: old product page with `SoftwareApplication` JSON-LD, old-domain URL and product metadata; this route is to be retired.
+- `src/routes/chessboard/examples/+page.svelte` and the four example pages (`minimal`, `chessjs`, `promotion`, `live-games-grid`): hardcoded old-domain canonical/OG URLs, though no JSON-LD was found in those examined files.
+- `src/routes/+layout.svelte`: old product slogan in footer. `src/lib/nav/links.ts`: Chess Lore navigation link. `README.md`: old-domain site description.
+- Outside site source: old domain occurs in library `package.json` homepages and core/React README demo links; `mirasen-io/.github/profile/README.md` still presents Chess Lore as a product. Public GitHub repository homepage fields for core and React also use old domain.
+- JSON-LD is **constructed inline inside `.svelte` files**, via `JSON.stringify` and injected `<script type="application/ld+json">` strings; it is not a separately maintained collection of `.json` files.
+
 ## 1. Reposition the website as a library catalog
 
 Repository: [`mirasen-io/cloudflare-site`](https://github.com/mirasen-io/cloudflare-site).
@@ -53,6 +76,19 @@ Verified source paths in the website (each currently contains `https://mirasen.i
 - [ ] Search remaining live source/config/docs for `mirasen.io`, `Chess Lore`, `Become Dangerous`, and old `cloudflare-site.*.workers.dev` references. Do **not** mechanically rewrite archived specifications, release history, or other historical records that accurately describe the past.
 
 Preserve the working route structure under `/chessboard`, `/chessboard/examples`, and `/license-gate` to avoid needless broken links. Check both `.html` and extensionless demo links (both forms exist in current package READMEs), since Workers Static Assets uses `html_handling: drop-trailing-slash`.
+
+## 2a. JSON-LD / Google Knowledge Graph and structured data audit
+
+Google's understanding of the brand and its products must reflect **real open-source libraries**, not the abandoned learning-product narrative. Treat structured data as a separate review, not just string replacement.
+
+- [ ] `src/routes/+page.svelte`: revisit both `organizationLd` (`@type: Organization`) and `websiteLd` (`@type: WebSite`). Replace `url` and misleading learning-product `description`; keep factual `sameAs` links to mirasen GitHub/npm. Decide whether consistent, stable `@id` references would improve entity identification; do not invent claims or markup solely for search ranking.
+- [ ] `src/routes/chessboard/+page.svelte`: audit the complete `@graph`: core and React `SoftwareSourceCode` entities, `codeRepository`, `sameAs`, `subjectOf`, `isBasedOn`, `publisher` `Organization` node, descriptions, page/example URLs. Remove misleading references to the training-product ecosystem. Keep **core and React distinct**; link each to its actual repo/npm page.
+- [ ] `src/routes/license-gate/+page.svelte`: verify the `SoftwareSourceCode` object, publisher, `url`, and `subjectOf` README/changelog references against the published License Gate project and new URL.
+- [ ] `src/routes/chess-lore/+page.svelte`: delete/retire the `SoftwareApplication` JSON-LD and product metadata together with the old page; ensure it cannot still be emitted by prerendered files or referenced from active site markup.
+- [ ] Audit JSON-LD **consistency across pages**: canonical URL and `og:url` match structured-data `url` values, organization identity/name and links stay consistent, and no dangling `@id`, `subjectOf`, `publisher`, `sameAs`, or references to retired routes remain.
+- [ ] Verify the built HTML contains valid parseable `application/ld+json` script content (not double-escaped, duplicated, or missing after prerender). Inspect structured data in output, not only Svelte source.
+- [ ] Validate relevant page URLs/markup with Google's [Rich Results Test](https://search.google.com/test/rich-results) **where applicable** and [Schema Markup Validator](https://validator.schema.org/). The former checks Google's supported rich-result features, **not** a guarantee of Knowledge Graph inclusion or search placement.
+- [ ] Review the current public indexing/Google Search Console situation, if accessible, after the hostname change. Reindexing and knowledge-graph behavior cannot be inferred from passing JSON syntax validation; plan to verify indexed URLs and outdated snippets later.
 
 ## 3. Update the three library repositories
 
@@ -85,6 +121,8 @@ Each repository should have a **separate, focused change** following its own `AG
 
 ## 6. Validation and cutover
 
+- [ ] Confirm the discovery/impact audit above is complete, all new findings are documented, and the intended structure for retired product routes is explicitly resolved.
+- [ ] Inspect **generated** HTML for JSON-LD validity and alignment with title, canonical, and OG metadata; verify no references to Chess Lore or old hostname remain on active pages.
 - [ ] Test the production homepage, core/React GitHub/npm links, License Gate page, all four interactive chessboard examples, and mobile navigation at `https://chessboard.k-tarmyshov.workers.dev`.
 - [ ] Verify canonical, OG, and JSON-LD URLs resolve to that domain and no active page advertises Chess Lore or the old slogan.
 - [ ] Run repository-required checks (`npm run format`, `npm run lint`, `npm run check`, `npm run build`, appropriate unit/E2E tests) and verify PR Cloudflare preview.
