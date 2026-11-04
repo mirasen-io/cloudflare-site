@@ -22,7 +22,7 @@
 	"devDependencies": {
 		"@changesets/cli": "^3.0.3",
 		"@eslint/js": "^10.0.1",
-		"@playwright/cli": "^0.1.22",
+		"@playwright/cli": "^0.1.23",
 		"@playwright/test": "^1.64.1",
 		"@skeletonlabs/skeleton": "^5.0.1",
 		"@skeletonlabs/skeleton-svelte": "^5.0.1",
@@ -63,7 +63,7 @@
 		"fsevents": true
 	},
 	"dependencies": {
-		"@lucide/svelte": "^1.65.0",
+		"@lucide/svelte": "^1.66.0",
 		"@mirasen/chessboard": "^1.5.2",
 		"chess.js": "^1.4.0"
 	}
