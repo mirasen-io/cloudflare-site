@@ -27,8 +27,8 @@
 		"@skeletonlabs/skeleton": "^5.0.4",
 		"@skeletonlabs/skeleton-svelte": "^5.0.4",
 		"@sveltejs/adapter-static": "^4.0.1",
-		"@sveltejs/enhanced-img": "^1.0.0",
-		"@sveltejs/kit": "^3.1.1",
+		"@sveltejs/enhanced-img": "^1.0.1",
+		"@sveltejs/kit": "^3.2.0",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/forms": "^0.5.11",
 		"@tailwindcss/typography": "^0.5.20",
@@ -48,10 +48,10 @@
 		"tailwindcss": "^4.3.3",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.72.2",
-		"vite": "^8.3.7",
+		"vite": "^8.3.8",
 		"vitest": "^5.0.5",
 		"vitest-browser-svelte": "^3.1.0",
-		"wrangler": "^4.159.0"
+		"wrangler": "^4.160.0"
 	},
 	"imports": {
 		"#lib": "./src/lib/index.js",
@@ -63,7 +63,7 @@
 		"fsevents": true
 	},
 	"dependencies": {
-		"@lucide/svelte": "^1.70.0",
+		"@lucide/svelte": "^1.72.0",
 		"@mirasen/chessboard": "^1.5.4",
 		"chess.js": "^1.4.0"
 	}
