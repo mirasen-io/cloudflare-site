@@ -63,7 +63,7 @@
 		"fsevents": true
 	},
 	"dependencies": {
-		"@lucide/svelte": "^1.72.0",
+		"@lucide/svelte": "^1.73.0",
 		"@mirasen/chessboard": "^1.5.4",
 		"chess.js": "^1.4.0"
 	}
