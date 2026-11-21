@@ -129,14 +129,18 @@
 							class="btn preset-tonal"
 							href={library.repository}
 							target="_blank"
-							rel="external noopener noreferrer">GitHub</a
+							rel="external noopener noreferrer"
 						>
+							GitHub
+						</a>
 						<a
 							class="btn preset-tonal"
 							href={library.npm}
 							target="_blank"
-							rel="external noopener noreferrer">npm</a
+							rel="external noopener noreferrer"
 						>
+							npm
+						</a>
 					</div>
 				</article>
 			{/each}

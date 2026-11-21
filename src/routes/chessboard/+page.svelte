@@ -98,8 +98,10 @@
 					class="btn preset-tonal"
 					href={githubHref}
 					target="_blank"
-					rel="external noopener noreferrer">Core on GitHub</a
+					rel="external noopener noreferrer"
 				>
+					Core on GitHub
+				</a>
 			</div>
 		</div>
 		<aside class="hero-side card p-6">
@@ -139,14 +141,18 @@
 						class="btn preset-tonal"
 						href={githubHref}
 						target="_blank"
-						rel="external noopener noreferrer">GitHub</a
+						rel="external noopener noreferrer"
 					>
+						GitHub
+					</a>
 					<a
 						class="btn preset-tonal"
 						href={npmHref}
 						target="_blank"
-						rel="external noopener noreferrer">npm</a
+						rel="external noopener noreferrer"
 					>
+						npm
+					</a>
 					<a class="btn preset-tonal" href={examplesHref}>Live examples</a>
 				</div>
 			</article>
@@ -161,14 +167,18 @@
 						class="btn preset-tonal"
 						href={reactGithubHref}
 						target="_blank"
-						rel="external noopener noreferrer">GitHub</a
+						rel="external noopener noreferrer"
 					>
+						GitHub
+					</a>
 					<a
 						class="btn preset-tonal"
 						href={reactNpmHref}
 						target="_blank"
-						rel="external noopener noreferrer">npm</a
+						rel="external noopener noreferrer"
 					>
+						npm
+					</a>
 				</div>
 			</article>
 		</div>
